@@ -1,0 +1,25 @@
+<?php 
+    $base_url = "http://127.0.0.1:5000/login-api";
+
+    function check_ticket(){
+        global $base_url;
+        session_start();
+        
+        if (isset($_SESSION['ticket'])){
+            if ($_SESSION['ticket'] != ''){
+                $ticket = $_SESSION['ticket'];
+        
+                $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                $response = json_decode(curl_exec($ch), true);
+        
+                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202){
+                    $role = $response['data']['role'];
+                    return $role;
+                }
+            }
+        }
+        return False;
+    }
+?>
