@@ -27,11 +27,11 @@
             $_SESSION['ticket'] = $ticket;
             header('Location: ../index.php');
             exit();
-        }else if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 400){
+        }else if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 401){
             $msg = $response['msg'];
             echo "<script>alert('$msg');</script>";
         }else{
-            echo "<script>alert('Login failed!');</script>";
+            echo "<script>alert('Login failed! Email or password is incorrect. ');</script>";
         }
     }
     
@@ -47,9 +47,9 @@
 <body>
     <h1>Login</h1>
     <form method="post">
-        <label for="email">Email:</label> <input type="text" id="email" name="email"><br><br>
-        <label for="password">Password:</label> <input type="password" id="password" name="password"><br><br>
-        <input type="submit">
+        <label for="email">Email:</label> <input type="text" id="email" name="email" required autofocus><br><br>
+        <label for="password">Password:</label> <input type="password" id="password" name="password" required><br><br>
+        <input type="submit"> <a href="./register.php">Register</a>
     </form>
 </body>
 </html>

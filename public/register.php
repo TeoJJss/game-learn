@@ -43,15 +43,15 @@
 <body>
     <h1>Register</h1>
     <form method="post">
-        <label for="email">Email:</label> <input type="text" id="email" name="email"><br><br>
-        <label for="name">Name:</label> <input type="text" id="name" name="name"><br><br>
-        <label for="password">Password:</label> <input type="password" id="password" name="password"><br><br>
-        <select id="user_type" name="user_type">
+        <label for="email">Email:</label> <input type="text" id="email" name="email" required autofocus><br><br>
+        <label for="name">Name:</label> <input type="text" id="name" name="name" required><br><br>
+        <label for="password">Password:</label> <input type="password" id="password" name="password" required><br><br>
+        <select id="user_type" name="user_type"  required>
             <option value="" disabled selected>Select a role</option>
             <option value="student">Student</option>
             <option value="educator">Educator</option>
         </select>
-        <input type="submit">
+        <input type="submit"> <a href="./index.php">Login</a>
     </form>
 </body>
 </html>

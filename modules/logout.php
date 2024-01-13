@@ -18,10 +18,9 @@
     curl_setopt($ch, CURLOPT_POSTFIELDS, $request_body);
     $response = curl_exec($ch);
 
-    session_unset();
-    session_destroy();
-
     if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200){
+        session_unset();
+        session_destroy();
         echo "<script>alert('Logout success!')</script>";
         header("Location: ../index.php");
         exit();
