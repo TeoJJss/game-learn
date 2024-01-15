@@ -17,6 +17,7 @@
 <body>
     <h1>Admin Homepage</h1>
     <button onclick="location.href='../../modules/logout.php'">Logout</button>
+    <button onclick="location.href='../index.php'">Profile</button>
 </body>
 <script src="../../src/logout.js"></script>
 </html>

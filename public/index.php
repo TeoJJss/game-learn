@@ -22,14 +22,13 @@
         $response = json_decode(curl_exec($ch), true);
         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 201) {
             $ticket = $response['ticket'];
-            echo "<script>alert('Login success!');</script>";
             session_start();
             $_SESSION['ticket'] = $ticket;
             header('Location: ../index.php');
             exit();
         }else if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 401){
             $msg = $response['msg'];
-            echo "<script>alert('$msg');</script>";
+            echo "<script>alert(`$msg`);</script>";
         }else{
             echo "<script>alert('Login failed! Email or password is incorrect. ');</script>";
         }

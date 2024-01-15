@@ -54,3 +54,23 @@ def logout():
 
     rm_ticket(tic)
     return jsonify({"msg": "Logout success"}), 200
+
+@blueprint.route("/update_prof", methods=["PATCH"])
+def update_profile():
+    body = request.json
+    tic = body.get("ticket")
+    email = body.get("email")
+    name = body.get("name")
+
+    msg, code = update_usr_prof(tic, email, name)
+    return jsonify({"msg": msg}), code
+
+@blueprint.route("/update_pass", methods=["PATCH"])
+def update_password():
+    body = request.json
+    tic = body.get("ticket")
+    cur_pass = body.get("current_pass")
+    new_pass = body.get("new_pass")
+    
+    msg, code = reset_pass(tic, cur_pass, new_pass)
+    return jsonify({"msg": msg}), code

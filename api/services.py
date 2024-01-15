@@ -144,3 +144,42 @@ def rm_ticket(ticket):
     conn.commit()
 
     conn.close()
+
+def update_usr_prof(ticket, email, name):
+    conn = sqlite3.connect(auth_db)
+    get_usr_sql = "SELECT USER_ID FROM TICKETS WHERE TICKET=?"
+    user_id = conn.execute(get_usr_sql, (ticket,)).fetchone()[0]
+
+    if user_id:
+        chk_em_sql = "SELECT COUNT(*) FROM USERS WHERE USER_ID!=? AND EMAIL=?"
+        c_em = conn.execute(chk_em_sql, (user_id, email)).fetchone()[0]
+        if c_em:
+            return "The email has been registered!", 400
+        update_sql = "UPDATE USERS SET EMAIL=?, NAME=? WHERE USER_ID=?"
+        conn.execute(update_sql, (email, name, user_id))
+        conn.commit()
+        
+        return "Update success", 200
+    conn.close()
+    return "Invalid ticket", 400
+
+def reset_pass(ticket, cur_pass, new_pass):
+    conn = sqlite3.connect(auth_db)
+
+    get_usr_sql = "SELECT USER_ID FROM TICKETS WHERE TICKET=?"
+    user_id = conn.execute(get_usr_sql, (ticket,)).fetchone()[0]
+    
+    if user_id:
+        chk_usr_sql = "SELECT COUNT(*) FROM USERS WHERE USER_ID=? AND PASSWORD=?"
+        c_usr = conn.execute(chk_usr_sql, (user_id, cur_pass)).fetchone()[0]
+        if not c_usr:
+            return "Incorrect current password entered!", 400
+        
+        update_sql = "UPDATE USERS SET PASSWORD=? WHERE USER_ID=?"
+        conn.execute(update_sql, (new_pass, user_id))
+        conn.commit()
+
+        return "Update password success", 200
+    
+    conn.close()
+    return "Invalid ticket", 400
