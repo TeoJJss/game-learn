@@ -163,17 +163,17 @@ def update_usr_prof(ticket, email, name):
     conn.close()
     return "Invalid ticket", 400
 
-def reset_pass(ticket, cur_pass, new_pass):
+def reset_pass(ticket, email, name, new_pass):
     conn = sqlite3.connect(auth_db)
 
     get_usr_sql = "SELECT USER_ID FROM TICKETS WHERE TICKET=?"
     user_id = conn.execute(get_usr_sql, (ticket,)).fetchone()[0]
     
     if user_id:
-        chk_usr_sql = "SELECT COUNT(*) FROM USERS WHERE USER_ID=? AND PASSWORD=?"
-        c_usr = conn.execute(chk_usr_sql, (user_id, cur_pass)).fetchone()[0]
+        chk_usr_sql = "SELECT COUNT(*) FROM USERS WHERE USER_ID=? AND EMAIL=? AND NAME=?"
+        c_usr = conn.execute(chk_usr_sql, (user_id, email, name)).fetchone()[0]
         if not c_usr:
-            return "Incorrect current password entered!", 400
+            return "Incorrect details entered!", 400
         
         update_sql = "UPDATE USERS SET PASSWORD=? WHERE USER_ID=?"
         conn.execute(update_sql, (new_pass, user_id))

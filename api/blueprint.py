@@ -69,8 +69,9 @@ def update_profile():
 def update_password():
     body = request.json
     tic = body.get("ticket")
-    cur_pass = body.get("current_pass")
+    email = body.get("email")
+    name = body.get("name")
     new_pass = body.get("new_pass")
     
-    msg, code = reset_pass(tic, cur_pass, new_pass)
+    msg, code = reset_pass(tic, email, name, new_pass)
     return jsonify({"msg": msg}), code
