@@ -1,5 +1,15 @@
 <?php 
+    echo '<link rel="shortcut icon" type="image/png" href="../images/favicon.png">';
     $base_url = "http://127.0.0.1:5000/login-api";
+
+    $ch = curl_init("$base_url/");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_exec($ch);
+
+    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200){
+        trigger_error("No active authentication backend system!");
+        die;
+    }
 
     function check_ticket(){
         global $base_url;
