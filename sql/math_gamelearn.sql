@@ -51,11 +51,12 @@ CREATE TABLE IF NOT EXISTS `comment` (
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE IF NOT EXISTS `course` (
   `courseID` int NOT NULL AUTO_INCREMENT,
+  `courseThumb` blob,
+  `courseName` varchar(100) NOT NULL,
   `intro` text COLLATE utf8mb4_general_ci NOT NULL,
   `description` text COLLATE utf8mb4_general_ci NOT NULL,
   `lastUpdate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `userID` int NOT NULL,
-  `courseThumb` blob,
   PRIMARY KEY (`courseID`),
   KEY `userID` (`userID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -119,11 +120,11 @@ CREATE TABLE IF NOT EXISTS `gift` (
 DROP TABLE IF EXISTS `module`;
 CREATE TABLE IF NOT EXISTS `module` (
   `moduleID` int NOT NULL AUTO_INCREMENT,
+  `moduleTitle` varchar(50) NOT NULL,
   `moduleDesc` text COLLATE utf8mb4_general_ci NOT NULL,
   `filename` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `file` blob NOT NULL,
   `courseID` int NOT NULL,
-  `moduleTitle` varchar(50) NOT NULL,
   PRIMARY KEY (`moduleID`),
   KEY `courseID` (`courseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
