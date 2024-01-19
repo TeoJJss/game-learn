@@ -93,7 +93,8 @@ CREATE TABLE IF NOT EXISTS `course_feedback` (
   `fbImg` blob,
   PRIMARY KEY (`fbID`),
   KEY `courseID` (`courseID`),
-  KEY `userID` (`userID`)
+  KEY `userID` (`userID`),
+  CHECK (ratings >= 0 AND ratings<=5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -202,7 +203,7 @@ DROP TABLE IF EXISTS `question`;
 CREATE TABLE IF NOT EXISTS `question` (
   `questID` int NOT NULL AUTO_INCREMENT,
   `questText` text COLLATE utf8mb4_general_ci NOT NULL,
-  `award_pt` int NOT NULL,
+  `awardPt` int NOT NULL,
   `courseID` int NOT NULL,
   `questImg` tinyblob,
   PRIMARY KEY (`questID`),
