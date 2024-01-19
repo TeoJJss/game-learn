@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `module` (
   `filename` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `file` blob NOT NULL,
   `courseID` int NOT NULL,
-  `moduleTitle` int NOT NULL,
+  `moduleTitle` text NOT NULL,
   PRIMARY KEY (`moduleID`),
   KEY `courseID` (`courseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
