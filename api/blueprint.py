@@ -31,10 +31,10 @@ def register():
     password = body.get("password")
     role = body.get("role")
 
-    registration_status = register_user(email, name, password, role)
+    registration_status, user_id = register_user(email, name, password, role)
     if not registration_status:
-        return jsonify({"msg": "User already exists"}), 403
-    return jsonify({"msg": "Registered"}), 200
+        return jsonify({"msg": "User already exists", "user_id": 0}), 403
+    return jsonify({"msg": "Registered", "user_id": str(user_id)}), 200
 
 @blueprint.route("/check-ticket", methods=["GET"])
 def check():

@@ -192,7 +192,9 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `point` int NOT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+-- Create admin account
+INSERT INTO `profile`(`userID`)
+VALUES('1')
 -- --------------------------------------------------------
 
 --

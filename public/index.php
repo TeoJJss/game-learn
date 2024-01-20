@@ -33,7 +33,6 @@
             echo "<script>alert('Login failed! Email or password is incorrect. ');</script>";
         }
     }
-    
 ?>
 
 <!DOCTYPE html>

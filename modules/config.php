@@ -1,4 +1,13 @@
 <?php 
+    $host="localhost";
+    $user="root";
+    $password="";
+    $database="math_gamelearn";
+    $conn=mysqli_connect($host, $user, $password,$database);
+    if(mysqli_connect_errno()){
+        die; 
+    }
+
     echo '<link rel="shortcut icon" type="image/png" href="../images/favicon.png">';
     $base_url = "http://127.0.0.1:5000/login-api";
 

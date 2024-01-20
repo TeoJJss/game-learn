@@ -1,5 +1,6 @@
 import string, random, datetime, sqlite3
 from config import AUTH_DB
+from werkzeug.security import generate_password_hash, check_password_hash
 
 auth_db=AUTH_DB
 
@@ -21,9 +22,10 @@ def create_db():
     conn.execute(sql)
 
     # Add admin
-    insert_users_sql = '''
+    admin_pass = str(generate_password_hash("admin123"))
+    insert_users_sql = f'''
         INSERT INTO USERS (EMAIL, NAME, PASSWORD, ROLE, STATUS)
-        VALUES ('admin@gel.com', 'admin', 'admin123', 'admin', 'active')
+        VALUES ('admin@gel.com', 'admin', '{admin_pass}', 'admin', 'active')
     '''
     conn.execute(insert_users_sql)
 
@@ -50,17 +52,17 @@ def generate_ticket(email, password):
     # Check if credentials are valid
     conn = sqlite3.connect(auth_db)
     
-    sql="SELECT USER_ID, NAME, ROLE, STATUS FROM USERS WHERE EMAIL=? AND PASSWORD=?"
+    sql="SELECT PASSWORD, USER_ID, NAME, ROLE, STATUS FROM USERS WHERE EMAIL=?"
 
     cur = conn.cursor()
-    cur.execute(sql, (email, password))
+    cur.execute(sql, (email,))
 
     user = cur.fetchone()
 
-    if user:
-        u_id = user[0]
-        role = user[2]
-        status = user[3]
+    if user and check_password_hash(user[0], password):
+        u_id = user[1]
+        role = user[3]
+        status = user[4]
         if status != "active":
             return u_id, 0, role, status
     
@@ -98,7 +100,7 @@ def register_user(email, name, password, role):
     result = conn.execute(sql, (email,)).fetchone()[0]
 
     if result > 0:
-        return not result
+        return not result, 0
 
     if role == "student":
         insert_sql=f"INSERT INTO USERS(EMAIL, NAME, PASSWORD, ROLE, STATUS) VALUES (?, ?, ?, ?, 'active')"
@@ -106,13 +108,16 @@ def register_user(email, name, password, role):
     elif role == "educator":
         insert_sql=f"INSERT INTO USERS(EMAIL, NAME, PASSWORD, ROLE, STATUS) VALUES (?, ?, ?, ?, 'pending')"
     
-    conn.execute(insert_sql, (email, name, password, role))
+    conn.execute(insert_sql, (email, name, generate_password_hash(password), role))
 
     conn.commit()
 
+    sql=f"SELECT USER_ID FROM USERS WHERE EMAIL=?"
+    user_id = conn.execute(sql, (email,)).fetchone()[0]
+
     conn.close()
 
-    return not result
+    return not result, user_id
 
 def check_ticket(ticket):
     conn = sqlite3.connect(auth_db)
@@ -129,6 +134,7 @@ def check_ticket(ticket):
         role = result[2]
         status = result[3]
         result = {
+            "user_id": user_id,
             "email": email,
             "name": name,
             "role": role,

@@ -21,6 +21,12 @@
         $response = json_decode(curl_exec($ch), true);
 
         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+            $sql = "INSERT INTO `profile`(userID) VALUES(?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $response['user_id']);
+            $stmt->execute();
+            $stmt->close();
+            
             echo "<script>alert('Registration success!');</script>";
             echo "<script>location.href = '../index.php';</script>";
             exit();
@@ -50,8 +56,8 @@
             <option value="" disabled selected>Select a role</option>
             <option value="student">Student</option>
             <option value="educator">Educator</option>
-        </select>
-        <input type="submit"> <a href="./index.php">Login</a>
+        </select><br>
+        <input type="submit" value="Register"> <a href="./index.php">Login</a>
     </form>
 </body>
 </html>
