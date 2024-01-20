@@ -11,7 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -33,7 +32,7 @@ DROP TABLE IF EXISTS `comment`;
 CREATE TABLE IF NOT EXISTS `comment` (
   `commentID` int NOT NULL AUTO_INCREMENT,
   `commentText` text COLLATE utf8mb4_general_ci NOT NULL,
-  `commentMedia` blob NOT NULL,
+  `commentMedia` blob DEFAULT NULL,
   `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `postID` int NOT NULL,
   `userID` int NOT NULL,
@@ -51,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE IF NOT EXISTS `course` (
   `courseID` int NOT NULL AUTO_INCREMENT,
-  `courseThumb` blob,
+  `courseThumb` blob DEFAULT NULL,
   `courseName` varchar(100) NOT NULL,
   `intro` text COLLATE utf8mb4_general_ci NOT NULL,
   `description` text COLLATE utf8mb4_general_ci NOT NULL,
@@ -90,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `course_feedback` (
   `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `userID` int NOT NULL,
   `courseID` int NOT NULL,
-  `fbImg` blob,
+  `fbImg` blob DEFAULT NULL,
   PRIMARY KEY (`fbID`),
   KEY `courseID` (`courseID`),
   KEY `userID` (`userID`),
@@ -108,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `gift` (
   `giftID` int NOT NULL AUTO_INCREMENT,
   `giftName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `giftPoints` int NOT NULL,
-  `giftMedia` blob NOT NULL,
+  `giftMedia` blob DEFAULT NULL,
   PRIMARY KEY (`giftID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -157,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `option` (
   `optValue` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `IsAnswer` tinyint(1) NOT NULL,
   `questID` int NOT NULL,
-  `optImg` blob,
+  `optImg` blob DEFAULT NULL,
   PRIMARY KEY (`optID`),
   KEY `questID` (`questID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -172,7 +171,7 @@ DROP TABLE IF EXISTS `post`;
 CREATE TABLE IF NOT EXISTS `post` (
   `postID` int NOT NULL AUTO_INCREMENT,
   `content` text COLLATE utf8mb4_general_ci NOT NULL,
-  `postMedia` blob NOT NULL,
+  `postMedia` blob DEFAULT NULL,
   `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `userID` int NOT NULL,
   PRIMARY KEY (`postID`),
@@ -188,13 +187,14 @@ CREATE TABLE IF NOT EXISTS `post` (
 DROP TABLE IF EXISTS `profile`;
 CREATE TABLE IF NOT EXISTS `profile` (
   `userID` int NOT NULL,
-  `profilePic` blob NOT NULL,
-  `point` int NOT NULL,
+  `profilePic` blob DEFAULT NULL,
+  `point` int DEFAULT 0,
+  `about` text DEFAULT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 -- Create admin account
 INSERT INTO `profile`(`userID`)
-VALUES('1')
+VALUES('1');
 -- --------------------------------------------------------
 
 --
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `question` (
   `questText` text COLLATE utf8mb4_general_ci NOT NULL,
   `awardPt` int NOT NULL,
   `courseID` int NOT NULL,
-  `questImg` tinyblob,
+  `questImg` blob DEFAULT NULL,
   PRIMARY KEY (`questID`),
   KEY `courseID` (`courseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -238,7 +238,7 @@ DROP TABLE IF EXISTS `system_feedback`;
 CREATE TABLE IF NOT EXISTS `system_feedback` (
   `sfID` int NOT NULL AUTO_INCREMENT,
   `sfContent` text COLLATE utf8mb4_general_ci NOT NULL,
-  `sfMedia` blob NOT NULL,
+  `sfMedia` blob DEFAULT NULL,
   `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `reply` text COLLATE utf8mb4_general_ci,
   `userID` int NOT NULL,
