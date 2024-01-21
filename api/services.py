@@ -164,6 +164,7 @@ def update_usr_prof(ticket, email, name):
         update_sql = "UPDATE USERS SET EMAIL=?, NAME=? WHERE USER_ID=?"
         conn.execute(update_sql, (email, name, user_id))
         conn.commit()
+        conn.close()
         
         return "Update success", 200
     conn.close()
@@ -184,8 +185,48 @@ def reset_pass(ticket, email, name, new_pass):
         update_sql = "UPDATE USERS SET PASSWORD=? WHERE USER_ID=?"
         conn.execute(update_sql, (new_pass, user_id))
         conn.commit()
+        conn.close()
 
         return "Update password success", 200
     
     conn.close()
     return "Invalid ticket", 400
+
+def update_status(ticket, user_id, new_status, remark=None):
+    conn = sqlite3.connect(auth_db)
+    if new_status not in ["active", "banned"]:
+        return "Invalid new status", 400
+    validate_sql = "SELECT ROLE FROM USERS LEFT JOIN TICKETS ON USERS.USER_ID = TICKETS.USER_ID WHERE TICKET=?"
+    c_usr_role = conn.execute(validate_sql, (ticket,)).fetchone()[0]
+    if c_usr_role != "admin":
+        return "Unauthorized access", 401
+    update_sql = "UPDATE USERS SET STATUS = ?, REMARK = ? WHERE USER_ID = ?"
+    conn.execute(update_sql, (new_status, remark, user_id))
+    conn.commit()
+    conn.close()
+
+    return "Update status success", 200
+
+def get_edu_list(ticket):
+    conn = sqlite3.connect(auth_db)
+    validate_sql = "SELECT ROLE FROM USERS LEFT JOIN TICKETS ON USERS.USER_ID = TICKETS.USER_ID WHERE TICKET=?"
+    c_usr_role = conn.execute(validate_sql, (ticket,)).fetchone()[0]
+    if c_usr_role != "admin":
+        return "Unauthorized access", 401
+    ls_sql = "SELECT EMAIL, NAME, ROLE, STATUS, REMARK, USER_ID FROM USERS WHERE ROLE='educator'"
+    usr_ls = conn.execute(ls_sql).fetchall()
+
+    edu_ls = []
+    print(usr_ls)
+    for usr in usr_ls:
+        tmp_d = {
+            "email": usr[0],
+            "name": usr[1],
+            "role": usr[2],
+            "status": usr[3],
+            "remark": usr[4],
+            "user_id": usr[5]
+        }
+        edu_ls.append(tmp_d)
+    conn.close()
+    return edu_ls, 200

@@ -75,3 +75,21 @@ def update_password():
     
     msg, code = reset_pass(tic, email, name, new_pass)
     return jsonify({"msg": msg}), code
+
+@blueprint.route("/update_status", methods=["PATCH"])
+def update_usr_status():
+    body = request.json
+    tic = body.get("ticket")
+    user_id = body.get("user_id")
+    new_status = body.get("new_status")
+    remark = body.get("remark") if not 'null' else ""
+    msg, code = update_status(tic, user_id, new_status, remark)
+
+    return jsonify({"msg": msg}), code
+
+@blueprint.route("/edu_list", methods=["GET"])
+def get_edu_ls():
+    tic = request.args.get("ticket")
+
+    msg, code = get_edu_list(tic)
+    return jsonify({"msg": msg}), code
