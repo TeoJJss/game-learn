@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `reply` (
 
 DROP TABLE IF EXISTS `user_gift`;
 CREATE TABLE IF NOT EXISTS `user_gift` (
-  `redemptionID` int NOT NULL,
+  `redemptionID` int NOT NULL AUTO_INCREMENT,
   `userID` int NOT NULL,
   `giftID` int NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
