@@ -25,6 +25,12 @@
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $response['user_id']);
             $stmt->execute();
+            if ($role == "student"){
+                $sql = "INSERT INTO `point`(userID) VALUES(?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $response['user_id']);
+                $stmt->execute();
+            }
             $stmt->close();
             
             echo "<script>alert('Registration success!');</script>";

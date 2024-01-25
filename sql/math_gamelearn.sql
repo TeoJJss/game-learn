@@ -188,9 +188,17 @@ DROP TABLE IF EXISTS `profile`;
 CREATE TABLE IF NOT EXISTS `profile` (
   `userID` int NOT NULL,
   `profilePic` blob DEFAULT NULL,
-  `point` int DEFAULT 0,
   `about` text DEFAULT NULL,
   PRIMARY KEY (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `point`;
+CREATE TABLE IF NOT EXISTS `point` (
+  `pointID` int NOT NULL AUTO_INCREMENT,
+  `userID` int NOT NULL,
+  `pointValue` int DEFAULT 0,
+  PRIMARY KEY (`pointID`),
+  FOREIGN KEY (`userID`) REFERENCES `profile`(`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 -- Create admin account
 INSERT INTO `profile`(`userID`)
@@ -240,10 +248,20 @@ CREATE TABLE IF NOT EXISTS `system_feedback` (
   `sfContent` text COLLATE utf8mb4_general_ci NOT NULL,
   `sfMedia` blob DEFAULT NULL,
   `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `reply` text COLLATE utf8mb4_general_ci,
   `userID` int NOT NULL,
   PRIMARY KEY (`sfID`),
   KEY `userID` (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `reply`;
+CREATE TABLE IF NOT EXISTS `reply` (
+  `replyID` int NOT NULL AUTO_INCREMENT,
+  `replyContent` text COLLATE utf8mb4_general_ci NOT NULL,
+  `replyMedia` blob DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sfID` int NOT NULL,
+  PRIMARY KEY (`replyID`),
+  FOREIGN KEY (`sfID`) REFERENCES `system_feedback`(`sfID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -259,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `user_gift` (
   `giftID` int NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `isUsed` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`redemptionID`,`userID`,`giftID`),
+  PRIMARY KEY (`redemptionID`),
   KEY `userID` (`userID`),
   KEY `giftID` (`giftID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
