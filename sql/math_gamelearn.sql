@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   `intro` text COLLATE utf8mb4_general_ci NOT NULL,
   `description` text COLLATE utf8mb4_general_ci NOT NULL,
   `lastUpdate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(50) DEFAULT 'pending',
   `userID` int NOT NULL,
   PRIMARY KEY (`courseID`),
   KEY `userID` (`userID`)
@@ -90,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `course_feedback` (
   `userID` int NOT NULL,
   `courseID` int NOT NULL,
   `fbImg` blob DEFAULT NULL,
+  `eduReply` text DEFAULT NULL,
   PRIMARY KEY (`fbID`),
   KEY `courseID` (`courseID`),
   KEY `userID` (`userID`),
@@ -223,22 +225,6 @@ CREATE TABLE IF NOT EXISTS `question` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quiz_enrolment`
---
-
-DROP TABLE IF EXISTS `quiz_enrolment`;
-CREATE TABLE IF NOT EXISTS `quiz_enrolment` (
-  `userID` int NOT NULL,
-  `questID` int NOT NULL,
-  `isCorrect` tinyint(1) NOT NULL,
-  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`userID`,`questID`),
-  KEY `questID` (`questID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `system_feedback`
 --
 
@@ -280,6 +266,23 @@ CREATE TABLE IF NOT EXISTS `user_gift` (
   PRIMARY KEY (`redemptionID`),
   KEY `userID` (`userID`),
   KEY `giftID` (`giftID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_enrolment`
+--
+
+DROP TABLE IF EXISTS `quiz_enrolment`;
+CREATE TABLE IF NOT EXISTS `quiz_enrolment` (
+  `userID` int NOT NULL,
+  `questID` int NOT NULL,
+  `optID` int DEFAULT NULL,
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `redemptionID`int DEFAULT NULL,
+  PRIMARY KEY (`userID`,`questID`),
+  KEY `questID` (`questID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -351,7 +354,9 @@ ALTER TABLE `question`
 --
 ALTER TABLE `quiz_enrolment`
   ADD CONSTRAINT `quiz_enrolment_ibfk_1` FOREIGN KEY (`questID`) REFERENCES `question` (`questID`),
-  ADD CONSTRAINT `quiz_enrolment_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `profile` (`userID`);
+  ADD CONSTRAINT `quiz_enrolment_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `profile` (`userID`),
+  ADD CONSTRAINT `quiz_enrolment_ibfk_3` FOREIGN KEY (`optID`) REFERENCES `option`(`optID`),
+  ADD CONSTRAINT `quiz_enrolment_ibfk_4` FOREIGN KEY (`redemptionID`) REFERENCES `user_gift`(`redemptionID`);
 
 --
 -- Constraints for table `system_feedback`
