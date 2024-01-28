@@ -1,1 +1,1 @@
-AUTH_DB = "auth.db"
+AUTH_DB = "auth.db" # DB filename

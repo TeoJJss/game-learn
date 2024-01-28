@@ -11,7 +11,7 @@ def create_db():
         CREATE TABLE USERS
         (
             USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-            EMAIL VARCHAR(50) NOT NULL,
+            EMAIL VARCHAR(50) NOT NULL UNIQUE,
             NAME VARCHAR(50) NOT NULL,
             PASSWORD VARCHAR(255) NOT NULL,
             ROLE VARCHAR(50) NOT NULL,
@@ -225,3 +225,30 @@ def get_edu_list(ticket):
         edu_ls.append(tmp_d)
     conn.close()
     return edu_ls, 200
+
+def get_user_list(ticket):
+    conn = sqlite3.connect(auth_db)
+    # Check if request from admin
+    validate_sql = "SELECT ROLE FROM USERS LEFT JOIN TICKETS ON USERS.USER_ID = TICKETS.USER_ID WHERE TICKET=?"
+    c_usr_role = conn.execute(validate_sql, (ticket,)).fetchone()[0]
+    if c_usr_role != "admin":
+        return "Unauthorized access", 401
+    
+    # Get user list
+    ls_sql = "SELECT EMAIL, NAME, ROLE, STATUS, REMARK, USER_ID FROM USERS WHERE ROLE != 'admin'"
+    usr_ls = conn.execute(ls_sql).fetchall()
+
+    user_ls = []
+    print(usr_ls)
+    for usr in usr_ls:
+        tmp_d = {
+            "email": usr[0],
+            "name": usr[1],
+            "role": usr[2],
+            "status": usr[3],
+            "remark": usr[4],
+            "user_id": usr[5]
+        }
+        user_ls.append(tmp_d)
+    conn.close()
+    return user_ls, 200

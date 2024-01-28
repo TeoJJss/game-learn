@@ -81,7 +81,7 @@ def update_usr_status():
     tic = body.get("ticket")
     user_id = body.get("user_id")
     new_status = body.get("new_status")
-    remark = body.get("remark") if not 'null' else ""
+    remark = body.get("remark") if body.get("remark") !=  'null' else ""
     msg, code = update_status(tic, user_id, new_status, remark)
 
     return jsonify({"msg": msg}), code
@@ -91,4 +91,11 @@ def get_edu_ls():
     tic = request.args.get("ticket")
 
     msg, code = get_edu_list(tic)
+    return jsonify({"msg": msg}), code
+
+@blueprint.route('/user-list', methods=['GET'])
+def get_user_ls():
+    tic = request.args.get("ticket")
+
+    msg, code = get_user_list(tic)
     return jsonify({"msg": msg}), code
