@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Rubik+Burned&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+  }
+
+.navbar {
+    display: flex;
+    /* justify-content: space-between; */
+    background-color: #ffffff;
+    padding: 10px;
+    align-items:center;
+    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.5);
+  }
+
+
+  .logo{
+    width: auto; 
+    height: 50px;
+    align-items: center;      
+    position: relative;
+    left:1%;
+    border-radius: 15px;
+    transition: 0.4s;
+  }
+
+
+.nav_search {
+    border: none;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #e8e8e8;
+    border-color: #dedede;
+    transition: 0.3s;
+    position: absolute;
+    left: 15%;
+    width: 400px; 
+    height: 10px;
+
+   }
+   
+.nav_search:focus {
+    outline-color: #e8e8e8;
+    background: #e8e8e8;
+    box-shadow: inset 20px 20px 60px #c5c5c5,
+            inset -20px -20px 60px #ffffff;
+    transition: 0.3s;
+}
+
+ 
+.myteach{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: transparent;
+    position: absolute;
+    right:35%;
+    border-color: transparent;
+    border-radius: 15px;
+    transition: 0.4s;
+}
+
+.mylearn{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: transparent;
+    position: absolute;
+    right:25%;
+    border-color: transparent;
+    border-radius: 15px;
+    transition: 0.4s;
+}
+
+.myteach img, .mylearn img {
+    margin-bottom: 0.5px;
+    width: auto;
+    height: 35px;
+}
+
+.myteach a , .mylearn a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 12px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login{
+    width: 100px; 
+    height: 40px; 
+    font-size: 15px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 15px;
+    border-color: #d3d1d1;
+    background-color: #f2f2f2;
+    position: absolute;
+    right: 11%;
+    transition: 0.4s;
+    color: #353535;
+}
+
+.signup{
+    width: 100px; 
+    height: 40px; 
+    font-size: 15px;
+    color: #cacaca;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 15px;
+    border-color: #000000;
+    background-color: #000000;
+    position: absolute;
+    right: 3%;
+    transition: 0.4s;
+}
+
+.logo:hover, .myteach:hover, .mylearn:hover {
+    transform: scale(1.1); 
+}
+
+.login:hover {
+    color: #ffffff;
+    background-color: #ff9900;
+    transform: scale(1.1); 
+    text-shadow: 0 0 5px #ffffff;
+    box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
+}
+
+.signup:hover {
+    color: #ffffff; 
+    transform: scale(1.1); 
+    text-shadow: 0 0 5px #ffffff;
+    box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
+}
+
+
+
