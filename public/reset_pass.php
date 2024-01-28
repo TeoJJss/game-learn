@@ -17,7 +17,7 @@
             "password" => $password
         ));
 
-        $ch = curl_init("$base_url/update_pass");
+        $ch = curl_init("$base_url/update-pass");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request_body);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

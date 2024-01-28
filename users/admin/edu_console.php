@@ -7,7 +7,7 @@
     }
     $ticket = $_SESSION['ticket'];
 
-    $ch = curl_init("$base_url/edu_list?ticket=$ticket");
+    $ch = curl_init("$base_url/edu-list?ticket=$ticket");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $response = json_decode(curl_exec($ch), true);

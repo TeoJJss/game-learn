@@ -15,7 +15,7 @@
         'new_status' => $status,
         'remark' => $remark,
     ));
-    $ch = curl_init("$base_url/update_status");
+    $ch = curl_init("$base_url/update-status");
 
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $uptBody);
