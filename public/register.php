@@ -1,5 +1,11 @@
 <?php 
     require '../modules/config.php';
+
+    if (check_ticket()){
+        header("Location: ../index.php");
+        exit();
+    }
+
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $email = $_POST['email'];
         $name = $_POST['name'];

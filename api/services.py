@@ -170,27 +170,22 @@ def update_usr_prof(ticket, email, name):
     conn.close()
     return "Invalid ticket", 400
 
-def reset_pass(ticket, email, name, new_pass):
+def reset_pass(email, name, new_pass):
     conn = sqlite3.connect(auth_db)
 
-    get_usr_sql = "SELECT USER_ID FROM TICKETS WHERE TICKET=?"
-    user_id = conn.execute(get_usr_sql, (ticket,)).fetchone()[0]
-    
-    if user_id:
-        chk_usr_sql = "SELECT COUNT(*) FROM USERS WHERE USER_ID=? AND EMAIL=? AND NAME=?"
-        c_usr = conn.execute(chk_usr_sql, (user_id, email, name)).fetchone()[0]
-        if not c_usr:
-            return "Incorrect details entered!", 400
-        
-        update_sql = "UPDATE USERS SET PASSWORD=? WHERE USER_ID=?"
-        conn.execute(update_sql, (new_pass, user_id))
-        conn.commit()
+    chk_usr_sql = "SELECT COUNT(*), USER_ID FROM USERS WHERE EMAIL=? AND NAME=?"
+    usr = conn.execute(chk_usr_sql, (email, name)).fetchone()
+    c_usr = usr[0]
+    if not c_usr:
         conn.close()
-
-        return "Update password success", 200
-    
+        return "Incorrect details entered!", 400
+    user_id = usr[1]
+    update_sql = "UPDATE USERS SET PASSWORD=? WHERE USER_ID=?"
+    conn.execute(update_sql, (generate_password_hash(new_pass), user_id))
+    conn.commit()
     conn.close()
-    return "Invalid ticket", 400
+
+    return "Update password success", 200
 
 def update_status(ticket, user_id, new_status, remark=None):
     conn = sqlite3.connect(auth_db)

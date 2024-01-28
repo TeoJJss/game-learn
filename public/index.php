@@ -47,7 +47,7 @@
     <form method="post">
         <label for="email">Email:</label> <input type="text" id="email" name="email" required autofocus><br><br>
         <label for="password">Password:</label> <input type="password" id="password" name="password" required><br><br>
-        <input type="submit"> <a href="./register.php">Register</a>
+        <input type="submit" value="Login Now!"> <a href="./register.php">Register</a>
     </form>
 </body>
 </html>

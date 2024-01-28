@@ -68,12 +68,11 @@ def update_profile():
 @blueprint.route("/update_pass", methods=["PATCH"])
 def update_password():
     body = request.json
-    tic = body.get("ticket")
     email = body.get("email")
     name = body.get("name")
-    new_pass = body.get("new_pass")
+    new_pass = body.get("password")
     
-    msg, code = reset_pass(tic, email, name, new_pass)
+    msg, code = reset_pass(email, name, new_pass)
     return jsonify({"msg": msg}), code
 
 @blueprint.route("/update_status", methods=["PATCH"])
