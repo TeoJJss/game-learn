@@ -30,6 +30,6 @@
         echo "<script>alert('Action failed!')</script>";
     }
     curl_close($ch);
-    header('Location:../users/admin/edu_console.php');
+    echo "<script>window.history.back();</script>";
     exit();
 ?>
