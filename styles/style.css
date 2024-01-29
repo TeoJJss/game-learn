@@ -290,17 +290,20 @@ body {
 /* home page for webpage */
 /* join for free */
 .join_for_free{
-    width: 150px; 
-    height: 40px; 
-    font-size: 15px;
+    width: auto;
+    height: auto;
+    font-size: 1.2vw;
     color: #ffffff;
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    border-radius: 15px;
+    border-radius: 1.2vw;
     border-color: transparent;
     background-color: #ff9900;
     transition: 0.4s;
+    padding: 0.1vw;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
 }
 .join_for_free:hover {
     color: #ffffff; 
@@ -314,17 +317,20 @@ body {
 
 
 .start_teaching_today{
-    width: 200px; 
-    height: 40px; 
-    font-size: 15px;
+    width: auto;
+    height: auto;
+    font-size: 1.2vw;
     color: #ffffff;
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    border-radius: 15px;
+    border-radius: 1.2vw;
     border-color: transparent;
     background-color: #ff9900;
     transition: 0.4s;
+    padding: 0.1vw;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
 }
 .start_teaching_today:hover {
     color: #ffffff; 
@@ -364,6 +370,33 @@ h4{
 }
 
 
+
+/* submit button */
+.submit{
+    width: auto;
+    height: auto;
+    font-size: 1.2vw;
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    border-radius: 1.2vw;
+    border-color: transparent;
+    background-color: #ff9900;
+    transition: 0.4s;
+    padding: 0.1vw;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
+}
+.submit:hover {
+    color: #ffffff; 
+    transform: scale(1.1); 
+    text-shadow: 0 0 5px #ffffff;
+    box-shadow: 5px 0 10px rgba(255, 162, 0, 0.5);
+}
+.submit:active {
+    transform: scale(0.95);
+  }
 
 
 
