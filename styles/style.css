@@ -1,0 +1,371 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+  }
+
+.navbar {
+    display: flex;
+    /* justify-content: space-between; */
+    background-color: #ffffff;
+    padding: 10px;
+    align-items:center;
+    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+  }
+
+
+  .logo{
+    width: auto; 
+    height: 50px;
+    align-items: center;      
+    position: relative;
+    left:1%;
+    border-radius: 5px;
+    transition: 0.4s;
+  }
+
+
+.nav_search {
+    border: none;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #e8e8e8;
+    border-color: #dedede;
+    transition: 0.3s;
+    position: absolute;
+    left: 15%;
+    width: 400px; 
+    height: 10px;
+   }
+   
+.nav_search:focus {
+    outline-color: #e8e8e8;
+    background: #e8e8e8;
+    box-shadow: inset 20px 20px 60px #c5c5c5,
+            inset -20px -20px 60px #ffffff;
+    transition: 0.3s;
+}
+
+ 
+.myteach{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: transparent;
+    position: absolute;
+    right:35%;
+    border-color: transparent;
+    border-radius: 15px;
+    transition: 0.4s;
+}
+
+.mylearn{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: transparent;
+    position: absolute;
+    right:25%;
+    border-color: transparent;
+    border-radius: 15px;
+    transition: 0.4s;
+}
+
+.myteach img, .mylearn img {
+    margin-bottom: 0.5px;
+    width: auto;
+    height: 5vh;
+}
+
+.myteach a , .mylearn a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 1.5vh;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+
+.login{
+    width: 100px; 
+    height: 40px; 
+    font-size: 15px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    border-radius: 15px;
+    border-color: #d3d1d1;
+    background-color: #f2f2f2;
+    position: absolute;
+    right: 11%;
+    transition: 0.4s;
+    color: #353535;
+}
+
+.signup{
+    width: 100px; 
+    height: 40px; 
+    font-size: 15px;
+    color: #cacaca;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    border-radius: 15px;
+    border-color: #000000;
+    background-color: #000000;
+    position: absolute;
+    right: 3%;
+    transition: 0.4s;
+}
+
+.logo:hover, .myteach:hover, .mylearn:hover {
+    transform: scale(1.1); 
+}
+
+.logo:active, .myteach:active, .mylearn:active {
+    transform: scale(0.95);
+  }
+
+.login:hover {
+    color: #ffffff;
+    background-color: #ff9900;
+    transform: scale(1.1); 
+    text-shadow: 0 0 5px #ffffff;
+    box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
+}
+
+.signup:hover {
+    color: #ffffff; 
+    transform: scale(1.1); 
+    text-shadow: 0 0 5px #ffffff;
+    box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
+}
+
+
+/* header nav button */
+.nav_button{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 5px;
+    transition: 0.4s;
+    position: relative;
+    left:1%;
+}
+
+.nav_button img {
+    margin-bottom: 0.5px;
+    width: auto;
+    height: 5vh;
+}
+
+.nav_button a{
+    color: #000000;
+    text-decoration: none;
+    font-size: 1.5vh;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.nav_button:hover {
+    transform: scale(1.1); 
+}
+
+.nav_button:active {
+    transform: scale(0.95);
+  }
+
+/* more_button */
+.more_button{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f8f8f8;
+    border-color: transparent;
+    border-radius: 12px;
+    transition: 0.4s;
+    position: relative;
+    left:1%;
+    width: 12.5vw;
+    height: 12.5vw;
+}
+
+.more_button img {
+    padding: 1.5vh;
+    width: auto;
+    height: 7.83vw;
+}
+
+.more_button a{
+    color: #000000;
+    text-decoration: none;
+    font-size: 1.6667vw;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+}
+
+.more_button:hover {
+    transform: scale(1.1); 
+    background-color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.more_button:active {
+    transform: scale(0.95);
+  }
+
+
+
+/* tittle */
+.title{
+    display: flex;
+    align-items: center;
+    margin: 2vw;
+}
+.title img {
+    padding: 2vh;
+    width: auto;
+    height: 5vw;
+}
+.title a{
+    color: #000000;
+    text-decoration: none;
+    font-size: 5vh;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    margin-left: 1vw;
+}
+
+
+
+/* this is the sign up and login pop-up interface button */
+.login_signup_button {
+  margin: 10px;
+  padding: 15px 30px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+  display: block;
+  border: 0px;
+  font-weight: 700;
+  box-shadow: 0px 0px 14px -7px #f09819;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  width: 300px;
+  height: auto;
+}
+
+.login_signup_button:hover {
+  background-position: right center;
+  /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.login_signup_button:active {
+  transform: scale(0.95);
+}
+
+
+/* home page for webpage */
+/* join for free */
+.join_for_free{
+    width: 150px; 
+    height: 40px; 
+    font-size: 15px;
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    border-radius: 15px;
+    border-color: transparent;
+    background-color: #ff9900;
+    transition: 0.4s;
+}
+.join_for_free:hover {
+    color: #ffffff; 
+    transform: scale(1.1); 
+    text-shadow: 0 0 5px #ffffff;
+    box-shadow: 5px 0 10px rgba(255, 162, 0, 0.5);
+}
+.join_for_free:active {
+    transform: scale(0.95);
+  }
+
+
+.start_teaching_today{
+    width: 200px; 
+    height: 40px; 
+    font-size: 15px;
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    border-radius: 15px;
+    border-color: transparent;
+    background-color: #ff9900;
+    transition: 0.4s;
+}
+.start_teaching_today:hover {
+    color: #ffffff; 
+    transform: scale(1.1); 
+    text-shadow: 0 0 5px #ffffff;
+    box-shadow: 5px 0 10px rgba(255, 162, 0, 0.5);
+}
+.start_teaching_today:active {
+    transform: scale(0.95);
+  }
+
+
+
+  /* font size */
+h1{
+    font-size: 1.6667vw;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;   
+}
+
+h2{
+    font-size: 1.5vw;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;   
+}
+
+h3{
+    font-size: 1.3vw;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;   
+}
+
+h4{
+    font-size: 1.1vw;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;   
+}
+
+
+
+
+
+
+
