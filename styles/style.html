@@ -26,6 +26,68 @@
     </div>
 
 
+
+    <!-- dropdown box, category -->
+    <div class="dropdown">
+        <button class="dropbutton">
+            Progress
+            <img src="./nav_picture/arrow.png" alt="drop_img" class="dropbutton-icon"> 
+        </button>
+        <div class="dropdown-content">
+        <a href="#">Progressing</a>
+        <a href="#">Completed</a>
+        <a href="#">Link 3</a>
+        </div>
+    </div>
+
+    <p></p>
+
+    <!-- search bar -->
+    <input class="searchbar" placeholder="Search My Course">
+
+    <p></p>
+
+    <!-- rating star -->
+    <div class="rating">
+        <input value="5" name="rating" id="star5" type="radio">
+        <label for="star5"></label>
+        <input value="4" name="rating" id="star4" type="radio">
+        <label for="star4"></label>
+        <input value="3" name="rating" id="star3" type="radio">
+        <label for="star3"></label>
+        <input value="2" name="rating" id="star2" type="radio">
+        <label for="star2"></label>
+        <input value="1" name="rating" id="star1" type="radio">
+        <label for="star1"></label>
+      </div>
+    
+
+    <p></p>
+
+    <!-- minus and add button -->
+    <div class="add_minus_button">
+        <button class="minus_button" onclick="decrement()">-</button>
+        <span class="add_minus_number">0</span>
+        <button class="add_button" onclick="increment()">+</button>
+    </div>
+
+    <script>
+        let number = document.querySelector('.add_minus_number');
+
+        function increment() {
+            number.textContent = parseInt(number.textContent) + 1;
+        }
+
+        function decrement() {
+            if (parseInt(number.textContent) > 0) {
+                number.textContent = parseInt(number.textContent) - 1;
+            }
+        }
+    </script>
+
+    <p></p> 
+
+
     <!-- header nav button -->
     <button class="nav_button">
         <img src="./nav_picture/course.png" alt="nav_button">
@@ -62,9 +124,23 @@
     <h2>This is h2</h2>
     <h3>This is h3</h3>
     <h4>This is h4</h4>
-    
+
+
     <!-- submit button -->
     <button class="submit">Submit</button>
+
+
+
+
+
+
+
+ 
+
+
+    
+
+
 
     
 </body>
