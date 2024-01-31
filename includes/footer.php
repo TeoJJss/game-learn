@@ -1,5 +1,9 @@
 <footer>
-  <link rel="stylesheet" href="../styles/footer.css">
+  <?php if (file_exists("../styles/footer.css")){ ?>
+      <link rel="stylesheet" href="../styles/footer.css">
+  <?php }else{?>
+      <link rel="stylesheet" href="../../styles/footer.css">
+  <?php }?>
   <div class="footer">
     <div>
       <a href="#about">About Us</a>

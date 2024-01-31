@@ -35,10 +35,12 @@
         
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202){
                     $role = $response['data']['role'];
+                    session_write_close();
                     return $role;
                 }
             }
         }
+        session_write_close();
         return False;
     }
 ?>

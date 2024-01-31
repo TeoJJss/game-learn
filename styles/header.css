@@ -2,9 +2,10 @@
 
 
 
-body {
+header {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
+    max-width: 100vw;
   }
 
 .navbar {
@@ -26,9 +27,13 @@ body {
     left:1%;
     border-radius: 5px;
     transition: 0.4s;
+    margin-right: 2vw
   }
 
-
+div.nav{
+    display: flex;
+    flex-direction: row;
+}
 .nav_search {
     border: none;
     padding: 1rem;
@@ -36,10 +41,13 @@ body {
     background: #e8e8e8;
     border-color: #dedede;
     transition: 0.3s;
-    position: absolute;
-    left: 15%;
+    /* position: absolute; */
+    margin-left: 7vw;
+    /* left: 15%; */
+    margin-top: 2vh;
     width: 400px; 
     height: 10px;
+    margin-right: 5vw;
    }
    
 .nav_search:focus {
@@ -50,38 +58,26 @@ body {
     transition: 0.3s;
 }
 
- 
-.myteach{
+.nav_button{
     display: flex;
     align-items: center;
     flex-direction: column;
     background-color: transparent;
-    position: absolute;
-    right:35%;
+    /* position: absolute; */
+    /* right:35%; */
+    margin-right: 2vw;
     border-color: transparent;
     border-radius: 15px;
     transition: 0.4s;
-}
+} 
 
-.mylearn{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    background-color: transparent;
-    position: absolute;
-    right:25%;
-    border-color: transparent;
-    border-radius: 15px;
-    transition: 0.4s;
-}
-
-.myteach img, .mylearn img {
+.nav_button img {
     margin-bottom: 0.5px;
     width: auto;
     height: 5vh;
 }
 
-.myteach a , .mylearn a {
+.nav_button a {
     color: #000000;
     text-decoration: none;
     font-size: 1.5vh;
@@ -90,37 +86,32 @@ body {
     font-weight: 600;
 }
 
-
-.login{
+.guest-btn{
     width: 100px; 
     height: 40px; 
     font-size: 15px;
+    transition: 0.4s;
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     border-radius: 15px;
+}
+
+#login{
+    
     border-color: #d3d1d1;
     background-color: #f2f2f2;
     position: absolute;
     right: 11%;
-    transition: 0.4s;
     color: #353535;
 }
 
-.signup{
-    width: 100px; 
-    height: 40px; 
-    font-size: 15px;
+#signup{
     color: #cacaca;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    border-radius: 15px;
     border-color: #000000;
     background-color: #000000;
     position: absolute;
     right: 3%;
-    transition: 0.4s;
 }
 
 .logo:hover, .myteach:hover, .mylearn:hover {

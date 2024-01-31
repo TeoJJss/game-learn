@@ -69,7 +69,7 @@
             <option value="student">Student</option>
             <option value="educator">Educator</option>
         </select><br>
-        <input type="submit" value="Register"> <a href="./index.php">Login</a>
+        <input type="submit" value="Register"> <a href="./login.php">Login</a>
     </form>
 </body>
 </html>
