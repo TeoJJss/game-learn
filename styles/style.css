@@ -149,7 +149,9 @@ body {
     text-shadow: 0 0 5px #ffffff;
     box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
 }
-
+#course{
+  font-size: 10px;
+}
 
 /* header nav button */
 /* .nav_button{
@@ -163,7 +165,6 @@ body {
     position: relative;
     left:1%;
 } */
-
 .nav_button img {
     margin-bottom: 0.5px;
     width: auto;
@@ -375,7 +376,7 @@ h4{
 
 
 /* submit button */
-.submit{
+.button{
     width: auto;
     height: auto;
     font-size: 1.2vw;
@@ -527,7 +528,7 @@ h4{
     color: #ff9900;
     transition: color 0.3s;
   }
-
+  
 
 
   /* minus and add button */

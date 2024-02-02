@@ -31,7 +31,7 @@
         <?php }else if ($role == "student"){ //student header ?>
             
             <input type="text" class="nav_search" placeholder="Search For Anything">
-            <button class="nav_button">
+            <button class="nav_button" onclick="location.href = ''">
                 <img src="../images/nav_picture/course.png" alt="Course">
                 <a>Course</a>
             </button>
