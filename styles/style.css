@@ -11,18 +11,13 @@ body {
     font-weight: 300;
   }
 
-.navbar {
-    display: flex;
-    /* justify-content: space-between; */
-    background-color: #ffffff;
-    padding: 10px;
-    align-items:center;
-    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.5);
-    width: 100%;
-  }
+div.page{
+  margin-left: 8vw;
+  min-height: 100vh;
+}
 
 
-  .logo{
+  /* .logo{
     width: auto; 
     height: 50px;
     align-items: center;      
@@ -46,13 +41,13 @@ body {
     height: 10px;
    } */
    
-.nav_search:focus {
+/* .nav_search:focus {
     outline-color: #e8e8e8;
     background: #e8e8e8;
     box-shadow: inset 20px 20px 60px #c5c5c5,
             inset -20px -20px 60px #ffffff;
     transition: 0.3s;
-}
+} */
 
  
 .myteach{
@@ -230,7 +225,7 @@ body {
 
 .more_button:active {
     transform: scale(0.95);
-  }
+  } */
 
 
 
@@ -431,10 +426,23 @@ p{
     cursor: pointer;
   }
 
+.page-title{
+  display: flex;
+  align-items: center;
+}
 
+.page-title *{
+  vertical-align: middle;
+}
 
+.page-title img {
+  width: 5vw;
+  margin-right: 1vw;
+}
 
-
+.page-content{
+  margin-top: 10vh;
+}
 /* search bar */
 
 .searchbar {
@@ -459,10 +467,6 @@ p{
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
   }
-  
-
-
-
 
   /* rating stars */
   .rating {
@@ -491,14 +495,6 @@ p{
     color: #ff9900;
     transition: color 0.3s;
   }
-  
-
-
-
-
-
-
-  
 
   /* minus and add button */
 .add_minus_button{
@@ -538,10 +534,12 @@ p{
 .add_button:active, .minus_button:active {
     transform: scale(0.95);
   }
-  
+ 
+/* Default profile picture size */
+.profile{
+    width: 10vh;
+}
 
-
-
-  
-
-  
+label{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

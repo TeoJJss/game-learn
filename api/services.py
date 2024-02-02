@@ -168,7 +168,7 @@ def update_usr_prof(ticket, email, name):
         
         return "Update success", 200
     conn.close()
-    return "Invalid ticket", 400
+    return "Invalid ticket", 401
 
 def reset_pass(email, name, new_pass):
     conn = sqlite3.connect(auth_db)
