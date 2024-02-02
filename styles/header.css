@@ -16,6 +16,7 @@ header {
     align-items:center;
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.5);
     width: 100%;
+    height: auto;
   }
 
 
@@ -27,7 +28,8 @@ header {
     left:1%;
     border-radius: 5px;
     transition: 0.4s;
-    margin-right: 2vw
+    margin-right: 2vw;
+    cursor: pointer;
   }
 
 div.nav{
@@ -69,6 +71,7 @@ div.nav{
     border-color: transparent;
     border-radius: 15px;
     transition: 0.4s;
+    cursor: pointer;
 } 
 
 .nav_button img {
@@ -95,6 +98,7 @@ div.nav{
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     border-radius: 15px;
+    cursor: pointer;
 }
 .guest-btn:hover{
     cursor: pointer;
