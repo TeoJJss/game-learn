@@ -158,6 +158,10 @@
             display: flex;
             align-items: center;
         }
+        .badge{
+            max-width: 10vw;
+            margin-left: 2vw;
+        }
     </style>
 </head>
 
@@ -195,6 +199,20 @@
                     <input type="file" name="profImg" accept=".jpeg, .jpg, .png" id="imgUpload" onchange="handleFileSelection()">
                     <input type="submit" id="chg-img" hidden>
                 </form>
+                <?php if ($role=='student'){
+                    $sql = "SELECT pointValue FROM `point` WHERE userID=?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $response['data']['user_id']);
+                    $stmt->execute();
+                    $stmt->bind_result($points);
+                    $stmt->fetch();
+
+                    include '../modules/badge.php';
+
+                    $lvl = check_badge($points);
+                    echo "<img src='../images/nav_picture/badge0$lvl.png' class='badge' title='Level $lvl'>";
+                }
+                ?>
             </div>
             <div class="details-container">
                 <form method="post">
@@ -209,14 +227,7 @@
                     <div class="prof-row">
                         <label for="role">Role : </label><input type="text" name="" id="role" value="<?php echo $role; ?>" disabled><br>
                     </div>
-                    <?php if ($role == 'student') {
-                        $sql = "SELECT pointValue FROM `point` WHERE userID=?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param("i", $response['data']['user_id']);
-                        $stmt->execute();
-                        $stmt->bind_result($points);
-                        $stmt->fetch();
-                    ?>
+                    <?php if ($role == 'student') { ?>
                         <div class="prof-row">
                             <label for="status">Status : </label><input type="text" name="" id="status" disabled><br>
                         </div>
