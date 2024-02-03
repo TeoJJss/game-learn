@@ -80,7 +80,26 @@
                     <img src="../images/nav_picture/more.png" alt="More">
                     <a>More</a>
                 </button>
+            <?php }else if ($role == "admin"){ // admin header ?>
+                <input type="text" class="nav_search" placeholder="Search For Course">
+                <button class="nav_button">
+                    <img src="../images/nav_picture/manage_user.png" alt="Manage User">
+                    <a>Manage User</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/forum.png" alt="Forum">
+                    <a>Forum</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/report.png" alt="Report">
+                    <a>Report</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/more.png" alt="More">
+                    <a>More</a>
+                </button>
             <?php } ?>
+
             <button class="nav_button" onclick="location.href='../index.php'">
                 <?php if ($role){ 
                     $ticket = $_SESSION['ticket'];
