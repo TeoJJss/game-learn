@@ -23,42 +23,64 @@
             }
         ?>
         <div class="nav">
-        <?php if (!$role){ //Guest header ?>
-            <button class="nav_button">
-                <img src="../images/nav_picture/Teach On Mathy.png" alt="Teach On Mathy">
-                <a>Teach On Mathy</a>
-            </button>
-            <button class="nav_button">
-                <img src="../images/nav_picture/my_learning.png" alt="My Learning">
-                <a>My Learning</a>
-            </button>
-            <input type="text" class="nav_search" placeholder="Search For Anything">
-            <button class="guest-btn" id="login">Log In</button>
-            <button class="guest-btn" id="signup">Sign Up</button>
+            <?php if (!$role){ //Guest header ?>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/teach_on_mathy.png" alt="Teach On Mathy">
+                    <a>Teach On Mathy</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/my_learning.png" alt="My Learning">
+                    <a>My Learning</a>
+                </button>
+                <input type="text" class="nav_search" placeholder="Search For Course">
+                <button class="guest-btn" id="login">Log In</button>
+                <button class="guest-btn" id="signup">Sign Up</button>
 
-        <?php }else if ($role == "student"){ //student header ?>
-            <input type="text" class="nav_search" placeholder="Search For Anything">
-            <button class="nav_button" onclick="location.href = ''">
-                <img src="../images/nav_picture/course.png" alt="Course">
-                <a>Course</a>
-            </button>
-            <button class="nav_button">
-                <img src="../images/nav_picture/forum.png" alt="Forum">
-                <a>Forum</a>
-            </button>
-            <button class="nav_button">
-                <img src="../images/nav_picture/gift_shop.png" alt="Gift Shop">
-                <a>Gift Shop</a>
-            </button>
-            <button class="nav_button">
-                <img src="../images/nav_picture/my_learning.png" alt="My Learning">
-                <a>My Learning</a>
-            </button>
-            <button class="nav_button">
-                <img src="../images/nav_picture/more.png" alt="More">
-                <a>More</a>
-            </button>
-        <?php } ?>
+            <?php }else if ($role == "student"){ //student header ?>
+                <input type="text" class="nav_search" placeholder="Search For Course">
+                <button class="nav_button" onclick="location.href = ''">
+                    <img src="../images/nav_picture/course.png" alt="Course">
+                    <a>Course</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/forum.png" alt="Forum">
+                    <a>Forum</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/gift_shop.png" alt="Gift Shop">
+                    <a>Gift Shop</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/my_learning.png" alt="My Learning">
+                    <a>My Learning</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/more.png" alt="More">
+                    <a>More</a>
+                </button>
+            <?php }else if ($role == "educator"){ //educator header ?>
+                <input type="text" class="nav_search" placeholder="Search For Course">
+                <button class="nav_button">
+                    <img src="../images/nav_picture/dashboard.png" alt="Dashboard">
+                    <a>Dashboard</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/course.png" alt="Course">
+                    <a>Course</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/forum.png" alt="Forum">
+                    <a>Forum</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/report.png" alt="Report">
+                    <a>Report</a>
+                </button>
+                <button class="nav_button">
+                    <img src="../images/nav_picture/more.png" alt="More">
+                    <a>More</a>
+                </button>
+            <?php } ?>
             <button class="nav_button" onclick="location.href='../index.php'">
                 <?php if ($role){ 
                     $ticket = $_SESSION['ticket'];
