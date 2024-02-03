@@ -144,8 +144,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
+    <script>
+        var originalName = document.getElementById("username").value;
+        var originalEmail = document.getElementById("email").value;
+
+        function showWarning() {
+            var nameField = document.getElementById("username").value;
+            var emailField = document.getElementById("email").value;
+
+            var warningPopup = document.getElementById("warningPopup");
+            if (nameField !== originalName || emailField !== originalEmail) {
+                warningPopup.style.display = "block";
+                document.getElementById('update-prof').disabled =false;
+            } else {
+                warningPopup.style.display = "none";
+            }
+        }
+
+        // function closeWarning() {
+        //     var warningPopup = document.getElementById("warningPopup");
+        //     warningPopup.style.display = "none";
+        // }
+    </script>
+    <?php include '../includes/warning.php'; ?>
     <div class="page">
         <br><br>
+        
         <div class="page-title">
             <h1><img src="./images/nav_picture/setting.png" alt="Settings">My Profile</h1>
         </div>
@@ -155,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button class="button" id="edit-button">Edit Picture</button>
                 <form action="../modules/update_prof_pic.php" method="post" enctype="multipart/form-data">
                     <input type="text" name="user_id" value="<?php echo $user_id; ?>" hidden>
-                    <input type="file" name="profImg" id="imgUpload" onchange="handleFileSelection()">
+                    <input type="file" name="profImg" accept=".jpeg, .jpg, .png" id="imgUpload" onchange="handleFileSelection()">
                     <input type="submit" id="chg-img" hidden>
                 </form>
             </div>
@@ -163,11 +187,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <form method="post">
                     <div class="prof-row">
                         <label for="username">Username :</label><br>
-                        <input type="text" name="username" id="username" value="<?php echo $name; ?>"><br>
+                        <input type="text" name="username" id="username" value="<?php echo $name; ?>" oninput="showWarning()" required autocomplete="off"><br>
                     </div>
                     <div class="prof-row">
                         <label for="email">Email : </label><br>
-                        <input type="email" name="email" id="email" value="<?php echo $email; ?>"><br><br>
+                        <input type="email" name="email" id="email" value="<?php echo $email; ?>" oninput="showWarning()" required autocomplete="off"><br><br>
                     </div>
                     <div class="prof-row">
                         <label for="role">Role : </label><input type="text" name="" id="role" value="<?php echo $role; ?>" disabled><br>
@@ -186,10 +210,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="prof-row"><label for="point">Point : </label><input type="number" name="" id="point" value="<?php echo $points; ?>" disabled></div>
                     <?php } ?><br>
                     <div class="prof-action-buttons">
-                        <button class="button" type="submit" id="update-prof">Update Profile</button>
+                        <button class="button" type="button" id="logout" onclick="location.href='../modules/logout.php'">Logout</button>
+                        <button class="button" type="submit" id="update-prof" disabled>Update Profile</button>
                     </div>
                 </form>
-                <button class="button" id="logout" onclick="location.href='../modules/logout.php'">Logout</button>
             </div>
         </div>
     </div>
