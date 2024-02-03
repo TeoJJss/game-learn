@@ -9,6 +9,7 @@ html{
 body {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
+    overflow-x: hidden;
   }
 
 div.page{
@@ -434,6 +435,7 @@ p{
 .page-title{
   display: flex;
   align-items: center;
+  margin-top: 3vh;
 }
 
 .page-title *{
@@ -441,7 +443,7 @@ p{
 }
 
 .page-title img {
-  width: 5vw;
+  max-width: 3vw;
   margin-right: 1vw;
 }
 

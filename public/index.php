@@ -16,7 +16,14 @@
     <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
-    <h1>Guest Homepage</h1>
+    <div class="page">
+        <div class="page-title">
+            <h1>Guest Homepage</h1>
+        </div>
+        <div class="page-content">
+
+        </div>
+    </div>
 </body>
 <?php include '../includes/footer.php';?>
 </html>
