@@ -326,7 +326,7 @@ p{
 
 
 
-/* submit button */
+/* default button */
 .button{
     width: auto;
     height: auto;
@@ -358,6 +358,10 @@ p{
   cursor: not-allowed;
 }
 
+.button img{
+  margin-top: 0.5vh;
+  margin-bottom: 0;
+}
   /* dropdownbox for filter, category */
   .dropbutton {
     display: flex;

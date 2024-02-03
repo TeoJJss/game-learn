@@ -1,6 +1,7 @@
 <style>
     .alert-warning {
         background-color: #ff9800;
+        color: white;
         position: fixed;
         width: 80vw;
         min-width: 10vw;

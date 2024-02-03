@@ -1,75 +1,82 @@
 <!-- Profile page -->
 <?php
-include '../modules/config.php';
+    include '../modules/config.php';
 
-if (!check_ticket()) {
-    header("Location: ../index.php");
-    exit();
-}
-include '../includes/header.php';
-
-$ticket = $_SESSION['ticket'];
-$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-$response = json_decode(curl_exec($ch), true);
-
-if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
-    $email = $response["data"]["email"];
-    $name = $response["data"]["name"];
-    $role = $response["data"]["role"];
-    $user_id = $response['data']['user_id'];
-
-    $sql = "SELECT profile.profilePic FROM `profile` WHERE userID=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($profilePic);
-    $stmt->fetch();
-
-    $no_img = '<img src="../images/user.png" id="profPic-settings">';
-    if ($profilePic !== null) {
-        $base64Image = $profilePic;
-        $img_html =  '<img src="data:image/png;image/jpg;base64,' . $base64Image . '" alt="Profile Picture" id="profPic-settings">';
-    } else {
-        $img_html = $no_img;
+    if (!check_ticket()) {
+        header("Location: ../index.php");
+        exit();
     }
-    $stmt->close();
-} else {
-    header("Location: ../index.php");
-    exit();
-}
+    include '../includes/header.php';
+
+    $ticket = $_SESSION['ticket'];
+    $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $response = json_decode(curl_exec($ch), true);
+
+    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
+        $email = $response["data"]["email"];
+        $name = $response["data"]["name"];
+        $role = $response["data"]["role"];
+        $user_id = $response['data']['user_id'];
+
+        $sql = "SELECT profile.profilePic, profile.linkedin, profile.about FROM `profile` WHERE userID=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->bind_result($profilePic, $link, $abt);
+        $stmt->fetch();
+
+        $no_img = '<img src="../images/user.png" id="profPic-settings">';
+        if ($profilePic !== null) {
+            $base64Image = $profilePic;
+            $img_html =  '<img src="data:image/png;image/jpg;base64,' . $base64Image . '" alt="Profile Picture" id="profPic-settings">';
+        } else {
+            $img_html = $no_img;
+        }
+        $stmt->close();
+    } else {
+        header("Location: ../index.php");
+        exit();
+    }
 ?>
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $new_name = $_POST['username'];
-    $new_email = $_POST['email'];
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $new_name = $_POST['username'];
+        $new_email = $_POST['email'];
 
-    $uptBody = json_encode(array(
-        'ticket' => $ticket,
-        'email' => $new_email,
-        'name' => $new_name
-    ));
-    $ch = curl_init("$base_url/update-prof");
+        $uptBody = json_encode(array(
+            'ticket' => $ticket,
+            'email' => $new_email,
+            'name' => $new_name
+        ));
+        $ch = curl_init("$base_url/update-prof");
 
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $uptBody);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-    ));
-    $response = curl_exec($ch);
-    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-        echo "<script>alert('Action success!')</script>";
-    } else if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 400) {
-        echo "<script>alert('Action failed! Email has been registered.')</script>";
-    } else {
-        echo "<script>alert('Action failed! Something went wrong!')</script>";
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $uptBody);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+        ));
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        if ($role == "educator"){
+            $sql = "UPDATE `profile` SET about=?, linkedin=? WHERE userID=?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssi", $_POST['about'], $_POST['linkedin'], $user_id);
+            $stmt->execute();
+        }
+        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+            echo "<script>alert('Action success!')</script>";
+        } else if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 400) {
+            echo "<script>alert('Action failed! Email has been registered.')</script>";
+        } else {
+            echo "<script>alert('Action failed! Something went wrong!')</script>";
+        }
+        echo "<script>location.href='./index.php';</script>";
+        exit();
     }
-    curl_close($ch);
-    echo "<script>location.href='./index.php';</script>";
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,15 +119,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .prof-row {
             padding-bottom: 3vh;
             font-size: 1.5vw;
+            gap: 2vw;
         }
 
-        .prof-row input {
-            width: 40vw;
-            height: 5vh;
+        .prof-row input, .prof-row textarea {
+            /* width: 40vw; */
+            /* height: 5vh; */
             font-size: 1.5vw;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            min-height: fit-content;
+            min-width: 32vw;
+            max-width: 40vw;
         }
-
+        .prof-row textarea{
+            min-height: 30vh;
+        }
         .prof-action-buttons {
             margin-left: 17vw;
         }
@@ -139,6 +152,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         #imgUpload {
             display: none;
+        }
+
+        #about-field{
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
@@ -160,11 +178,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 warningPopup.style.display = "none";
             }
         }
-
-        // function closeWarning() {
-        //     var warningPopup = document.getElementById("warningPopup");
-        //     warningPopup.style.display = "none";
-        // }
     </script>
     <?php include '../includes/warning.php'; ?>
     <div class="page">
@@ -208,9 +221,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label for="status">Status : </label><input type="text" name="" id="status" disabled><br>
                         </div>
                         <div class="prof-row"><label for="point">Point : </label><input type="number" name="" id="point" value="<?php echo $points; ?>" disabled></div>
-                    <?php } ?><br>
+                    <?php } else if ($role == 'educator') { ?>
+                        <div class="prof-row">
+                            <label for="linkedin">Linkedin : </label>
+                            <input type="url" name="linkedin" id="linkedin" value="<?php echo $link; ?>" oninput="showWarning()" autocomplete="off"><br><br>
+                        </div>
+                        <div class="prof-row" id="about-field">
+                            <label for="about">About : </label>
+                            <textarea name="about" id="about" oninput="showWarning()" autocomplete="off"><?php echo $abt; ?></textarea><br><br>
+                        </div>
+                    <?php } ?>
+                    <br>
                     <div class="prof-action-buttons">
-                        <button class="button" type="button" id="logout" onclick="location.href='../modules/logout.php'">Logout</button>
+                        <button class="button" type="button" id="logout" onclick="location.href='../modules/logout.php'">Logout <img src="../images/nav_picture/logout.png" alt="Logout" width="18"></button>
                         <button class="button" type="submit" id="update-prof" disabled>Update Profile</button>
                     </div>
                 </form>
