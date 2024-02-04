@@ -19,6 +19,7 @@
 <body>
     <h1>Student Homepage</h1>
     <button onclick="location.href='../../modules/logout.php'">Logout</button>
+    <button onclick="location.href='../index.php'">Profile</button>
 </body>
 <?php include '../../includes/footer.php';?>
 </html>

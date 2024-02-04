@@ -11,8 +11,9 @@
         /* padding: 10vh; */
         vertical-align: middle;
         border-radius: 3%;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-family: 'Poppins', sans-serif;
         margin-left: 8vw;
+        transition: 0.4s;
     }
 
     .closebtn {
@@ -52,7 +53,7 @@
             div.style.opacity = "0";
             setTimeout(function() {
                 div.style.display = "none";
-            }, 600);
+            }, 10);
         }
     }
 </script>

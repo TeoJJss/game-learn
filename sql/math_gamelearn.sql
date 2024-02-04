@@ -56,6 +56,8 @@ CREATE TABLE IF NOT EXISTS `course` (
   `description` text COLLATE utf8mb4_general_ci NOT NULL,
   `lastUpdate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(50) DEFAULT 'pending',
+  `category` varchar(50) DEFAULT 'math',
+  `label` varchar(50) DEFAULT NULL,
   `userID` int NOT NULL,
   PRIMARY KEY (`courseID`),
   KEY `userID` (`userID`)
@@ -203,6 +205,7 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `profilePic` blob DEFAULT NULL,
   `about` text DEFAULT NULL,
   `linkedin` varchar(50) DEFAULT NULL,
+  `jobTitle` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

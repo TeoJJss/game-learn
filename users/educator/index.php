@@ -16,5 +16,6 @@
 <body>
     <h1>Educator HomePage</h1>
     <button onclick="location.href='../../modules/logout.php'">Logout</button>
+    <button onclick="location.href='../index.php'">Profile</button>
 </body>
 </html>

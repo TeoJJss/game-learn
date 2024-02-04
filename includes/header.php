@@ -16,10 +16,10 @@
     <?php }?>
     <div class="navbar">
         <?php 
-            if (file_exists("./$role/index.php" && $role)){
+            if (file_exists("./$role/index.php") && $role){
                 echo "<img src='../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick=\"location.href='./$role/index.php'\">";
-            }else if (file_exists("../$role/index.php" && $role)){
-                echo "<img src='../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick='location.href=\"../$role/index.php\"'>";
+            }else if (file_exists("../$role/index.php") && $role){
+                echo "<img src='../../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick='location.href=\"../$role/index.php\"'>";
             }else if ($role) {
                 echo "<img src='../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick='location.href=\"../../$role/index.php\"'>";
             }

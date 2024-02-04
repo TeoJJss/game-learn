@@ -20,11 +20,11 @@
         $role = $response["data"]["role"];
         $user_id = $response['data']['user_id'];
 
-        $sql = "SELECT profile.profilePic, profile.linkedin, profile.about FROM `profile` WHERE userID=?";
+        $sql = "SELECT profile.profilePic, profile.linkedin, profile.about, profile.jobTitle FROM `profile` WHERE userID=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
-        $stmt->bind_result($profilePic, $link, $abt);
+        $stmt->bind_result($profilePic, $link, $abt, $job);
         $stmt->fetch();
 
         $no_img = '<img src="../images/user.png" id="profPic-settings">';
@@ -62,9 +62,9 @@
         curl_close($ch);
         
         if ($role == "educator"){
-            $sql = "UPDATE `profile` SET about=?, linkedin=? WHERE userID=?";
+            $sql = "UPDATE `profile` SET about=?, linkedin=?, jobTitle=? WHERE userID=?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssi", $_POST['about'], $_POST['linkedin'], $user_id);
+            $stmt->bind_param("sssi", $_POST['about'], $_POST['linkedin'], $_POST['jobTitle'], $user_id);
             $stmt->execute();
         }
         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
@@ -236,6 +236,10 @@
                         <div class="prof-row">
                             <label for="linkedin">Linkedin : </label>
                             <input type="url" name="linkedin" id="linkedin" value="<?php echo $link; ?>" oninput="showWarning()" autocomplete="off"><br><br>
+                        </div>
+                        <div class="prof-row">
+                            <label for="jobTitle">Job Title : </label>
+                            <input type="text" name="jobTitle" id="jobTitle" value="<?php echo $job; ?>" oninput="showWarning()" autocomplete="off"><br><br>
                         </div>
                         <div class="prof-row" id="about-field">
                             <label for="about">About : </label>
