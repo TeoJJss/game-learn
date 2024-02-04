@@ -188,7 +188,7 @@
         <br><br>
         
         <div class="page-title">
-            <h1><img src="../images/nav_picture/setting.png" alt="Settings">Settings</h1>
+            <h1><img src="../images/setting.png" alt="Settings">Settings</h1>
         </div>
         <div class="page-content">
             <div class="profilePic-container">

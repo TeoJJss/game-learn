@@ -199,7 +199,7 @@ div.page{
     position: relative;
     left:1%;
     width: 12.5vw;
-    height: 12.5vw;
+    height: 14vw;
     cursor: pointer;
 }
 
@@ -212,7 +212,7 @@ div.page{
 .more_button a{
     color: #000000;
     text-decoration: none;
-    font-size: 1.6667vw;
+    font-size: 1.3vw;
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-weight: 800;

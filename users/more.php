@@ -42,7 +42,7 @@ include '../includes/header.php';
                     <a>Gift Shop</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/forum.png" alt="nav_button">
+                    <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
                 </button>
                 <button class="more_button">
@@ -58,17 +58,17 @@ include '../includes/header.php';
                     <a>Feedback</a>
                 </button>
                 <button class="more_button" onclick="location.href='./index.php';">
-                    <img src="../images/nav_picture/setting.png" alt="nav_button">
+                    <img src="../images/setting.png" alt="nav_button">
                     <a>Settings</a>
                 </button>
 
             <?php }else if($role == 'educator'){ ?>
                 <button class="more_button">
-                    <img src="../images/nav_picture/course.png" alt="nav_button">
+                    <img src="../images/educator_pic/course.png" alt="nav_button">
                     <a>Course</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/forum.png" alt="nav_button">
+                    <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
                 </button>
                 <button class="more_button">
@@ -76,53 +76,53 @@ include '../includes/header.php';
                     <a>Report</a>
                 </button>
                 <button class="more_button" onclick="location.href='./index.php';">
-                    <img src="../images/nav_picture/setting.png" alt="nav_button">
+                    <img src="../images/setting.png" alt="nav_button">
                     <a>Settings</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/sys_feedback.png" alt="nav_button">
+                    <img src="../images/sys_feedback.png" alt="nav_button">
                     <a>System Feedback</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/stu_feedback.png" alt="nav_button">
+                    <img src="../images/educator_pic/stu_feedback.png" alt="nav_button">
                     <a>Student's Feedback</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/leaderboard02.png" alt="nav_button">
+                    <img src="../images/leaderboard.png" alt="nav_button">
                     <a>Leaderboard</a>
                 </button>
             <?php }else if ($role=='admin'){ ?>
-                <button class="more_button">
-                    <img src="../images/nav_picture/edu_registration.png" alt="nav_button">
+                <button class="more_button" onclick="location.href='./admin/edu_console.php';">
+                    <img src="../images/admin_pic/edu_approval.png" alt="nav_button">
                     <a>Educators Applications</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/course_review.png" alt="nav_button">
+                    <img src="../images/admin_pic/course_review.png" alt="nav_button">
                     <a>Courses Application</a>
                 </button>
-                <button class="more_button">
-                    <img src="../images/nav_picture/user_management.png" alt="nav_button">
+                <button class="more_button" onclick="location.href='./admin/user_console.php';">
+                    <img src="../images/admin_pic/manage_user.png" alt="nav_button">
                     <a>User Management</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/feedback.png" alt="nav_button">
+                    <img src="../images/admin_pic/feedback.png" alt="nav_button">
                     <a>System Feedbacks</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/forum.png" alt="nav_button">
+                    <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/report.png" alt="nav_button">
+                    <img src="../images/report.png" alt="nav_button">
                     <a>Report</a>
                 </button>
                 <button class="more_button" onclick="location.href='./index.php';">
-                    <img src="../images/nav_picture/setting.png" alt="nav_button">
+                    <img src="../images/setting.png" alt="nav_button">
                     <a>Settings</a>
                 </button>
             <?php } ?>
             <button class="more_button" onclick="location.href='../modules/logout.php';">
-                <img src="../images/nav_picture/logout.png" alt="nav_button">
+                <img src="../images/logout.png" alt="nav_button">
                 <a>Logout</a>
             </button>
         </div>

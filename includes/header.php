@@ -7,6 +7,7 @@
         $base = "../../";
     }
     $role = check_ticket();
+    echo "<link rel='shortcut icon' type='image/png' href='$base\images/favicon.png'>";
 ?>
 <header>
     <?php if (file_exists("../styles/header.css")){ ?>
@@ -48,7 +49,7 @@
                     <a>Course</a>
                 </button>
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/forum.png" alt="Forum">
+                    <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>
                 <button class="nav_button">
@@ -70,7 +71,7 @@
                     <a>Course</a>
                 </button>
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/forum.png" alt="Forum">
+                    <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>
                 <button class="nav_button">
@@ -79,16 +80,16 @@
                 </button>
             <?php }else if ($role == "admin"){ // admin header ?>
                 <input type="text" class="nav_search" placeholder="Search For Course">
-                <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/manage_user.png" alt="Manage User">
+                <button class="nav_button" onclick="location.href='<?php echo $base; ?>users/admin/user_console.php'">
+                    <img src="<?php echo $base; ?>images/admin_pic/manage_user.png" alt="Manage User">
                     <a>Manage User</a>
                 </button>
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/forum.png" alt="Forum">
+                    <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/report.png" alt="Report">
+                    <img src="<?php echo $base; ?>images/report.png" alt="Report">
                     <a>Report</a>
                 </button>
             <?php } ?>

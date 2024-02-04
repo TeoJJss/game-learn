@@ -8,7 +8,6 @@
         die; 
     }
 
-    echo '<link rel="shortcut icon" type="image/png" href="../images/favicon.png">';
     $base_url = "http://127.0.0.1:5000/login-api";
 
     $ch = curl_init("$base_url/");

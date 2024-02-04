@@ -71,12 +71,21 @@ def generate_ticket(email, password):
 
     # Generate ticket
     letters = string.ascii_lowercase + string.ascii_uppercase
-    result_str = ''.join(random.choice(letters) for i in range(26))
+    re = True
+    while re:
+        result_str = ''.join(random.choice(letters) for i in range(26))
+        dt= datetime.datetime.now().strftime("%f")
+        ticket=f"GEL-{result_str}-{dt}"
+        sql = "SELECT COUNT(*) FROM TICKETs WHERE ticket=?"
+        cur = conn.cursor()
+        cur.execute(sql, (ticket,))
 
-    dt= datetime.datetime.now().strftime("%f")
-    ticket=f"GEL-{result_str}-{dt}"
+        count = cur.fetchone()[0]
+        if count == 0:
+            re = False
     insert_ticket(ticket, u_id, role)
 
+    conn.close()
     return u_id, ticket, role, status
 
 def insert_ticket(ticket, u_id, role):
