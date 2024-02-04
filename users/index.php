@@ -116,24 +116,6 @@
             color: #727272;
         }
 
-        .prof-row {
-            padding-bottom: 3vh;
-            font-size: 1.5vw;
-            gap: 2vw;
-        }
-
-        .prof-row input, .prof-row textarea {
-            /* width: 40vw; */
-            /* height: 5vh; */
-            font-size: 1.5vw;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            min-height: fit-content;
-            min-width: 32vw;
-            max-width: 40vw;
-        }
-        .prof-row textarea{
-            min-height: 30vh;
-        }
         .prof-action-buttons {
             margin-left: 17vw;
         }
@@ -154,10 +136,6 @@
             display: none;
         }
 
-        #about-field{
-            display: flex;
-            align-items: center;
-        }
         .badge{
             max-width: 10vw;
             margin-left: 2vw;
@@ -216,32 +194,32 @@
             </div>
             <div class="details-container">
                 <form method="post">
-                    <div class="prof-row">
+                    <div class="inp-row">
                         <label for="username">Username :</label><br>
                         <input type="text" name="username" id="username" value="<?php echo $name; ?>" oninput="showWarning()" required autocomplete="off"><br>
                     </div>
-                    <div class="prof-row">
+                    <div class="inp-row">
                         <label for="email">Email : </label><br>
                         <input type="email" name="email" id="email" value="<?php echo $email; ?>" oninput="showWarning()" required autocomplete="off"><br><br>
                     </div>
-                    <div class="prof-row">
+                    <div class="inp-row">
                         <label for="role">Role : </label><input type="text" name="" id="role" value="<?php echo $role; ?>" disabled><br>
                     </div>
                     <?php if ($role == 'student') { ?>
-                        <div class="prof-row">
-                            <label for="status">Status : </label><input type="text" name="" id="status" disabled><br>
+                        <div class="inp-row">
+                            <label for="status">Status : </label><input type="text" name="status" id="status" value="Level <?php echo $lvl;?>" disabled><br>
                         </div>
-                        <div class="prof-row"><label for="point">Point : </label><input type="number" name="" id="point" value="<?php echo $points; ?>" disabled></div>
+                        <div class="inp-row"><label for="point">Point : </label><input type="number" name="" id="point" value="<?php echo $points; ?>" disabled></div>
                     <?php } else if ($role == 'educator') { ?>
-                        <div class="prof-row">
+                        <div class="inp-row">
                             <label for="linkedin">Linkedin : </label>
                             <input type="url" name="linkedin" id="linkedin" value="<?php echo $link; ?>" oninput="showWarning()" autocomplete="off"><br><br>
                         </div>
-                        <div class="prof-row">
+                        <div class="inp-row">
                             <label for="jobTitle">Job Title : </label>
                             <input type="text" name="jobTitle" id="jobTitle" value="<?php echo $job; ?>" oninput="showWarning()" autocomplete="off"><br><br>
                         </div>
-                        <div class="prof-row" id="about-field">
+                        <div class="inp-row" id="textarea-row">
                             <label for="about">About : </label>
                             <textarea name="about" id="about" oninput="showWarning()" autocomplete="off"><?php echo $abt; ?></textarea><br><br>
                         </div>

@@ -63,7 +63,7 @@
             <?php }else if ($role == "educator"){ //educator header ?>
                 <input type="text" class="nav_search" placeholder="Search For Course">
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/dashboard.png" alt="Dashboard">
+                    <img src="<?php echo $base; ?>images/educator_pic/dashboard.png" alt="Dashboard">
                     <a>Dashboard</a>
                 </button>
                 <button class="nav_button">
