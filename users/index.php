@@ -117,7 +117,7 @@
         }
 
         .prof-action-buttons {
-            margin-left: 17vw;
+            margin-left: 10vw;
         }
 
         button#logout {
@@ -139,6 +139,19 @@
         .badge{
             max-width: 10vw;
             margin-left: 2vw;
+        }
+        .tier-table{
+            margin-top: 1vh;
+            margin-left: 1vw;
+            margin-right: 5vw;
+            border-spacing: 2vw;
+            border-collapse: separate;
+            background-color: beige;
+            text-align: center;
+            border-radius: 10%;
+        }
+        .tier-table img {
+            width: 3vw;
         }
     </style>
 </head>
@@ -188,7 +201,7 @@
                     include '../modules/badge.php';
 
                     $lvl = check_badge($points);
-                    echo "<img src='../images/nav_picture/badge0$lvl.png' class='badge' title='Level $lvl'>";
+                    echo "<img src='../images/student_pic/badge0$lvl.png' class='badge' title='Level $lvl'>";
                 }
                 ?>
             </div>
@@ -231,6 +244,24 @@
                     </div>
                 </form>
             </div>
+            <?php if ($role == 'student') { ?>
+                <table class="tier-table">
+                    <thead>
+                        <th>Badge</th>
+                        <th>Level</th>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        for($i = 1; $i<=5; $i++){
+                        ?>
+                            <tr>
+                                <td><img src="../images/student_pic/badge0<?php echo $i;?>.png"></td>
+                                <td><?php echo $i;?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            <?php } ?>
         </div>
     </div>
     <script>
@@ -249,7 +280,7 @@
             }
         }
     </script>
-</body>
+</body><br>
 <?php include '../includes/footer.php'; ?>
 
 </html>
