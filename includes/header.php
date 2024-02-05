@@ -7,14 +7,9 @@
         $base = "../../";
     }
     $role = check_ticket();
-    echo "<link rel='shortcut icon' type='image/png' href='$base\images/favicon.png'>";
 ?>
 <header>
-    <?php if (file_exists("../styles/header.css")){ ?>
-        <link rel="stylesheet" href="../styles/header.css">
-    <?php }else{?>
-        <link rel="stylesheet" href="../../styles/header.css">
-    <?php }?>
+    <link rel="stylesheet" href="<?php echo $base; ?>styles/header.css">
     <div class="navbar">
         <?php 
             if (file_exists("./$role/index.php") && $role){
