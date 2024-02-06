@@ -130,7 +130,7 @@ div.nav{
     transform: scale(0.95);
   }
 
-.login:hover {
+#login:hover {
     color: #ffffff;
     background-color: #ff9900;
     transform: scale(1.1); 
@@ -138,7 +138,7 @@ div.nav{
     box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
 }
 
-.signup:hover {
+#signup:hover {
     color: #ffffff; 
     transform: scale(1.1); 
     text-shadow: 0 0 5px #ffffff;
