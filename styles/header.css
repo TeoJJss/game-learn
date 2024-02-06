@@ -27,10 +27,10 @@ header {
     height: 50px;
     align-items: center;      
     position: relative;
-    left:5%;
+    left:2%;
     border-radius: 5px;
     transition: 0.4s;
-    margin-right: 5vw;
+    margin-right: 1vw;
     cursor: pointer;
 }
 
@@ -46,13 +46,14 @@ div.nav{
     border-color: #dedede;
     transition: 0.3s;
     /* position: absolute; */
-    margin-left: 7vw;
+    margin-left: 3vw;
     /* left: 15%; */
     margin-top: 2vh;
     width: 400px; 
     height: 10px;
     margin-right: 10vw;
    }
+
    
 .nav_search:focus {
     outline-color: #e8e8e8;
@@ -112,6 +113,7 @@ div.nav{
     position: absolute;
     right: 11%;
     color: #353535;
+    margin-top: 0.5%;   
 }
 
 #signup{
@@ -120,6 +122,7 @@ div.nav{
     background-color: #000000;
     position: absolute;
     right: 3%;
+    margin-top: 0.5%;
 }
 
 .logo:hover, .myteach:hover, .mylearn:hover {
