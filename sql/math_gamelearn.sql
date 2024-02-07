@@ -220,6 +220,9 @@ CREATE TABLE IF NOT EXISTS `point` (
 -- Create admin account
 INSERT INTO `profile`(`userID`)
 VALUES('1');
+-- Create educator account
+INSERT INTO `profile`(`userID`)
+VALUES('2');
 -- --------------------------------------------------------
 
 --

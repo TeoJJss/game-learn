@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     $role = $_POST['user_type'];
     $img = null;
-    if (isset($_FILES['profPic'])){
-        $image = $_FILES['profPic']['tmp_name'];
+    $image = $_FILES['profPic']['tmp_name'];
+    if (isset($_FILES['profPic']) && file_exists($image)){
         $img = base64_encode(file_get_contents($image));
     }
 

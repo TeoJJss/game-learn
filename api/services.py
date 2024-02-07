@@ -23,9 +23,11 @@ def create_db():
 
     # Add admin
     admin_pass = str(generate_password_hash("admin123"))
+    edu_pass = str(generate_password_hash("educator123"))
     insert_users_sql = f'''
         INSERT INTO USERS (EMAIL, NAME, PASSWORD, ROLE, STATUS)
-        VALUES ('admin@gel.com', 'admin', '{admin_pass}', 'admin', 'active')
+        VALUES ('admin@gel.com', 'admin', '{admin_pass}', 'admin', 'active'),
+        ('educator@example.com', 'educator_test', '{edu_pass}', 'educator', 'active')
     '''
     conn.execute(insert_users_sql)
 
