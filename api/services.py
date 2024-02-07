@@ -194,6 +194,9 @@ def reset_pass(email, name, new_pass):
     update_sql = "UPDATE USERS SET PASSWORD=? WHERE USER_ID=?"
     conn.execute(update_sql, (generate_password_hash(new_pass), user_id))
     conn.commit()
+    dlt_sql = "DELETE FROM TICKETS WHERE USER_ID=?"
+    conn.execute(dlt_sql, (user_id,))
+    conn.commit()
     conn.close()
 
     return "Update password success", 200
