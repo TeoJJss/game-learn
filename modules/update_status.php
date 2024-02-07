@@ -1,5 +1,5 @@
 <?php  
-    include '../modules/config.php';
+    require '../modules/config.php';
     if (check_ticket() != 'admin'){
         header("Location: ../../index.php");
         exit();

@@ -1,5 +1,5 @@
 <?php 
-    include '../modules/config.php';
+    require '../modules/config.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $image = $_FILES['profImg']['tmp_name'];
         $img = base64_encode(file_get_contents($image));

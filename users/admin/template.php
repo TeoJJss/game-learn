@@ -1,5 +1,5 @@
 <?php 
-    include '../../modules/config.php';
+    require '../../modules/config.php';
     $role = check_ticket();
     if ($role != 'admin') {
         header("Location: ../../index.php");
