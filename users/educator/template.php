@@ -1,7 +1,7 @@
 <?php 
-    require '../../modules/config.php';
-
-    if (check_ticket() != 'student'){
+    include '../../modules/config.php';
+    $role = check_ticket();
+    if ($role != 'educator') {
         header("Location: ../../index.php");
         exit();
     }
@@ -13,13 +13,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Homepage</title>
+    <title>Template</title>
     <link rel="stylesheet" href="../../styles/style.css">
 </head>
 <body>
-    <h1>Student Homepage</h1>
-    <button onclick="location.href='../../modules/logout.php'">Logout</button>
-    <button onclick="location.href='../index.php'">Profile</button>
+    <div class="page">
+        <div class="page-title">
+
+        </div>
+        <div class="page-content">
+
+        </div>
+    </div>
 </body>
 <?php include '../../includes/footer.php';?>
 </html>

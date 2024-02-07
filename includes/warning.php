@@ -40,7 +40,7 @@
 
 <div class="alert-warning" id="warningPopup">
     <span class="closebtn">&times;</span>
-    <strong>Warning!</strong>the changes are not saved yet
+    <strong>Warning!</strong> The changes are not saved yet
 </div>
 
 <script>

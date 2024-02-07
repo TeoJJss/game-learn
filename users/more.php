@@ -1,11 +1,11 @@
 <?php
-include '../modules/config.php';
-$role = check_ticket();
-if (!$role) {
-    header("Location: ../index.php");
-    exit();
-}
-include '../includes/header.php';
+    include '../modules/config.php';
+    $role = check_ticket();
+    if (!$role) {
+        header("Location: ../index.php");
+        exit();
+    }
+    include '../includes/header.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
