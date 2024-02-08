@@ -33,12 +33,12 @@
                     <img src="<?php echo $base; ?>images/nav_picture/my_learning.png" alt="My Learning">
                     <a>My Learning</a>
                 </button>
-                <input type="text" class="nav_search" placeholder="Search For Course">
+                <input type="search" class="nav_search" id="search-inp" placeholder="Search For Course">
                 <button class="guest-btn" id="login">Log In</button>
                 <button class="guest-btn" id="signup">Sign Up</button>
 
             <?php }else if ($role == "student"){ //student header ?>
-                <input type="text" class="nav_search" placeholder="Search For Course">
+                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
                 <button class="nav_button" onclick="location.href = ''">
                     <img src="<?php echo $base; ?>images/nav_picture/course.png" alt="Course">
                     <a>Course</a>
@@ -56,7 +56,7 @@
                     <a>My Learning</a>
                 </button>
             <?php }else if ($role == "educator"){ //educator header ?>
-                <input type="text" class="nav_search" placeholder="Search For Course">
+                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
                 <button class="nav_button">
                     <img src="<?php echo $base; ?>images/educator_pic/dashboard.png" alt="Dashboard">
                     <a>Dashboard</a>
@@ -74,7 +74,7 @@
                     <a>Report</a>
                 </button>
             <?php }else if ($role == "admin"){ // admin header ?>
-                <input type="text" class="nav_search" placeholder="Search For Course">
+                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
                 <button class="nav_button" onclick="location.href='<?php echo $base; ?>users/admin/user_console.php'">
                     <img src="<?php echo $base; ?>images/admin_pic/manage_user.png" alt="Manage User">
                     <a>Manage User</a>
@@ -130,4 +130,16 @@
             </button>
         </div>
     </div>
+    <script>
+        var searchInput = document.getElementById("search-inp");
+
+        searchInput.addEventListener("keypress", function(event){
+            if (event.key == "Enter"){
+                console.log("entered");
+                searchInputVal =searchInput.value;
+                location.href = '<?php echo $base; ?>public/search_result.php?search='+searchInputVal;
+                event.preventDefault();
+            }
+        });
+    </script>
 </header>

@@ -99,3 +99,9 @@ def get_user_ls():
 
     msg, code = get_user_list(tic)
     return jsonify({"msg": msg}), code
+
+@blueprint.route("/edu-detail", methods=["GET"])
+def get_edu_details():
+    u_id = request.args.get("user_id")
+    username, code = get_edu(u_id)
+    return jsonify({"msg": username}), code

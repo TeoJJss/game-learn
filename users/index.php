@@ -230,7 +230,7 @@
                         </div>
                         <div class="inp-row">
                             <label for="jobTitle">Job Title : </label>
-                            <input type="text" name="jobTitle" id="jobTitle" value="<?php echo $job; ?>" oninput="showWarning()" autocomplete="off"><br><br>
+                            <input type="text" name="jobTitle" id="jobTitle" value="<?php echo $job; ?>" maxlength="20" oninput="showWarning()" autocomplete="off"><br><br>
                         </div>
                         <div class="inp-row" id="textarea-row">
                             <label for="about">About : </label>

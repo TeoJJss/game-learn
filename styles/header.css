@@ -4,40 +4,41 @@ header {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
     max-width: 100vw;
-  }
+}
 
 .navbar {
     display: flex;
     /* justify-content: space-between; */
     background-color: #ffffff;
     padding: 10px;
-    align-items:center;
+    align-items: center;
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.5);
     width: 100%;
     height: auto;
-  }
+}
 
-#profilePic-header{
+#profilePic-header {
     border-radius: 100%;
     height: 3vw;
 }
 
-.logo{
-    width: auto; 
+.logo {
+    width: auto;
     height: 50px;
-    align-items: center;      
+    align-items: center;
     position: relative;
-    left:2%;
+    left: 2%;
     border-radius: 5px;
     transition: 0.4s;
     margin-right: 1vw;
     cursor: pointer;
 }
 
-div.nav{
+div.nav {
     display: flex;
     flex-direction: row;
 }
+
 .nav_search {
     border: none;
     padding: 1rem;
@@ -49,21 +50,21 @@ div.nav{
     margin-left: 3vw;
     /* left: 15%; */
     margin-top: 2vh;
-    width: 400px; 
+    width: 400px;
     height: 10px;
     margin-right: 21vw;
-   }
+}
 
-   
+
 .nav_search:focus {
     outline-color: #e8e8e8;
     background: #e8e8e8;
     box-shadow: inset 20px 20px 60px #c5c5c5,
-            inset -20px -20px 60px #ffffff;
+        inset -20px -20px 60px #ffffff;
     transition: 0.3s;
 }
 
-.nav_button{
+.nav_button {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -75,7 +76,7 @@ div.nav{
     border-radius: 15px;
     transition: 0.4s;
     cursor: pointer;
-} 
+}
 
 .nav_button img {
     margin-bottom: 0.5px;
@@ -92,9 +93,9 @@ div.nav{
     font-weight: 600;
 }
 
-.guest-btn{
-    width: 100px; 
-    height: 40px; 
+.guest-btn {
+    width: 100px;
+    height: 40px;
     font-size: 15px;
     transition: 0.4s;
     text-align: center;
@@ -103,20 +104,22 @@ div.nav{
     border-radius: 15px;
     cursor: pointer;
 }
-.guest-btn:hover{
+
+.guest-btn:hover {
     cursor: pointer;
 }
-#login{
-    
+
+#login {
+
     border-color: #d3d1d1;
     background-color: #f2f2f2;
     position: absolute;
     right: 11%;
     color: #353535;
-    margin-top: 0.5%;   
+    margin-top: 0.5%;
 }
 
-#signup{
+#signup {
     color: #cacaca;
     border-color: #000000;
     background-color: #000000;
@@ -125,25 +128,29 @@ div.nav{
     margin-top: 0.5%;
 }
 
-.logo:hover, .myteach:hover, .mylearn:hover {
-    transform: scale(1.1); 
+.logo:hover,
+.myteach:hover,
+.mylearn:hover {
+    transform: scale(1.1);
 }
 
-.logo:active, .myteach:active, .mylearn:active {
+.logo:active,
+.myteach:active,
+.mylearn:active {
     transform: scale(0.95);
-  }
+}
 
 #login:hover {
     color: #ffffff;
     background-color: #ff9900;
-    transform: scale(1.1); 
+    transform: scale(1.1);
     text-shadow: 0 0 5px #ffffff;
     box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
 }
 
 #signup:hover {
-    color: #ffffff; 
-    transform: scale(1.1); 
+    color: #ffffff;
+    transform: scale(1.1);
     text-shadow: 0 0 5px #ffffff;
     box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
 }

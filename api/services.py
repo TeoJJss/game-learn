@@ -266,3 +266,14 @@ def get_user_list(ticket):
         user_ls.append(tmp_d)
     conn.close()
     return user_ls, 200
+
+def get_edu(user_id):
+    conn = sqlite3.connect(auth_db)
+    sql = "SELECT NAME FROM USERS WHERE USER_ID=?"
+    username = conn.execute(sql, (user_id,)).fetchone()[0]
+    print(username)
+    conn.close()
+    if username:
+        return username, 200
+    else:
+        return None, 400
