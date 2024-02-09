@@ -20,10 +20,20 @@ if (isset($_GET['search'])) {
     $stmt = $conn->prepare($sql);
     $param = "%$search%";
     $stmt->bind_param("s", $param);
-    $stmt->execute();
-    // $stmt->fetch();
-    $result = $stmt->get_result();
+}else{
+    $sql = "SELECT course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, AVG(course_feedback.ratings) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
+                FROM `course` 
+                LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
+                LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
+                LEFT JOIN `profile` ON `profile`.`userID` = course.userID 
+                GROUP BY course.courseID
+                ";
+    $stmt = $conn->prepare($sql);
 }
+
+$stmt->execute();
+// $stmt->fetch();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -86,9 +96,24 @@ if (isset($_GET['search'])) {
         }
 
         .count-results {
-            margin-left: 60vw;
+            margin-right: 20vw;
+            margin-bottom: 5vh;
+            float: right;
             font-weight: bold;
             color: #6F6F6F;
+        }
+
+        #point {
+            width: 4vw;
+            max-width: 5vw;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        #your-course{
+            background-color: #d6af63;
+            pointer-events: none;
+            color: black;
         }
     </style>
 </head>
@@ -128,8 +153,24 @@ if (isset($_GET['search'])) {
                     }
                     ?>
                 </select>
+                <button class="button" onclick="location.reload()">Clear Filter</button>
             </div>
             <span class="count-results">
+                <?php if ($role == 'student'){
+                    $ticket = $_SESSION['ticket'];
+                    $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                    $response = json_decode(curl_exec($ch), true);
+                    $user_id = $response['data']['user_id'];
+                    $sql = "SELECT `pointValue` FROM `point` WHERE userID=?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $user_id);
+                    $stmt->execute();
+                    $stmt->bind_result($pointVal);
+                    $stmt->fetch();
+                    echo "<p class='button' id='point'>$pointVal</p>";
+                } ?>
                 <span id="count-num"><?php echo $count ?></span> results
             </span>
             <br><br>
@@ -157,7 +198,21 @@ if (isset($_GET['search'])) {
                     <?php echo $courseThumb; ?>
                     <div class="course-details">
                         <a class="course-title"><?php echo $courseName; ?></a>
-                        <p class="detail"><?php echo $eduName; ?>/<?php echo $courseJob; ?></p>
+                        <p class="detail">
+                            <?php echo $eduName; ?>/<?php echo $courseJob; ?>
+                            <?php if ($role=='educator'){
+                                $ticket = $_SESSION['ticket'];
+                                $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                                $response = json_decode(curl_exec($ch), true);
+                                $user_id = $response['data']['user_id'];
+                                if ($user_id == $courseEdu){
+                                    echo "<span class='button' id='your-course'>Your course</span>";
+                                }
+                            } 
+                            ?>
+                        </p>
 
                         <div class="rating">
                             <span class="rating-num"><?php echo $courseRating; ?> </span>
@@ -194,7 +249,7 @@ if (isset($_GET['search'])) {
                 var cat = rows[i].getElementsByClassName('category-val')[0].innerHTML;
                 if (cat == selected_cat) {
                     rows[i].style.display = "";
-                    count+=1;
+                    count += 1;
                 } else {
                     rows[i].style.display = "none";
                 }
