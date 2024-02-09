@@ -9,7 +9,7 @@ include '../includes/header.php';
 
 if (isset($_GET['search'])) {
     $search  = $_GET['search'];
-    $sql = "SELECT course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, AVG(course_feedback.ratings) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
+    $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
                 FROM `course` 
                 LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
                 LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
@@ -21,7 +21,7 @@ if (isset($_GET['search'])) {
     $param = "%$search%";
     $stmt->bind_param("s", $param);
 }else{
-    $sql = "SELECT course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, AVG(course_feedback.ratings) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
+    $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
                 FROM `course` 
                 LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
                 LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
@@ -197,7 +197,7 @@ $result = $stmt->get_result();
                 <div class="course-row" style="display: '';">
                     <?php echo $courseThumb; ?>
                     <div class="course-details">
-                        <a class="course-title"><?php echo $courseName; ?></a>
+                        <a class="course-title" onclick="location.href='../public/course.php?courseID=<?php echo $row['courseID'];?>'"><?php echo $courseName; ?></a>
                         <p class="detail">
                             <?php echo $eduName; ?>/<?php echo $courseJob; ?>
                             <?php if ($role=='educator'){

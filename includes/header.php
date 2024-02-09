@@ -40,7 +40,7 @@
 
             <?php }else if ($role == "student"){ //student header ?>
                 <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
-                <button class="nav_button" onclick="location.href = ''">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>public/search_result.php'">
                     <img src="<?php echo $base; ?>images/nav_picture/course.png" alt="Course">
                     <a>Course</a>
                 </button>

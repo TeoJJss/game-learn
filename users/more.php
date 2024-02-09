@@ -33,7 +33,7 @@
         </div>
         <div class="page-content">
             <?php if ($role == "student") { ?>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='../public/search_result.php'">
                     <img src="../images/nav_picture/course.png" alt="nav_button">
                     <a>Course</a>
                 </button>
@@ -65,7 +65,7 @@
             <?php }else if($role == 'educator'){ ?>
                 <button class="more_button">
                     <img src="../images/educator_pic/course.png" alt="nav_button">
-                    <a>Course</a>
+                    <a>My Courses</a>
                 </button>
                 <button class="more_button">
                     <img src="../images/forum.png" alt="nav_button">
