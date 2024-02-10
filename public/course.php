@@ -17,12 +17,16 @@ $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.in
             LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
             LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
             LEFT JOIN `profile` ON `profile`.`userID` = course.userID 
-            WHERE course.courseID=?";
+            WHERE course.courseID=? AND course.`status`='active'";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $courseID);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
+if ($row['courseID']==null){
+    echo "<script>alert('Course Not Found!'); history.back(); </script>";
+    exit();
+}
 $courseRating = $row['rating'] == null ? 0 : $row['rating'];
 $enrolled = $row['enrolled'] == null ? 0 : $row['enrolled'];
 $eduID = $row['userID'];
@@ -49,22 +53,8 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mathy Course</title>
     <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/course_style.css">
     <style>
-        #course-page {
-            margin-left: 0vw;
-        }
-
-        .page-content {
-            margin: 0;
-        }
-
-        .course-head {
-            background-color: #2B2B2B;
-            min-height: 45vh;
-            max-height: 50vh;
-            display: flex;
-        }
-
         .text p {
             word-wrap: break-word;
             min-width: 50vw;
@@ -72,11 +62,6 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
             color: white;
             margin-left: 5vw;
 
-        }
-
-        .course-title {
-            font-weight: bold;
-            font-size: 2vw;
         }
 
         .rating span.rating-num {
@@ -124,11 +109,6 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
             height: 100%;
             width: 20vw;
             padding-bottom: 2vh;
-        }
-
-        .course-thumb {
-            max-width: 15vw;
-            margin-right: 2vw;
         }
 
         .preview-content {
@@ -220,7 +200,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     <?php echo $courseThumb; ?><br>
                     <?php if ($role == 'student') {
                         if ($row['status'] == 'active') {
-                            echo '<br><button class="button">Learn Now</button><br><br>';
+                            echo '<br><button class="button" onclick="location.href='."'../users/course.php?courseID=$row[courseID]';".'">Learn Now</button><br><br>';
                         } else {
                             echo '<p style="color: red;">The course is unavailable at the moment!</p>';
                         }
@@ -236,7 +216,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                                 if ($row['status'] == 'active') {
                                     echo '<br><button class="button">Enter</button><br><br>
                                     <button class="button" id="edit-btn">Edit</button><br><br>
-                                    <button class="button" id="dlt-btn">Delete course</button><br>';
+                                    <button class="button" id="dlt-btn" onclick="location.href='."'../modules/dlt_course.php?cid=$row[courseID]';".'">Delete course</button><br>';
                                 } else if ($row['status'] == 'banned') {
                                     echo '<p style="color: red;">Your course is banned!</p>';
                                 } else if ($row['status'] == 'pending') {
@@ -249,12 +229,12 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         }
                     } else if ($role == 'admin') {
                         if ($row['status'] == 'active') {
-                            echo '<br><button class="button" id="positive-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Ban</button><br>';
+                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Ban</button><br>';
                         } else if ($row['status'] == 'banned') {
-                            echo '<br><button class="button" id="negative-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Unban</button><br>';
+                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Unban</button><br>';
                         } else if ($row['status'] == 'pending') {
-                            echo '<br><button class="button" id="positive-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Approve</button><br>';
-                            echo '<br><button class="button" id="negative-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Reject</button><br>';
+                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Approve</button><br>';
+                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Reject</button><br>';
                         } else {
                             trigger_error('Course invalid!');
                             exit();
@@ -288,9 +268,6 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                             <span><?php echo $row['about'] ?></span>
                         </div>
                     </div>
-                </div>
-                <div class="rating-field">
-                    <span class="fa fa-star checked"></span><?php echo $courseRating; ?> Course Rating
                 </div>
             </div>
         </div>

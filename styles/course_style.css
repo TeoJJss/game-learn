@@ -1,0 +1,25 @@
+#course-page {
+    margin-left: 0vw;
+}
+.page-content {
+    margin: 0;
+}
+.course-head {
+    background-color: #2B2B2B;
+    min-height: 45vh;
+    max-height: 50vh;
+    display: flex;
+}
+
+.course-title {
+    font-weight: bold;
+    font-size: 2vw;
+    color: whitesmoke;
+    margin-left: 2vw;
+    margin-top: 3vh;
+}
+
+.course-thumb {
+    max-width: 15vw;
+    margin-right: 2vw;
+}
