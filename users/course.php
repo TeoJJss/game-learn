@@ -74,7 +74,7 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
         }
 
         .thumb-button img {
-            width: 1.3vw;
+            width: 1.4vw;
         }
 
         .course-content {
@@ -130,7 +130,7 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
                     <h2><?php echo $row['moduleTitle']; ?></h2>
                     <p><?php echo $row['moduleDesc']; ?></p>
                     <input type="checkbox" name="tick" class="module-check"><a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")){?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')"<?php }else{?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
-                    <div id="pdfPreview<?php echo $row['moduleID']; ?>"></div>
+                    <div id="pdfPreview<?php echo $row['moduleID']; ?>"></div><br>
                     <hr style="width:95%;text-align:left;margin-left:0">
                 <?php } ?>
             </div>
@@ -138,7 +138,7 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
     </div>
     <script>
         function showPdfPreview(moduleID, filename) {
-            document.getElementById(`pdfPreview${moduleID}`).innerHTML = `<iframe src="../tmp/${moduleID}/${filename}" frameborder="0" width="70%" height="60%"></iframe>`;
+            document.getElementById(`pdfPreview${moduleID}`).innerHTML = `<iframe src="../tmp/${moduleID}/${filename}" frameborder="0" width="70%" height="60%" title="${filename}" allowfullscreen></iframe>`;
         }
     </script>
 </body>
