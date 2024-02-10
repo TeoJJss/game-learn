@@ -9,7 +9,7 @@ if (!isset($_GET['courseID'])) {
 }
 
 $courseID = $_GET['courseID'];
-$sql = "SELECT course.courseThumb, course.courseName, course.intro, course.description, course.lastUpdate, course.status, course.userID,
+$sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.intro, course.description, course.lastUpdate, course.status, course.userID,
                     ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_enrolment.courseID) as enrolled, COUNT(course_feedback.fbID) as num_fb, 
                     `profile`.profilePic, `profile`.about,
                     `profile`.linkedin, `profile`.jobTitle
@@ -249,12 +249,12 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         }
                     } else if ($role == 'admin') {
                         if ($row['status'] == 'active') {
-                            echo '<br><button class="button">Ban</button><br>';
+                            echo '<br><button class="button" id="positive-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Ban</button><br>';
                         } else if ($row['status'] == 'banned') {
-                            echo '<br><button class="button">Unban</button><br>';
+                            echo '<br><button class="button" id="negative-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Unban</button><br>';
                         } else if ($row['status'] == 'pending') {
-                            echo '<br><button class="button">Approve</button><br>';
-                            echo '<br><button class="button">Reject</button><br>';
+                            echo '<br><button class="button" id="positive-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Approve</button><br>';
+                            echo '<br><button class="button" id="negative-btn" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Reject</button><br>';
                         } else {
                             trigger_error('Course invalid!');
                             exit();

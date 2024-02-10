@@ -14,7 +14,7 @@ if (isset($_GET['search'])) {
                 LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
                 LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
                 LEFT JOIN `profile` ON `profile`.`userID` = course.userID 
-                WHERE LOWER(course.courseName) LIKE LOWER(?)
+                WHERE LOWER(course.courseName) LIKE LOWER(?) AND course.status='active'
                 GROUP BY course.courseID
                 ";
     $stmt = $conn->prepare($sql);
@@ -26,6 +26,7 @@ if (isset($_GET['search'])) {
                 LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
                 LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
                 LEFT JOIN `profile` ON `profile`.`userID` = course.userID 
+                WHERE course.status='active'
                 GROUP BY course.courseID
                 ";
     $stmt = $conn->prepare($sql);
@@ -247,6 +248,24 @@ $result = $stmt->get_result();
 
             for (let i = 0; i < rows.length; i++) {
                 var cat = rows[i].getElementsByClassName('category-val')[0].innerHTML;
+                if (cat == selected_cat) {
+                    rows[i].style.display = "";
+                    count += 1;
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+
+            document.getElementById('count-num').innerHTML = count;
+        }
+
+        function rat_selected() {
+            var selected_cat = document.getElementById('rating-filter').value;
+            var rows = document.getElementsByClassName('course-row');
+            var count = 0;
+
+            for (let i = 0; i < rows.length; i++) {
+                var cat = rows[i].getElementsByClassName('rating-val')[0].innerHTML;
                 if (cat == selected_cat) {
                     rows[i].style.display = "";
                     count += 1;

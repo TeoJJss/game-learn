@@ -53,7 +53,7 @@
                 re = null;
             }
 
-            location.href = `../../modules/update_status.php?new_status=${newStatus}&uid=${userId}&remark=${re}`;
+            location.href = `../../modules/update_usr_status.php?new_status=${newStatus}&uid=${userId}&remark=${re}`;
         }
     </script>
 </body>
