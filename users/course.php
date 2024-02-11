@@ -1,43 +1,57 @@
 <?php
-require '../modules/config.php';
-$role = check_ticket();
-include '../includes/header.php';
-$ticket = $_SESSION['ticket'];
-$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-$response = json_decode(curl_exec($ch), true);
+    require '../modules/config.php';
+    $role = check_ticket();
+    include '../includes/header.php';
+    if (!isset($_SESSION['ticket'])) {
+        header("Location: ../index.php");
+        exit();
+    }
+    $ticket = $_SESSION['ticket'];
+    $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $response = json_decode(curl_exec($ch), true);
 
-if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202){
-    $userID = $response["data"]["user_id"];
-}
+    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202){
+        $userID = $response["data"]["user_id"];
+    }else{
+        header("Location: ../index.php");
+        exit();
+    }
 
-if (!isset($_GET['courseID'])) {
-    echo "<script>alert('Invalid Course ID!'); history.back(); </script>";
-    exit();
-}
-$courseID = $_GET['courseID'];
-if (!$role) {
-    header("Location: ../public/course.php?courseID=$courseID");
-    exit();
-}
+    if (!isset($_GET['courseID'])) {
+        echo "<script>alert('Invalid Course ID!'); history.back(); </script>";
+        exit();
+    }
+    $courseID = $_GET['courseID'];
+    if (!$role) {
+        header("Location: ../public/course.php?courseID=$courseID");
+        exit();
+    }
 
-$sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename, module.file
-                    FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
-                    WHERE course.courseID=? AND course.status = 'active'";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $courseID);
-$stmt->execute();
-$result = $stmt->get_result();
+    if ($role == 'student'){
+        $course_enrolled_sql = "INSERT INTO course_enrolment(courseID, userID) VALUES(?, ?)";
+        $stmt = $conn->prepare($course_enrolled_sql);
+        $stmt->bind_param("ii", $courseID, $userID);
+        $stmt->execute();
+    }
 
-if ($result->num_rows == 0) {
-    echo "<script>alert('Course Not Found!'); history.back(); </script>";
-    exit();
-}
-$row = $result->fetch_assoc();
+    $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename, module.file
+                        FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
+                        WHERE course.courseID=? AND course.status = 'active'";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $courseID);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-$courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/course.png' alt='Course Thumbnail' class='course-thumb'>" : "<img src='data:image/png;base64," . $row['courseThumb'] . "' alt='Course Thumbnail' class='course-thumb'>";
-$stmt->close();
+    if ($result->num_rows == 0) {
+        echo "<script>alert('Course Not Found!'); history.back(); </script>";
+        exit();
+    }
+    $row = $result->fetch_assoc();
+
+    $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/course.png' alt='Course Thumbnail' class='course-thumb'>" : "<img src='data:image/png;base64," . $row['courseThumb'] . "' alt='Course Thumbnail' class='course-thumb'>";
+    $stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -81,6 +95,7 @@ $stmt->close();
 
         .thumb-button:hover {
             color: black;
+            cursor: context-menu;
         }
 
         .thumb-button img {
