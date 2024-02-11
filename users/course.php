@@ -2,6 +2,15 @@
 require '../modules/config.php';
 $role = check_ticket();
 include '../includes/header.php';
+$ticket = $_SESSION['ticket'];
+$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$response = json_decode(curl_exec($ch), true);
+
+if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202){
+    $userID = $response["data"]["user_id"];
+}
 
 if (!isset($_GET['courseID'])) {
     echo "<script>alert('Invalid Course ID!'); history.back(); </script>";
@@ -14,7 +23,7 @@ if (!$role) {
 }
 
 $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename, module.file
-                    FROM course LEFT JOIN module ON course.courseID = module.courseID
+                    FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
                     WHERE course.courseID=? AND course.status = 'active'";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $courseID);
@@ -28,6 +37,7 @@ if ($result->num_rows == 0) {
 $row = $result->fetch_assoc();
 
 $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/course.png' alt='Course Thumbnail' class='course-thumb'>" : "<img src='data:image/png;base64," . $row['courseThumb'] . "' alt='Course Thumbnail' class='course-thumb'>";
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -91,6 +101,7 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
             color: #0553AE;
             font-weight: bold;
             font-size: 1.5vw;
+            text-decoration: none;
         }
 
         .filename:hover {
@@ -104,6 +115,10 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
 
         h2{
             font-weight: bold;
+        }
+
+        .module-check{
+            cursor: pointer;
         }
     </style>
 </head>
@@ -119,7 +134,23 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
                     <?php echo $courseThumb; ?>
                     <div class="thumb-buttons">
                         <button class="button thumb-button"><img src="../images/leaderboard.png" alt="Leaderboard">Leaderboard</button>
-                        <button class="button thumb-button">Progress</button>
+                        <?php if ($role == 'student'){ 
+                            $progress_sql = "SELECT (SELECT COUNT(moduleID) FROM module WHERE courseID=$row[courseID]) as module_total, 
+                                                    (SELECT COUNT(module_enrolment.moduleID) FROM module_enrolment LEFT JOIN module ON module.moduleID=module_enrolment.moduleID 
+                                                    WHERE module_enrolment.userID=$userID AND module.courseID=$row[courseID]) as enrolled_count";
+                            $stmt = $conn->prepare($progress_sql);
+                            $stmt->execute();
+                            $stmt->bind_result($total, $current);
+                            $stmt->fetch();
+                            $stmt -> close();
+                            if ($total >0){
+                                $progress = $current/$total * 100;
+                            }else{
+                                $progress = 0;
+                            }
+                        ?>
+                            <button class="button thumb-button">Progress <?php echo $progress; ?>%</button>
+                        <?php } ?>
                     </div>
 
                 </div>
@@ -129,7 +160,21 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
                 while ($row = $result->fetch_assoc()) { ?>
                     <h2><?php echo $row['moduleTitle']; ?></h2>
                     <p><?php echo $row['moduleDesc']; ?></p>
-                    <input type="checkbox" name="tick" class="module-check"><a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")){?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')"<?php }else{?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
+                    <?php if ($role=='student'){
+                        $checked_sql = "SELECT moduleID FROM module_enrolment WHERE userID=? AND moduleID=?";
+                        $checked = false;
+                        $stmt = $conn->prepare($checked_sql);
+                        $stmt->bind_param("ii", $userID, $row['moduleID']);
+                        $stmt->execute();
+                        $result2 = $stmt->get_result();
+                        if ($result2->num_rows > 0){
+                            $checked = true;
+                        }
+                        $stmt -> close();
+                     ?>
+                        <input type="checkbox" name="tick" class="module-check" id="module-check-<?php echo $row['moduleID']; ?>" onclick="check_module('<?php echo $row['moduleID']; ?>')" <?php if ($checked){ echo 'checked'; }?>>
+                    <?php } ?>
+                    <a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")){?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')"<?php }else{?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
                     <div id="pdfPreview<?php echo $row['moduleID']; ?>"></div><br>
                     <hr style="width:95%;text-align:left;margin-left:0">
                 <?php } ?>
@@ -139,6 +184,14 @@ $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/co
     <script>
         function showPdfPreview(moduleID, filename) {
             document.getElementById(`pdfPreview${moduleID}`).innerHTML = `<iframe src="../tmp/${moduleID}/${filename}" frameborder="0" width="70%" height="60%" title="${filename}" allowfullscreen></iframe>`;
+        }
+
+        function check_module(moduleID){
+            var target_module = document.getElementById(`module-check-${moduleID}`);
+
+            if (target_module.checked == true){
+                location.href=`../modules/check_module.php?mid=${moduleID}`;
+            }
         }
     </script>
 </body>

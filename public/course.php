@@ -239,6 +239,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                             trigger_error('Course invalid!');
                             exit();
                         }
+                        echo '<br><button class="button" onclick="location.href='."'../users/course.php?courseID=$row[courseID]';".'">View Course Content</button><br><br>';
                     } else {
                         echo '<p style="color: red;">Please login first!</p>';
                     } ?>
