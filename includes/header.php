@@ -63,7 +63,7 @@
                     <a>Dashboard</a>
                 </button>
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/course.png" alt="Course">
+                    <img src="<?php echo $base; ?>images/educator_pic/course.png" alt="Course">
                     <a>Course</a>
                 </button>
                 <button class="nav_button">

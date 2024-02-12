@@ -1,7 +1,7 @@
 <?php  
     require '../modules/config.php';
-    if (check_ticket() != 'admin'){
-        header("Location: ../../index.php");
+    if (check_ticket() != 'educator'){
+        header("Location: ../index.php");
         exit();
     }
 
@@ -16,6 +16,6 @@
     }else{
         echo "<script>alert('Action failed!')</script>";
     }
-    echo "<script>history.back()</script>";
+    echo "<script>location.href='../users/educator/index.php'</script>";
     exit();
 ?>

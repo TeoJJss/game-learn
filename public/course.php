@@ -214,9 +214,9 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
                             if ($response['data']['user_id'] == $eduID) {
                                 if ($row['status'] == 'active') {
-                                    echo '<br><button class="button">Enter</button><br><br>
-                                    <button class="button" id="edit-btn">Edit</button><br><br>
-                                    <button class="button" id="dlt-btn" onclick="location.href='."'../modules/dlt_course.php?cid=$row[courseID]';".'">Delete course</button><br>';
+                                    echo '<br><button class="button" onclick="location.href='."'../users/course.php?courseID=$row[courseID]';".'">Enter</button><br><br>
+                                    <button class="button" id="edit-btn" onclick="location.href='."'../users/educator/edit_course.php?courseID=$row[courseID]';".'">Edit</button><br><br>
+                                    <button class="button" id="dlt-btn" onclick="if(confirm(\'Are you sure to delete this course?\')){location.href='."'../modules/dlt_course.php?cid=$row[courseID]';}".'">Delete course</button><br>';
                                 } else if ($row['status'] == 'banned') {
                                     echo '<p style="color: red;">Your course is banned!</p>';
                                 } else if ($row['status'] == 'pending') {
