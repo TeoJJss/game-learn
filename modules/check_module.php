@@ -20,6 +20,7 @@
         if($stmt->affected_rows === 0){
             echo "<script>alert('Action failed! Something went wrong.')</script>";
         }
+        $stmt -> close();
     }
     echo "<script>history.back()</script>";
     exit();

@@ -127,23 +127,23 @@
                 <input type="text" name="courseID" value="<?php echo $row['courseID']; ?>" hidden>
                 <div class="inp-row">
                     <label for="courseName">Course Name</label><br>
-                    <input type="text" name="courseName" id="courseName" value="<?php echo $courseName; ?>" minlength="1" maxlength="50" oninput="editable()">
+                    <input type="text" name="courseName" id="courseName" value="<?php echo $courseName; ?>" minlength="1" maxlength="50" oninput="editable()" required>
                 </div>
                 <div class="inp-row">
                     <label for="courseIntro">Course Introduction</label><br>
-                    <textarea name="courseIntro" id="courseIntro" minlength="1" maxlength="100" oninput="editable()"><?php echo $row['intro']; ?></textarea>
+                    <textarea name="courseIntro" id="courseIntro" minlength="1" maxlength="100" oninput="editable()" required><?php echo $row['intro']; ?></textarea>
                 </div>
                 <div class="inp-row">
                     <label for="courseDesc">Course Description</label><br>
-                    <textarea name="courseDesc" id="courseDesc" minlength="1" maxlength="100" oninput="editable()"><?php echo $row['description']; ?></textarea>
+                    <textarea name="courseDesc" id="courseDesc" minlength="1" maxlength="100" oninput="editable()" required><?php echo $row['description']; ?></textarea>
                 </div>
                 <div class="inp-row">
                     <label for="courseLabel">Course Label</label><br>
-                    <input type="text" name="courseLabel" id="courseLabel" value="<?php echo $row['label']; ?>" minlength="1" maxlength="10" oninput="editable()">
+                    <input type="text" name="courseLabel" id="courseLabel" value="<?php echo $row['label']; ?>" minlength="1" maxlength="10" oninput="editable()" required>
                 </div>
                 <div class="inp-row">
                     <label for="courseCat">Course Category</label><br>
-                    <input type="text" name="courseCat" id="courseCat" value="<?php echo $row['category']; ?>" minlength="1" maxlength="10" oninput="editable()">
+                    <input type="text" name="courseCat" id="courseCat" value="<?php echo $row['category']; ?>" minlength="1" maxlength="10" oninput="editable()" required>
                 </div>
                 <div class="inp-row">
                     <label for="courseThumb">Course Thumbnail</label><br>

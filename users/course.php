@@ -38,9 +38,9 @@
 
     $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename
                             FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
-                            WHERE course.courseID=? AND course.status = 'active'";
+                            WHERE course.courseID=? AND course.userID=? AND course.status = 'active'";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $courseID);
+    $stmt->bind_param("ii", $courseID, $userID);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -95,6 +95,9 @@
 
         .thumb-button:hover {
             color: black;
+        }
+
+        #pointer-btn{
             cursor: context-menu;
         }
 
@@ -112,7 +115,7 @@
         }
 
         .filename {
-            margin-left: 2vw;
+            margin-left: 1vw;
             color: #0553AE;
             font-weight: bold;
             font-size: 1.5vw;
@@ -168,7 +171,9 @@
                                 $progress = 0;
                             }
                         ?>
-                            <button class="button thumb-button">Progress <?php echo $progress; ?>%</button>
+                            <button class="button thumb-button" id="progress-btn">Progress <?php echo $progress; ?>%</button>
+                        <?php }else if ($role == 'educator'){ ?>
+                            <button class="button thumb-button" onclick="location.href='./educator/add_module.php?courseID=<?php echo $courseID; ?>';">Add new module</button>
                         <?php } ?>
                     </div>
 
@@ -195,7 +200,7 @@
                                                                                                                                                                                                 echo 'checked';
                                                                                                                                                                                             } ?>>
                     <?php } ?>
-                    <a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")) { ?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')" <?php } else { ?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
+                    <b>Attachment: </b><a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")) { ?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')" <?php } else { ?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
                     <div id="pdfPreview<?php echo $row['moduleID']; ?>"></div><br>
                     <?php if ($role == 'educator') { ?>
                         <iframe src="../frames/edit_module.php?moduleID=<?php echo $row['moduleID']; ?>" id="edit-frame-<?php echo $row['moduleID']; ?>" frameborder="0" width="1000" height="300" style="display: none;"></iframe><br>

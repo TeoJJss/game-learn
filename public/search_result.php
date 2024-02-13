@@ -6,7 +6,7 @@ $role = check_ticket();
 //     exit();
 // }
 include '../includes/header.php';
-
+$search="";
 if (isset($_GET['search'])) {
     $search  = $_GET['search'];
     $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
@@ -123,7 +123,8 @@ $result = $stmt->get_result();
     <div class="page">
         <div class="page-title">
             <h1><img src="../images/nav_picture/course.png" alt="Course">Course Search Results</h1>
-        </div>
+            
+        </div><span>Search key: "<?php echo $search; ?>"</span>
         <div class="page-content">
             <div class="filters">
                 <select id="category-filter" class="dropbutton" name="category" onchange="cat_selected()" required>
