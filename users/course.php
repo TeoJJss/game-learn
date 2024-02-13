@@ -12,9 +12,9 @@
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $response = json_decode(curl_exec($ch), true);
 
-    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202){
+    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
         $userID = $response["data"]["user_id"];
-    }else{
+    } else {
         header("Location: ../index.php");
         exit();
     }
@@ -29,16 +29,16 @@
         exit();
     }
 
-    if ($role == 'student'){
+    if ($role == 'student') {
         $course_enrolled_sql = "INSERT INTO course_enrolment(courseID, userID) VALUES(?, ?)";
         $stmt = $conn->prepare($course_enrolled_sql);
         $stmt->bind_param("ii", $courseID, $userID);
         $stmt->execute();
     }
 
-    $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename, module.file
-                        FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
-                        WHERE course.courseID=? AND course.status = 'active'";
+    $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename
+                            FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
+                            WHERE course.courseID=? AND course.status = 'active'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $courseID);
     $stmt->execute();
@@ -128,12 +128,16 @@
             width: 2vw;
         }
 
-        h2{
+        h2 {
             font-weight: bold;
         }
 
-        .module-check{
+        .module-check {
             cursor: pointer;
+        }
+
+        .edit-btn{
+            margin-left: 15vw;
         }
     </style>
 </head>
@@ -149,7 +153,7 @@
                     <?php echo $courseThumb; ?>
                     <div class="thumb-buttons">
                         <button class="button thumb-button"><img src="../images/leaderboard.png" alt="Leaderboard">Leaderboard</button>
-                        <?php if ($role == 'student'){ 
+                        <?php if ($role == 'student') {
                             $progress_sql = "SELECT (SELECT COUNT(moduleID) FROM module WHERE courseID=$row[courseID]) as module_total, 
                                                     (SELECT COUNT(module_enrolment.moduleID) FROM module_enrolment LEFT JOIN module ON module.moduleID=module_enrolment.moduleID 
                                                     WHERE module_enrolment.userID=$userID AND module.courseID=$row[courseID]) as enrolled_count";
@@ -157,10 +161,10 @@
                             $stmt->execute();
                             $stmt->bind_result($total, $current);
                             $stmt->fetch();
-                            $stmt -> close();
-                            if ($total >0){
-                                $progress = $current/$total * 100;
-                            }else{
+                            $stmt->close();
+                            if ($total > 0) {
+                                $progress = $current / $total * 100;
+                            } else {
                                 $progress = 0;
                             }
                         ?>
@@ -175,22 +179,28 @@
                 while ($row = $result->fetch_assoc()) { ?>
                     <h2><?php echo $row['moduleTitle']; ?></h2>
                     <p><?php echo $row['moduleDesc']; ?></p>
-                    <?php if ($role=='student'){
+                    <?php if ($role == 'student') {
                         $checked_sql = "SELECT moduleID FROM module_enrolment WHERE userID=? AND moduleID=?";
                         $checked = false;
                         $stmt = $conn->prepare($checked_sql);
                         $stmt->bind_param("ii", $userID, $row['moduleID']);
                         $stmt->execute();
                         $result2 = $stmt->get_result();
-                        if ($result2->num_rows > 0){
+                        if ($result2->num_rows > 0) {
                             $checked = true;
                         }
-                        $stmt -> close();
-                     ?>
-                        <input type="checkbox" name="tick" class="module-check" id="module-check-<?php echo $row['moduleID']; ?>" onclick="check_module('<?php echo $row['moduleID']; ?>')" <?php if ($checked){ echo 'checked'; }?>>
+                        $stmt->close();
+                    ?>
+                        <input type="checkbox" name="tick" class="module-check" id="module-check-<?php echo $row['moduleID']; ?>" onclick="check_module('<?php echo $row['moduleID']; ?>')" <?php if ($checked) {
+                                                                                                                                                                                                echo 'checked';
+                                                                                                                                                                                            } ?>>
                     <?php } ?>
-                    <a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")){?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')"<?php }else{?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
+                    <a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")) { ?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')" <?php } else { ?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
                     <div id="pdfPreview<?php echo $row['moduleID']; ?>"></div><br>
+                    <?php if ($role == 'educator') { ?>
+                        <iframe src="../frames/edit_module.php?moduleID=<?php echo $row['moduleID']; ?>" id="edit-frame-<?php echo $row['moduleID']; ?>" frameborder="0" width="1000" height="300" style="display: none;"></iframe><br>
+                        <button class="button edit-btn" id="edit-btn-<?php echo $row['moduleID']; ?>" style="display: ''" onclick="showEdit('<?php echo $row['moduleID']; ?>');">Edit Module</button>
+                    <?php } ?>
                     <hr style="width:95%;text-align:left;margin-left:0">
                 <?php } ?>
             </div>
@@ -201,12 +211,23 @@
             document.getElementById(`pdfPreview${moduleID}`).innerHTML = `<iframe src="../tmp/${moduleID}/${filename}" frameborder="0" width="70%" height="60%" title="${filename}" allowfullscreen></iframe>`;
         }
 
-        function check_module(moduleID){
+        function check_module(moduleID) {
             var target_module = document.getElementById(`module-check-${moduleID}`);
 
-            if (target_module.checked == true){
-                location.href=`../modules/check_module.php?mid=${moduleID}`;
+            if (target_module.checked == true) {
+                location.href = `../modules/check_module.php?mid=${moduleID}`;
             }
+        }
+
+        function refresh(){
+            location.reload();
+        }
+
+        function showEdit(moduleID){
+            var iframe = document.getElementById(`edit-frame-${moduleID}`);
+            var editBtn = document.getElementById(`edit-btn-${moduleID}`);
+            iframe.style.display = '';
+            editBtn.style.display = 'none';
         }
     </script>
 </body>

@@ -17,7 +17,7 @@ $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.in
             LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
             LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
             LEFT JOIN `profile` ON `profile`.`userID` = course.userID 
-            WHERE course.courseID=? AND course.`status`='active'";
+            WHERE course.courseID=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $courseID);
 $stmt->execute();

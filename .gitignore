@@ -1,5 +1,4 @@
 venv/
 __pycache__
-*.db
-test*
+test.php
 AIT001-4-4 Internship Handbook_Version 2.0_20211101.pdf
