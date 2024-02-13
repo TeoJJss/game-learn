@@ -81,6 +81,6 @@
         <label for="filename">Module Displayed Filename</label>
         <input type="text" name="moduleFilename" id="filename" value="<?php echo $moduleFilename; ?>" minlength="1" maxlength="20">
     </div>
-    <input type="submit" value="Save changes" class="button" style="margin-left: 5vw;" onclick="parent.refresh();">
+    <input type="submit" value="Save Changes" class="button" style="margin-left: 5vw;" onclick="parent.refresh();">
     <input type="text" name="moduleID" id="moduleID" value="<?php echo $moduleID; ?>" hidden>
 </form>
