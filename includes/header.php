@@ -35,7 +35,7 @@
                     <a>My Learning</a>
                 </button>
                 <input type="search" class="nav_search" id="search-inp" placeholder="Search For Course">
-                <button class="guest-btn" id="login">Log In</button>
+                <button class="guest-btn" id="login"  onclick="window.location.href='login.php'">Log In</button>
                 <button class="guest-btn" id="signup">Sign Up</button>
 
             <?php }else if ($role == "student"){ //student header ?>
