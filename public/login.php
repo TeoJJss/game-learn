@@ -1,5 +1,6 @@
 <?php 
     require '../modules/config.php';
+
     include '../includes/header.php';
 
     if (check_ticket()){
@@ -43,13 +44,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="../styles/style.css">
+    <style>
+
+        body {
+            background-image: url('../images/login_background.png'); 
+            background-size: cover; 
+            background-position: center; 
+        }
+
+        h1{
+            text-align: center;
+        }
+
+        form {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            margin-top: 2%;
+            margin-bottom: 5%;
+            border-color: black;
+            background-color: rgba(255, 255, 255, 0.5); 
+            backdrop-filter: blur(10px); 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+            border-radius: 10px; 
+            transition: border-radius 0.3s;
+        }
+
+        form:hover {
+            border-radius: 20px; 
+        }
+
+        label {
+            display: block;
+            text-align: left; 
+            margin-bottom: 5px; 
+            font-size: 0.8em; 
+            color: #666; 
+        }
+
+        a {
+        display: block;
+        margin-top: 1dvw;
+        }
+
+        #email{
+            width: 23em;
+            height: 3em;
+        }
+
+
+
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
+    
     <form method="post">
-        <label for="email">Email:</label> <input type="email" id="email" name="email" autocomplete="off" required autofocus><br><br>
-        <label for="password">Password:</label> <input type="password" id="password" name="password" required><br><br>
-        <input type="submit" value="Login Now!"> <a href="./register.php">Register</a>
+        <h1>Welcome Back</h1>
+        <label for="email">Email:</label> 
+            <input type="email" id="email" class="searchbar" name="email" autocomplete="off" required autofocus placeholder="name@email.com"><br><br>
+        <label for="password">Password:</label> 
+            <input type="password" id="email" class="searchbar" name="password" required placeholder="********"><br><br>
+        <input class="login_signup_button" type="submit" value="Login Now!"> 
+        <a href="./register.php">Sign Up</a>
+        
     </form>
 </body>
 <?php include '../includes/footer.php'; ?>
