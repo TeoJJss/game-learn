@@ -170,7 +170,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-    <div class="page">
         <div class="page-title">
             
         </div>
@@ -218,7 +217,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <a href="./login.php">Login</a> Now!
             </form>
         </div>
-    </div>
 
     <script>
         function educator_selected() {
