@@ -165,7 +165,12 @@
                             $stmt -> close();
                             while ($q_row = $options->fetch_assoc()) {
                                 $optID = $q_row['optID'];
-                                echo "<input type='radio' class='opt' id='opt-$optID' name='$questID' value='$optID' required><label for='opt-$optID' class='opt-label'>".$q_row['optValue']."</label><br><br>";
+                                $checked='';
+                                if ($q_row['IsAnswer'] && $role != 'student'){
+                                    $checked='checked';
+                                }
+                                echo "<input type='radio' class='opt' id='opt-$optID' name='$questID' value='$optID' required $checked>
+                                <label for='opt-$optID' class='opt-label'>".$q_row['optValue']."</label><br><br>";
                             }
                         ?>
                         <br><hr style="width:95%;text-align:left;margin-left:0"><br>

@@ -10,11 +10,10 @@ if (!isset($_GET['courseID'])) {
 
 $courseID = $_GET['courseID'];
 $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.intro, course.description, course.lastUpdate, course.status, course.userID,
-                    ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_enrolment.courseID) as enrolled, COUNT(course_feedback.fbID) as num_fb, 
+                    COUNT(course_enrolment.courseID) as enrolled, 
                     `profile`.profilePic, `profile`.about,
                     `profile`.linkedin, `profile`.jobTitle
             FROM course
-            LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
             LEFT JOIN course_enrolment ON course.courseID = course_enrolment.courseID 
             LEFT JOIN `profile` ON `profile`.`userID` = course.userID 
             WHERE course.courseID=?";
@@ -27,7 +26,7 @@ if ($row['courseID']==null){
     echo "<script>alert('Course Not Found!'); history.back(); </script>";
     exit();
 }
-$courseRating = $row['rating'] == null ? 0 : $row['rating'];
+
 $enrolled = $row['enrolled'] == null ? 0 : $row['enrolled'];
 $eduID = $row['userID'];
 $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/course.png' alt='Course Thumbnail' class='course-thumb'>" : "<img src='data:image/png;base64," . $row['courseThumb'] . "' alt='Course Thumbnail' class='course-thumb'>";
@@ -177,8 +176,19 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     <p class="course-title"><?php echo $row['courseName']; ?></p>
                     <p class="course-intro"><?php echo $row['intro']; ?></p>
                     <div class="rating">
-                        <span class="rating-num"><?php echo $courseRating; ?> </span>
                         <?php
+                        $rating_sql = "SELECT ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_feedback.fbID) AS num_fb 
+                                        FROM course_feedback 
+                                        WHERE course_feedback.courseID = ?";
+                        $stmt = $conn->prepare($rating_sql);
+                        $stmt->bind_param("i", $courseID);
+                        $stmt->execute();
+                        $stmt->bind_result($courseRating, $num_fb);
+                        $stmt->fetch();
+                        $stmt->close();
+                        ?>
+                        <span class="rating-num"><?php echo $courseRating; ?> </span>
+                        <?php 
                         $i = 0;
                         do {
                             if ($courseRating == 0) {
@@ -190,7 +200,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                             $i++;
                         } while ($i < $courseRating)
                         ?>
-                        <span class="num-fb">(<?php echo $row['num_fb'] ?> ratings)</span>
+                        <span class="num-fb">(<?php echo $num_fb; ?> ratings)</span>
                         <span class="num-stu"><?php echo $enrolled; ?> enrolments</span>
                     </div>
                     <p class="created-by">Created by <span><?php echo $eduName . ", " . $row['jobTitle']; ?></span></p>
