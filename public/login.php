@@ -83,7 +83,7 @@
             color: #666; 
         }
 
-        a {
+        .a {
         display: block;
         margin-top: 1dvw;
         }
@@ -106,7 +106,7 @@
         <label for="password">Password:</label> 
             <input type="password" id="email" class="searchbar" name="password" required placeholder="********"><br><br>
         <input class="login_signup_button" type="submit" value="Login Now!"> 
-        <a href="./register.php">Sign Up</a>
+        <a class="a" href="./register.php">Sign Up</a>
         
     </form>
 </body>
