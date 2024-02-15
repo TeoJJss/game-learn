@@ -37,10 +37,10 @@
     }
 
     $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename
-                            FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
-                            WHERE course.courseID=? AND course.userID=? AND course.status = 'active'";
+                                FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
+                                WHERE course.courseID=? AND course.status = 'active'";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $courseID, $userID);
+    $stmt->bind_param("i", $courseID);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -97,7 +97,7 @@
             color: black;
         }
 
-        #pointer-btn{
+        #pointer-btn {
             cursor: context-menu;
         }
 
@@ -139,7 +139,7 @@
             cursor: pointer;
         }
 
-        .edit-btn{
+        .edit-btn {
             margin-left: 15vw;
         }
     </style>
@@ -172,7 +172,7 @@
                             }
                         ?>
                             <button class="button thumb-button" id="progress-btn">Progress <?php echo $progress; ?>%</button>
-                        <?php }else if ($role == 'educator'){ ?>
+                        <?php } else if ($role == 'educator') { ?>
                             <button class="button thumb-button" onclick="location.href='./educator/add_module.php?courseID=<?php echo $courseID; ?>';">Add new module</button>
                         <?php } ?>
                     </div>
@@ -224,11 +224,11 @@
             }
         }
 
-        function refresh(){
+        function refresh() {
             location.reload();
         }
 
-        function showEdit(moduleID){
+        function showEdit(moduleID) {
             var iframe = document.getElementById(`edit-frame-${moduleID}`);
             var editBtn = document.getElementById(`edit-btn-${moduleID}`);
             iframe.style.display = '';
