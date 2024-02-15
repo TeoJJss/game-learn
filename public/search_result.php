@@ -187,7 +187,7 @@ $result = $stmt->get_result();
                 $courseRating = $row['rating'] == null ? 0 : $row['rating'];
                 $courseEnrolled = $row['enrolled'];
 
-                $ch = curl_init("$base_url/edu-detail?user_id=$courseEdu");
+                $ch = curl_init("$base_url/user-detail?user_id=$courseEdu");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
                 $response = json_decode(curl_exec($ch), true);

@@ -54,3 +54,4 @@ function check_ticket()
     session_write_close();
     return False;
 }
+?>

@@ -32,7 +32,7 @@ $enrolled = $row['enrolled'] == null ? 0 : $row['enrolled'];
 $eduID = $row['userID'];
 $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/course.png' alt='Course Thumbnail' class='course-thumb'>" : "<img src='data:image/png;base64," . $row['courseThumb'] . "' alt='Course Thumbnail' class='course-thumb'>";
 
-$ch = curl_init("$base_url/edu-detail?user_id=$eduID");
+$ch = curl_init("$base_url/user-detail?user_id=$eduID");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $response = json_decode(curl_exec($ch), true);

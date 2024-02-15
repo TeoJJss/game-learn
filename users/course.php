@@ -37,8 +37,8 @@
     }
 
     $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename
-                                FROM course LEFT JOIN module ON course.courseID = module.courseID LEFT JOIN module_enrolment ON module.moduleID = module_enrolment.moduleID
-                                WHERE course.courseID=? AND course.status = 'active'";
+            FROM course LEFT JOIN module ON course.courseID = module.courseID
+            WHERE course.courseID=? AND course.status = 'active'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $courseID);
     $stmt->execute();
@@ -122,7 +122,7 @@
             text-decoration: none;
         }
 
-        .filename:hover {
+        .filename:hover, a.quiz:hover {
             text-decoration: underline;
             cursor: pointer;
         }
@@ -142,6 +142,18 @@
         .edit-btn {
             margin-left: 15vw;
         }
+
+        a.quiz{
+            color: #45AE05;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.5vw;
+        }
+
+        #progress-btn{
+            cursor: default;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -149,13 +161,13 @@
     <div class="page" id="course-page">
         <div class="page-content">
             <div class="course-head">
-                <span class="course-title"><?php echo $row['courseName'] ?></span>
+                <span class="course-title"><?php echo $row['courseName']; ?></span>
             </div>
             <div class="course-content">
                 <div class="course-thumb-layer">
                     <?php echo $courseThumb; ?>
                     <div class="thumb-buttons">
-                        <button class="button thumb-button"><img src="../images/leaderboard.png" alt="Leaderboard">Leaderboard</button>
+                        <button class="button thumb-button" onclick="location.href='../users/leaderboard.php?courseID=<?php echo $row['courseID'] ?>';"><img src="../images/leaderboard.png" alt="Leaderboard">Leaderboard</button>
                         <?php if ($role == 'student') {
                             $progress_sql = "SELECT (SELECT COUNT(moduleID) FROM module WHERE courseID=$row[courseID]) as module_total, 
                                                     (SELECT COUNT(module_enrolment.moduleID) FROM module_enrolment LEFT JOIN module ON module.moduleID=module_enrolment.moduleID 
@@ -208,6 +220,8 @@
                     <?php } ?>
                     <hr style="width:95%;text-align:left;margin-left:0">
                 <?php } ?>
+                <a href="../users/quiz.php?courseID=<?php echo $courseID; ?>" class="quiz">Take the quiz now!</a>
+                <br><br>
             </div>
         </div>
     </div>

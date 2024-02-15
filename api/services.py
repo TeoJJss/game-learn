@@ -267,7 +267,7 @@ def get_user_list(ticket):
     conn.close()
     return user_ls, 200
 
-def get_edu(user_id):
+def get_usr(user_id):
     conn = sqlite3.connect(auth_db)
     sql = "SELECT NAME FROM USERS WHERE USER_ID=?"
     username = conn.execute(sql, (user_id,)).fetchone()[0]
