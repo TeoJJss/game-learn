@@ -154,6 +154,12 @@
             cursor: default;
             pointer-events: none;
         }
+
+        .att-icon{
+            width: 5vw;
+            margin-left: 12vw;
+            margin-top: 5vh;
+        }
     </style>
 </head>
 
@@ -212,7 +218,9 @@
                                                                                                                                                                                                 echo 'checked';
                                                                                                                                                                                             } ?>>
                     <?php } ?>
-                    <b>Attachment: </b><a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")) { ?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')" <?php } else { ?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?></a>
+                    <b>Attachment: </b>
+                    <a class="filename" <?php if (file_exists("../tmp/$row[moduleID]/$row[filename].pdf")) { $file_type="pdf"; ?>onclick="showPdfPreview('<?php echo $row['moduleID'] ?>', '<?php echo $row['filename'] ?>')" <?php } else { $file_type="docx"; ?>href='../tmp/<?php echo $row['moduleID'] ?>/<?php echo $row['filename'] ?>.docx' download<?php } ?>> <?php echo $row['filename']; ?>
+                    <br><img src="../images/<?php echo $file_type; ?>.png" alt="Attachment" class="att-icon"></a>
                     <div id="pdfPreview<?php echo $row['moduleID']; ?>"></div><br>
                     <?php if ($role == 'educator') { ?>
                         <iframe src="../frames/edit_module.php?moduleID=<?php echo $row['moduleID']; ?>" id="edit-frame-<?php echo $row['moduleID']; ?>" frameborder="0" width="1000" height="300" style="display: none;"></iframe><br>

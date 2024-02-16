@@ -26,7 +26,7 @@
         ?>
         <div class="nav">
             <?php if (!$role){ //Guest header ?>
-                <button class="nav_button">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>public/register.php'">
                     <img src="<?php echo $base; ?>images/nav_picture/teach_on_mathy.png" alt="Teach On Mathy">
                     <a>Teach On Mathy</a>
                 </button>
