@@ -1,11 +1,12 @@
 <?php 
     require '../modules/config.php';
 
+    include '../includes/header.php';
+
     if (check_ticket()){
         header("Location: ../index.php");
         exit();
     }
-    include '../includes/header.php';
 
     if ($_SERVER['REQUEST_METHOD']=='POST'){
         $email = $_POST['email'];
@@ -83,7 +84,9 @@
             text-align: left; 
             margin-bottom: 5px; 
             font-size: 0.8em; 
-            color: #666; 
+            color: black;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; 
         }
 
 
