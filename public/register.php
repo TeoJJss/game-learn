@@ -223,7 +223,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <input type="text" name="jobTitle" id="jobTitle" autocomplete="off" class="searchbar" placeholder="Teacher">
                     </div><br>
                 </div>
+                 
                 <div class="inp-row">
+                <label for="email">ProfilePic:</label>
                     <input type="file" name="profPic" id="profPic-inp" accept=".jpeg, .jpg, .png">
                 </div><br>
                 <input type="submit" class="login_signup_button" value="Register"> 
