@@ -44,7 +44,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
         body {
             background-image: url('../images/login_background.png'); 
@@ -83,15 +87,28 @@
             color: #666; 
         }
 
-        .a {
-        display: block;
-        margin-top: 1dvw;
-        }
 
         #email{
             width: 23em;
             height: 3em;
         }
+
+        .link {
+            display: inline-block;
+            vertical-align: middle;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+        
+        .login-link{
+            padding: 10px;
+        }
+
+        .register-link{
+            padding-top: 10px;
+            padding-bottom: 0%;
+        }
+
 
 
 
@@ -105,8 +122,14 @@
             <input type="email" id="email" class="searchbar" name="email" autocomplete="off" required autofocus placeholder="name@email.com"><br><br>
         <label for="password">Password:</label> 
             <input type="password" id="email" class="searchbar" name="password" required placeholder="********"><br><br>
-        <input class="login_signup_button" type="submit" value="Login Now!"> 
-        <a class="a" href="./register.php">Sign Up</a>
+        <input class="login_signup_button" type="submit" value="Login Now!">
+        <div class="login-link">
+            Or <a href="./reset_pass.php" class="link">Forgot Password</a>
+        </div>
+        <hr>
+        <div class="register-link">
+        No account? Please <a class="link" href="./register.php"> Sign Up</a>    
+        </div>
         
     </form>
 </body>
