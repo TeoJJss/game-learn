@@ -33,7 +33,9 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
 function check_ticket()
 {
     global $base_url;
-    session_start();
+    if (session_status() != PHP_SESSION_ACTIVE){
+        session_start();
+    }
 
     if (isset($_SESSION['ticket'])) {
         if ($_SESSION['ticket'] != '') {
