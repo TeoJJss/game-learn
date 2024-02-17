@@ -6,7 +6,7 @@ $role = check_ticket();
 //     exit();
 // }
 include '../includes/header.php';
-$search="";
+$search = "";
 if (isset($_GET['search'])) {
     $search  = $_GET['search'];
     $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
@@ -20,7 +20,7 @@ if (isset($_GET['search'])) {
     $stmt = $conn->prepare($sql);
     $param = "%$search%";
     $stmt->bind_param("s", $param);
-}else{
+} else {
     $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.userID as eduID, `profile`.`jobTitle`, ROUND(AVG(course_feedback.ratings),1) as rating, COUNT(course_enrolment.courseID) as enrolled, course.category
                 FROM `course` 
                 LEFT JOIN course_feedback ON course.courseID = course_feedback.courseID 
@@ -109,12 +109,24 @@ $result = $stmt->get_result();
             max-width: 5vw;
             cursor: default;
             pointer-events: none;
+            background-color: #FFE9C8;
+            color: black;
+            font-size: 1.5vw;
         }
 
-        #your-course{
+        #point * {
+            vertical-align: middle;
+        }
+
+        #your-course {
             background-color: #d6af63;
             pointer-events: none;
             color: black;
+        }
+
+        .ptImg {
+            width: 2vw;
+            margin-right: 0.3vw;
         }
     </style>
 </head>
@@ -123,7 +135,7 @@ $result = $stmt->get_result();
     <div class="page">
         <div class="page-title">
             <h1><img src="../images/nav_picture/course.png" alt="Course">Course Search Results</h1>
-            
+
         </div><span>Search key: "<?php echo $search; ?>"</span>
         <div class="page-content">
             <div class="filters">
@@ -158,7 +170,7 @@ $result = $stmt->get_result();
                 <button class="button" onclick="location.reload()">Clear Filter</button>
             </div>
             <span class="count-results">
-                <?php if ($role == 'student'){
+                <?php if ($role == 'student') {
                     $ticket = $_SESSION['ticket'];
                     $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -171,7 +183,7 @@ $result = $stmt->get_result();
                     $stmt->execute();
                     $stmt->bind_result($pointVal);
                     $stmt->fetch();
-                    echo "<p class='button' id='point'>$pointVal</p>";
+                    echo "<p class='button' id='point'><img src='../images/nav_picture/point.png' class='ptImg'><span>$pointVal<span></p>";
                 } ?>
                 <span id="count-num"><?php echo $count ?></span> results
             </span>
@@ -199,20 +211,20 @@ $result = $stmt->get_result();
                 <div class="course-row" style="display: '';">
                     <?php echo $courseThumb; ?>
                     <div class="course-details">
-                        <a class="course-title" onclick="location.href='../public/course.php?courseID=<?php echo $row['courseID'];?>'"><?php echo $courseName; ?></a>
+                        <a class="course-title" onclick="location.href='../public/course.php?courseID=<?php echo $row['courseID']; ?>'"><?php echo $courseName; ?></a>
                         <p class="detail">
                             <?php echo $eduName; ?>/<?php echo $courseJob; ?>
-                            <?php if ($role=='educator'){
+                            <?php if ($role == 'educator') {
                                 $ticket = $_SESSION['ticket'];
                                 $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
                                 $response = json_decode(curl_exec($ch), true);
                                 $user_id = $response['data']['user_id'];
-                                if ($user_id == $courseEdu){
+                                if ($user_id == $courseEdu) {
                                     echo "<span class='button' id='your-course'>Your course</span>";
                                 }
-                            } 
+                            }
                             ?>
                         </p>
 
