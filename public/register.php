@@ -166,10 +166,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-align: center;
         }
 
+        .link {
+            display: inline-block;
+            vertical-align: middle;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+
+        .login-link{
+            padding-top: 8px;
+        }
+
     </style>
 </head>
 
 <body>
+
         <div class="page-title">
             
         </div>
@@ -213,10 +226,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="inp-row">
                     <input type="file" name="profPic" id="profPic-inp" accept=".jpeg, .jpg, .png">
                 </div><br>
-                <input type="submit" class="login_signup_button" value="Register"> Already have an account? 
-                <a href="./login.php">Login</a> Now!
+                <input type="submit" class="login_signup_button" value="Register"> 
+
+                <div class="login-link">    
+                    Already have an account? 
+                    <a class="link" href="./login.php">Login</a> Now!
+                </div>
             </form>
         </div>
+
 
     <script>
         function educator_selected() {
