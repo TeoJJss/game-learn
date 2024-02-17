@@ -13,11 +13,17 @@ $courseID = $_GET['courseID'];
 
 include '../includes/header.php';
 
-$sql = "SELECT quiz_enrolment.userID, SUM(question.awardPt) as score 
-            FROM quiz_enrolment JOIN question ON quiz_enrolment.questID=question.questID JOIN `option` ON `option`.optID=quiz_enrolment.optID JOIN course ON course.courseID=question.courseID 
-            WHERE `option`.`IsAnswer`=1 AND course.courseID=?
-            GROUP BY quiz_enrolment.userID 
-            ORDER BY score DESC";
+$sql = "SELECT result.userID, SUM(IF(result.IsAnswer = 1, result.awardPt, 0)) AS score
+        FROM (
+            SELECT quiz_enrolment.userID, quiz_enrolment.questID, quiz_enrolment.optID, `option`.`IsAnswer`, question.awardPt
+            FROM quiz_enrolment
+            LEFT JOIN question ON question.questID=quiz_enrolment.questID
+            LEFT JOIN `option` ON `option`.`optID` = quiz_enrolment.optID
+            LEFT JOIN course  ON course.courseID=question.courseID
+            WHERE course.courseID=?
+        ) result
+        GROUP BY result.userID
+        ORDER BY score DESC";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $courseID);
@@ -97,8 +103,11 @@ $rank = $stmt->get_result();
                 <span>Student Name</span>
                 <span>Score</span>
             </div>
-            <?php $count = 1;
+            <?php $count = 1; $tmp_score = -1;
             while ($row = $rank->fetch_assoc()) {
+                if ($tmp_score == $row['score']){
+                    $count--;
+                }
                 $userID = $row['userID'];
                 $ch = curl_init("$base_url/user-detail?user_id=$userID");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -113,7 +122,7 @@ $rank = $stmt->get_result();
                 <div class="tb-body row" id="row-<?php echo $count; ?>">
                     <span><?php echo $count; ?></span>
                     <span><?php echo $stuName; ?></span>
-                    <span class="score"><?php echo $row['score']; ?></span>
+                    <span class="score"><?php echo $row['score']; $tmp_score=$row['score']; ?></span>
                 </div>
             <?php $count++;
             } ?>

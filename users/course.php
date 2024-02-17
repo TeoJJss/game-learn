@@ -39,8 +39,14 @@
     $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.description, module.moduleID, module.moduleTitle, module.moduleDesc, module.filename
             FROM course LEFT JOIN module ON course.courseID = module.courseID
             WHERE course.courseID=? AND course.status = 'active'";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $courseID);
+    if ($role!='educator'){
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $courseID);
+    }else{
+        $sql .= " AND course.userID=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $courseID, $userID);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -140,7 +146,7 @@
         }
 
         .edit-btn {
-            margin-left: 15vw;
+            margin-left: 10vw;
         }
 
         a.quiz{
