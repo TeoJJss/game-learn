@@ -22,7 +22,7 @@ $stmt->bind_param("i", $courseID);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
-if ($row['courseID']==null){
+if ($row['courseID'] == null) {
     echo "<script>alert('Course Not Found!'); history.back(); </script>";
     exit();
 }
@@ -165,6 +165,64 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
         .rating-field {
             margin-top: 5vh;
         }
+
+        .instructor h2 {
+            padding-left: 3vw;
+            padding-top: 5vh;
+        }
+
+        .rating-text {
+            margin-left: 0.5vw;
+            margin-right: 5vw;
+        }
+
+        .dot {
+            height: 4vh;
+            width: 1.7vw;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5vw;
+        }
+
+        .ratings{
+            margin-left: 5vw;
+        }
+
+        .ratings-h2 {
+            vertical-align: center;
+            font-weight: 1500;
+        }
+
+        .profilePic {
+            width: 4vw;
+            border-radius: 50%;
+            margin-right: 2vw;
+        }
+
+        .usr-info {
+            display: flex;
+        }
+
+        .username,
+        .timestamp {
+            font-weight: bold;
+        }
+
+        .timestamp {
+            color: #A0A0A0;
+        }
+
+        .fbText {
+            margin-left: 5vw;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin-bottom: 5vh;
+        }
+
+        .fbRow {
+            margin-bottom: 5vh;
+            max-width: 80vw;
+        }
     </style>
 </head>
 
@@ -188,7 +246,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         $stmt->close();
                         ?>
                         <span class="rating-num"><?php echo $courseRating; ?> </span>
-                        <?php 
+                        <?php
                         $i = 0;
                         do {
                             if ($courseRating == 0) {
@@ -210,7 +268,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     <?php echo $courseThumb; ?><br>
                     <?php if ($role == 'student') {
                         if ($row['status'] == 'active') {
-                            echo '<br><button class="button" onclick="location.href='."'../users/course.php?courseID=$row[courseID]';".'">Learn Now</button><br><br>';
+                            echo '<br><button class="button" onclick="location.href=' . "'../users/course.php?courseID=$row[courseID]';" . '">Learn Now</button><br><br>';
                         } else {
                             echo '<p style="color: red;">The course is unavailable at the moment!</p>';
                         }
@@ -224,9 +282,9 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
                             if ($response['data']['user_id'] == $eduID) {
                                 if ($row['status'] == 'active') {
-                                    echo '<br><button class="button" onclick="location.href='."'../users/course.php?courseID=$row[courseID]';".'">Enter</button><br><br>
-                                    <button class="button" id="edit-btn" onclick="location.href='."'../users/educator/edit_course.php?courseID=$row[courseID]';".'">Edit</button><br><br>
-                                    <button class="button" id="dlt-btn" onclick="if(confirm(\'Are you sure to delete this course?\')){location.href='."'../modules/dlt_course.php?cid=$row[courseID]';}".'">Delete course</button><br>';
+                                    echo '<br><button class="button" onclick="location.href=' . "'../users/course.php?courseID=$row[courseID]';" . '">Enter</button><br><br>
+                                    <button class="button" id="edit-btn" onclick="location.href=' . "'../users/educator/edit_course.php?courseID=$row[courseID]';" . '">Edit</button><br><br>
+                                    <button class="button" id="dlt-btn" onclick="if(confirm(\'Are you sure to delete this course?\')){location.href=' . "'../modules/dlt_course.php?cid=$row[courseID]';}" . '">Delete course</button><br>';
                                 } else if ($row['status'] == 'banned') {
                                     echo '<p style="color: red;">Your course is banned!</p>';
                                 } else if ($row['status'] == 'pending') {
@@ -239,17 +297,17 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         }
                     } else if ($role == 'admin') {
                         if ($row['status'] == 'active') {
-                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Ban</button><br>';
+                            echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';" . '">Ban</button><br>';
                         } else if ($row['status'] == 'banned') {
-                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Unban</button><br>';
+                            echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';" . '">Unban</button><br>';
                         } else if ($row['status'] == 'pending') {
-                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';".'">Approve</button><br>';
-                            echo '<br><button class="button" onclick="location.href='."'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';".'">Reject</button><br>';
+                            echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';" . '">Approve</button><br>';
+                            echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';" . '">Reject</button><br>';
                         } else {
                             trigger_error('Course invalid!');
                             exit();
                         }
-                        echo '<br><button class="button" onclick="location.href='."'../users/course.php?courseID=$row[courseID]';".'">View Course Content</button><br><br>';
+                        echo '<br><button class="button" onclick="location.href=' . "'../users/course.php?courseID=$row[courseID]';" . '">View Course Content</button><br><br>';
                     } else {
                         echo '<p style="color: red;">Please login first!</p>';
                     } ?>
@@ -279,6 +337,51 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                             <span><?php echo $row['about'] ?></span>
                         </div>
                     </div>
+                </div>
+                <div class="ratings"><br>
+                    <h2 class="ratings-h2">
+                        <span class="fa fa-star checked" style="font-size: 2vw; margin-left:0.1vw; "></span><span class="rating-text"><?php echo $courseRating; ?> course rating</span>
+                        <span class="dot"></span><span class="num-ratings"><?php echo $num_fb; ?> ratings</span>
+                    </h2>
+                    <table>
+                        <?php
+                        $fbSql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings
+                                        FROM course_feedback
+                                        LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
+                                        WHERE course_feedback.courseID=?";
+                        $stmt = $conn->prepare($fbSql);
+                        $stmt->bind_param("i", $courseID);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        while ($row = $result->fetch_assoc()) { 
+                            $ch = curl_init("$base_url/user-detail?user_id=$row[userID]");
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                            $response = json_decode(curl_exec($ch), true);
+
+                            if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                                $fbName = $response['msg'];
+                            }
+                            ?>
+                            <tr class="fbRow">
+                                <div class="usr-info">
+                                    <?php if ($row['profilePic'] != null) { ?>
+                                        <img src='data:image/png;base64,<?php echo $row['profilePic'] ?>' alt='profilePic' class='profilePic'>
+                                    <?php } else { ?>
+                                        <img src="../images/user.png" alt='profilePic' class='profilePic'>
+                                    <?php } ?>
+                                    <div>
+                                        <span class="username"><?php echo $fbName; ?></span><br>
+                                        <?php for ($i = 1; $i <= $row['ratings']; $i++) {
+                                            echo '<span class="fa fa-star checked" style="font-size: 1.5vw;  "></span>';
+                                        }
+                                        echo '<span class="timestamp">' . $row['timestamp'] . '</span>'; ?>
+                                    </div>
+                                </div>
+                                <span class="fbText"><?php echo $row['fbText'] ?></span><br><br><br>
+                            </tr>
+                        <?php } ?>
+                    </table>
                 </div>
             </div>
         </div>

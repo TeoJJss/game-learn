@@ -188,8 +188,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="page-content">
             <form method="post" enctype="multipart/form-data">
-            <h1>Register</h1>
-            <br>
+                <h1>Register</h1>
+                <br>
                 <div class="inp-row">
                     <label for="email">Email:</label> 
                         <input type="text" id="email" name="email" autocomplete="off" required autofocus class="searchbar" placeholder="name@email.com">
