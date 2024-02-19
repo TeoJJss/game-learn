@@ -1,11 +1,11 @@
 <?php 
     require '../modules/config.php';
+    include '../includes/header.php';
 
     if (check_ticket()){
         header("Location: ../index.php");
         exit();
     }
-    include '../includes/header.php';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $email = $_POST['email'];
@@ -82,7 +82,9 @@
             text-align: left; 
             margin-bottom: 5px; 
             font-size: 0.8em; 
-            color: #666; 
+            color: black;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; 
         }
 
         #email{
@@ -111,7 +113,7 @@
 <body>  
     
     <form method="post">
-    <h1>Reset Password</h1>
+    <h1>Reset Password</h1><br>
         <label for="email">Email: </label>
         <input id="email" class="searchbar" type="text" name="email" id="email" placeholder="Enter your email" autofocus>
         <br><br>
