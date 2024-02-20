@@ -39,6 +39,31 @@
 
     $stmt -> close();
 
+    if ($_SERVER['REQUEST_METHOD'] == "POST"){
+        $feedback = $_POST['feedback'];
+        $rating = $_POST['rating'];
+        $img = null;
+        $image = $_FILES['fbFile']['tmp_name'];
+        if (isset($_FILES['fbFile']) && file_exists($image)){
+            $img = base64_encode(file_get_contents($image));
+        }
+
+        $new_FB_sql = "INSERT INTO course_feedback (`fbText`, `ratings`, `userID`, `courseID`, `fbImg`)
+                        VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($new_FB_sql);
+        $stmt->bind_param("siiis", $feedback, $rating, $userID, $courseID, $img);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($stmt->affected_rows == 0) {
+            echo "<script>alert('Feedback is not submitted!'); </script>";
+        }else{
+            echo "<script>alert('Feedback submitted!'); history.back(); </script>";
+        }
+        $stmt->close();
+        exit();
+    }
+
     include '../../includes/header.php';
 
     $sql = "SELECT question.questID, question.questText, question.awardPt, course.courseName
@@ -121,6 +146,43 @@
         .wrong-ans{
             background-color: red;
         }
+
+        h2.fb {
+            font-weight: bold;
+        }
+
+        h2.fb img{
+            width: 2vw;
+            margin-right: 1vw;
+        }
+
+        #feedback{
+            width: 60vw;
+            height: 5vh;
+            vertical-align: top;
+            font-size: 1vw;
+        }
+
+        .fb-sect {
+            border: 1px solid;
+            border-radius: 1%;
+            max-width: 60vw;
+            padding: 1vw;
+            background-color: beige;
+        }
+        #submitFB{
+            margin-top: 2vh;
+            margin-left: 5vw;
+        }
+
+        .fa-star{
+            cursor: pointer;
+            font-size: 1.6vw;
+        }
+        .fa-star:hover{
+            font-size: 1.8vw;
+            color: orange;
+        }
     </style>
 </head>
 
@@ -187,10 +249,58 @@
                     <hr style="width:95%;text-align:left;margin-left:0"><br>
                 <?php $count++;
                 } ?>
-                <button class="button" onclick="location.href='../course.php?courseID=<?php echo $courseID; ?>';">Back</button>
+                <?php
+                    // Check if the student already submit feedback, before displaying feedback form
+                    $chk_FB_Sql = "SELECT COUNT(*) FROM `course_feedback` WHERE courseID=? AND userID=?";
+                    $stmt = $conn->prepare($chk_FB_Sql);
+                    $stmt->bind_param("ii", $courseID, $userID);
+                    $stmt->execute();
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
+                    $stmt->close();
+                    if ($count == 0){
+                ?>
+                    <div class="fb-sect">
+                        <h2 class="fb"><img src="../../images/nav_picture/feedback.png">Feedback</h2>
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="rating">
+                                <span class="fa fa-star" id="fa1" onclick="ratings(1)"></span>
+                                <span class="fa fa-star" id="fa2" onclick="ratings(2)"></span>
+                                <span class="fa fa-star" id="fa3" onclick="ratings(3)"></span>
+                                <span class="fa fa-star" id="fa4" onclick="ratings(4)"></span>
+                                <span class="fa fa-star" id="fa5" onclick="ratings(5)"></span>
+                            </div>
+                            <input type="number" name="rating" id="rating" value="0" min="0" max="5" hidden>
+                            <input type="text" name="feedback" id="feedback" maxlength="150" oninput="enableFBtn()" placeholder="Tell us what you think about this course..." autocomplete="off" required>
+                            <input type="file" name="fbFile" id="fbFile" accept=".jpg, .jpeg, .png">
+                            <input type="submit" name="submitFB" id="submitFB" class="button" disabled>
+                        </form>
+                    </div><br>
+                <?php } ?>
+                <button class="button" onclick="location.href='../course.php?courseID=<?php echo $courseID; ?>';">Back to course</button>
             </div>
         </div>
     </div>
+    <script>
+        function enableFBtn(){
+            var FBtn = document.getElementById('submitFB');
+            FBtn.disabled = false;
+        }
+
+        function ratings(rating){
+            var count=0;
+            for(var i =1; i<=5; i++){
+                var star = document.getElementById(`fa${i}`);
+                if (i<=rating){
+                    star.classList.add("checked");
+                    count=i;
+                }else{
+                    star.classList.remove('checked');
+                }
+            }
+            document.getElementById('rating').value=count;
+        }
+    </script>
 </body><br><br>
 <?php include '../../includes/footer.php'; ?>
 

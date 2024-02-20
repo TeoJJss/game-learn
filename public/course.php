@@ -223,6 +223,11 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
             margin-bottom: 5vh;
             max-width: 80vw;
         }
+
+        .fbImg{
+            max-width: 10vw;
+            margin-left: 5vw;
+        }
     </style>
 </head>
 
@@ -345,7 +350,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     </h2>
                     <table>
                         <?php
-                        $fbSql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings
+                        $fbSql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings, course_feedback.fbImg
                                         FROM course_feedback
                                         LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
                                         WHERE course_feedback.courseID=?";
@@ -378,7 +383,11 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                                         echo '<span class="timestamp">' . $row['timestamp'] . '</span>'; ?>
                                     </div>
                                 </div>
-                                <span class="fbText"><?php echo $row['fbText'] ?></span><br><br><br>
+                                <span class="fbText"><?php echo $row['fbText'] ?></span><br>
+                                <?php if ($row['fbImg'] != null){
+                                    echo "<img src='data:image/png;base64," . $row['fbImg'] . "' class='fbImg'><br><br>";
+                                } ?>
+                                <br><br>
                             </tr>
                         <?php } ?>
                     </table>
