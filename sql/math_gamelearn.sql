@@ -104,8 +104,10 @@ CREATE TABLE IF NOT EXISTS `course_feedback` (
   `eduReply` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   PRIMARY KEY (`fbID`),
   KEY `courseID` (`courseID`),
-  KEY `userID` (`userID`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `userID` (`userID`),
+  FOREIGN KEY (`courseID`) REFERENCES `course`(`courseID`),
+  FOREIGN KEY (`userID`) REFERENCES `profile`(`userID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `course_feedback`
