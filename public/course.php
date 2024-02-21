@@ -8,6 +8,7 @@ if (!isset($_GET['courseID'])) {
     exit();
 }
 
+$owner = false;
 $courseID = $_GET['courseID'];
 $sql = "SELECT course.courseID, course.courseThumb, course.courseName, course.intro, course.description, course.lastUpdate, course.status, course.userID,
                     COUNT(course_enrolment.courseID) as enrolled, 
@@ -185,7 +186,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
             margin-right: 0.5vw;
         }
 
-        .ratings{
+        .ratings {
             margin-left: 5vw;
         }
 
@@ -220,13 +221,18 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
         }
 
         .fbRow {
-            margin-bottom: 5vh;
             max-width: 80vw;
         }
 
-        .fbImg{
+        .fbImg {
             max-width: 10vw;
             margin-left: 5vw;
+        }
+
+        .eduReply {
+            width: 25vw;
+            height: 5vh;
+            margin-right: 2vw;
         }
     </style>
 </head>
@@ -287,6 +293,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
                             if ($response['data']['user_id'] == $eduID) {
                                 if ($row['status'] == 'active') {
+                                    $owner = true;
                                     echo '<br><button class="button" onclick="location.href=' . "'../users/course.php?courseID=$row[courseID]';" . '">Enter</button><br><br>
                                     <button class="button" id="edit-btn" onclick="location.href=' . "'../users/educator/edit_course.php?courseID=$row[courseID]';" . '">Edit</button><br><br>
                                     <button class="button" id="dlt-btn" onclick="if(confirm(\'Are you sure to delete this course?\')){location.href=' . "'../modules/dlt_course.php?cid=$row[courseID]';}" . '">Delete course</button><br>';
@@ -350,7 +357,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     </h2>
                     <table>
                         <?php
-                        $fbSql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings, course_feedback.fbImg
+                        $fbSql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings, course_feedback.fbImg, course_feedback.eduReply, course_feedback.fbID
                                         FROM course_feedback
                                         LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
                                         WHERE course_feedback.courseID=?";
@@ -358,7 +365,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         $stmt->bind_param("i", $courseID);
                         $stmt->execute();
                         $result = $stmt->get_result();
-                        while ($row = $result->fetch_assoc()) { 
+                        while ($row = $result->fetch_assoc()) {
                             $ch = curl_init("$base_url/user-detail?user_id=$row[userID]");
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -367,7 +374,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                             if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                                 $fbName = $response['msg'];
                             }
-                            ?>
+                        ?>
                             <tr class="fbRow">
                                 <div class="usr-info">
                                     <?php if ($row['profilePic'] != null) { ?>
@@ -384,17 +391,36 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                                     </div>
                                 </div>
                                 <span class="fbText"><?php echo $row['fbText'] ?></span><br>
-                                <?php if ($row['fbImg'] != null){
-                                    echo "<img src='data:image/png;base64," . $row['fbImg'] . "' class='fbImg'><br><br>";
+                                <?php if ($row['fbImg'] != null) {
+                                    echo "<img src='data:image/png;base64," . $row['fbImg'] . "' class='fbImg'>";
                                 } ?>
+                                <br>
+                                <?php if ($role == 'educator' && $owner && $row['eduReply'] == null) {  ?>
+                                    <form method="post" action="../modules/reply_feedback.php">
+                                        <input type="number" name="fbID" value="<?php echo $row['fbID']; ?>" hidden>
+                                        <input type="text" name="eduReply" class="eduReply" placeholder="Your reply" oninput="enableReplyBtn('<?php echo $row['fbID']; ?>')" required autocomplete="off" maxlength="100">
+                                        <input type="submit" name="submit" id="submitReply-<?php echo $row['fbID']; ?>" class="button" value="Reply" disabled>
+                                    </form>
+                                    <?php } else {
+                                    if ($row['eduReply'] != null) { ?>
+                                        <hr style="width:55%;text-align:left;margin-left:0">
+                                        <b>Educator's Reply: </b><?php echo $row['eduReply'];
+                                                                } ?>
+                                <?php } ?>
                                 <br><br>
-                            </tr>
+                            </tr><br>
                         <?php } ?>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function enableReplyBtn(fbID) {
+            var replyBtn = document.getElementById(`submitReply-${fbID}`);
+            replyBtn.disabled = false;
+        }
+    </script>
 </body><br><br>
 <?php include '../includes/footer.php'; ?>
 
