@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.body{
+    max-width: 100vw;
+}
+
+.pages{
+    margin-left: 0vw;
+    min-height: 100vh;
+    display: flex;
+
+}
+
+.page-contents{
+    margin-top: 10vh;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    background-color: transparent;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh; 
+}
+
+.intro {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    background-color: #ff9900;
+    width: 180vh;
+    height: 40vh;
+    border-radius: 2vh;
+    font-family: 'Poppins', sans-serif;
+    justify-content:space-around;
+    /* margin-left: 15vh; */
+    margin-bottom: 80px;
+    /* max-width: 180vh;  */
+}
+
+.intro_left {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.intro_left h1 {
+    order: 1;
+    padding-left: 80px;
+    padding-top: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 7vh;
+    font-weight: 700;
+    padding-bottom: 0%;
+}
+
+.intro_left h4 {
+    order: 2;
+    width: 90vh;
+    padding-left: 80px;
+    padding-top: 0%;
+    margin-top: 0%;
+}
+
+.guest01 {
+    width: 300px; 
+    height: 250px;
+    order: 3; 
+    padding: 0px;
+    margin-top: 20px;
+
+}
+
+
+
+
+
+
+.intro02 {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 180vh;
+    justify-content: space-between;
+    margin-bottom: 80px;  
+}
+
+.guest02 {
+    flex: 1; /* Take up the left half of the space */
+    max-width: 80vh;
+}
+
+.intro02_text {
+    flex: 1; 
+    max-width: 90vh;
+}
+
+.intro02_text h1{
+    font-family: 'Poppins', sans-serif;
+    font-size: 5.3vh;
+    font-weight: 700;
+    margin: 0%;
+}
+
+.intro02_text>p>strong{
+    font-family: 'Poppins', sans-serif;
+    font-size: 3vh;
+    font-weight: 700;
+}
+
+
+.intro02_background {
+    position:absolute;  
+    background-color:  #ffefd6; 
+    width: 100%; 
+    height: 45vh; 
+    margin: auto; 
+    margin-top: 71vh; 
+    z-index: -99;
+}
+
+
+
+
+.intro03_title{
+    margin-bottom: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 6vh;
+    font-weight: 700;
+    color: #ff9900;
+}
+
+.intro03{
+    margin-bottom: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    max-width: 180vh;  
+    gap: 10px;
+    justify-content: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: flex-end;
+    background-image: linear-gradient(to bottom, transparent, black), url('../images/guest_pic/card_img01'); 
+    background-size: cover; 
+    background-position: center; 
+    width: 289px;
+    height: 306px;
+    border-radius: 3vh;
+    text-align: center;
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 5); 
+}
+
+.card hr{
+    color: white;
+    width: 90%;
+
+} 
+
+.card h2{
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.1vh;
+    font-weight: 700;
+}
+
+.card p {
+    padding-left: 2vh;
+    padding-right: 2vh;
+    padding-top: 0vh;
+    padding-bottom: 2vh;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2vh;
+    font-weight: 300;
+    width: 166px;
+    height: 43px;        
+}
+
+#card02{
+    background-image: linear-gradient(to bottom, transparent, black), url('../images/guest_pic/card_img02'); 
+}
+
+#card03{
+    background-image: linear-gradient(to bottom, transparent, black), url('../images/guest_pic/card_img03.png'); 
+}
+
+#card04{
+    background-image: linear-gradient(to bottom, transparent, black), url('../images/guest_pic/card_img04.jpg'); 
+}
+
+#card05{
+    background-image: linear-gradient(to bottom, transparent, black), url('../images/guest_pic/card_img05.png'); 
+}
+
+#card06{
+    background-image: linear-gradient(to bottom, transparent, black), url('../images/guest_pic/card_img06.jpg'); 
+}
+
+#card07{
+    background-image: linear-gradient(to bottom, transparent, black), url('../images/guest_pic/card_img07.jpg'); 
+}
+
+.instructor{
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    max-width: 150vh;  
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10vh;
+}
+
+.instructor_img{
+    width: 408px;
+    height: 464px;
+}
+
+.instructor_info{
+    width: 536px;
+}
+
+.instructor_info h1{
+    font-family: 'Poppins', sans-serif;
+    font-size: 6vh;
+    font-weight: 700;
+    margin: 0%;
+    margin-top: 10vh;
+}
+
+.instructor_info p{
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5vh;
+    font-weight: 400;
+    
+}
+
