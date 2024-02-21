@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `math_gamelearn`
 --
-CREATE DATABASE IF NOT EXISTS `math_gamelearn1` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `math_gamelearn1`;
+CREATE DATABASE IF NOT EXISTS `math_gamelearn` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `math_gamelearn`;
 
 -- --------------------------------------------------------
 
