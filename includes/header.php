@@ -58,19 +58,19 @@
                 </button>
             <?php }else if ($role == "educator"){ //educator header ?>
                 <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
-                <button class="nav_button">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/dashboard.php'">
                     <img src="<?php echo $base; ?>images/educator_pic/dashboard.png" alt="Dashboard">
                     <a>Dashboard</a>
                 </button>
-                <button class="nav_button">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/course.php'">
                     <img src="<?php echo $base; ?>images/educator_pic/course.png" alt="Course">
                     <a>Course</a>
                 </button>
-                <button class="nav_button">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/forum.php'">
                     <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>
-                <button class="nav_button">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/report.php'">
                     <img src="<?php echo $base; ?>images/nav_picture/report.png" alt="Report">
                     <a>Report</a>
                 </button>
