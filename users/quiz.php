@@ -86,25 +86,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
-
+        $redemption = $_POST['useGift'];
+        $redemptionID = $redemption == 'null' ? null : $redemption;
         while ($row = $result->fetch_assoc()) {
             $questID = $row['questID'];
             $selectedOpt = $_POST["$questID"];
-            $post_sql = "INSERT INTO quiz_enrolment(userID, questID, optID)
-                            VALUES(?, ?, ?)";
-            $stmt = $conn->prepare($post_sql);
-            $stmt->bind_param("iii", $userID, $questID, $selectedOpt);
+            if ($redemptionID != null){
+                $post_sql = "INSERT INTO quiz_enrolment(userID, questID, optID, redemptionID)
+                                VALUES(?, ?, ?, ?)";
+                $stmt = $conn->prepare($post_sql);
+                $stmt->bind_param("iiii", $userID, $questID, $selectedOpt, $redemptionID);
+            }else{
+                $post_sql = "INSERT INTO quiz_enrolment(userID, questID, optID)
+                                VALUES(?, ?, ?)";
+                $stmt = $conn->prepare($post_sql);
+                $stmt->bind_param("iii", $userID, $questID, $selectedOpt);
+            }
             $stmt->execute();
             $stmt->close();
 
             if ($selectedOpt == $row['optID']) {
-                $addPt = $row['awardPt'];
+                $addPt = $_POST["ptValue-$questID"];
                 $point_sql = "UPDATE `point` SET pointValue=pointValue+$addPt WHERE userID=?";
                 $stmt = $conn->prepare($point_sql);
                 $stmt->bind_param("i", $userID);
                 $stmt->execute();
                 $stmt->close();
             }
+        }
+        if ($redemptionID != null){
+            $usedSQL = "UPDATE user_gift SET isUsed=1 WHERE redemptionID=?";
+            $stmt = $conn->prepare($usedSQL);
+            $stmt->bind_param("i", $redemptionID);
+            $stmt->execute();
+            $stmt->close();
         }
         echo "<script>alert('Quiz submitted successfully!'); location.href='../users/student/result.php?courseID=$courseID'</script>";
         exit();
@@ -156,6 +171,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .questImg {
             width: 25vw;
         }
+
+        .gift-bag {
+            position: fixed;
+            background-color: #0557B8;
+            right: 10vw;
+            color: white;
+            min-width: 15vw;
+            min-height: 10vh;
+            text-align: center;
+            padding: 1vw;
+        }
+
+        .gift-bag-title {
+            font-weight: bold;
+            font-size: 2vw;
+            
+        }
+
+        .giftBagTitle {
+            text-align: center;
+            margin-bottom: 2vh;
+        }
+
+        .gift-bag-icon {
+            width: 2vw;
+            vertical-align: middle;
+        }
+
+        .giftPic {
+            width: 3vw;
+            margin-right: 1vw;
+        }
+
+        .gift-row{
+            text-align: left;
+            margin-left: 2vw;
+            vertical-align: middle;
+            margin-bottom: 2vh;
+        }
     </style>
 </head>
 
@@ -166,18 +220,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <span class="course-title">Quiz - <?php echo $row['courseName']; ?></span>
             </div><br>
             <div class="course-content">
+                <?php if ($role == 'student') { ?>
+                    <div class="gift-bag">
+                        <div class="giftBagTitle">
+                            <span class="gift-bag-title"><img src="../images/nav_picture/giftbag.png" class="gift-bag-icon">Gift Bag</span><br>
+                        </div>
+                        <?php
+                        $giftSql = "SELECT gift.giftID, gift.giftName, gift.giftMedia, user_gift.redemptionID
+                                        FROM user_gift JOIN gift ON user_gift.giftID=gift.giftID 
+                                        WHERE user_gift.userID=? AND user_gift.isUsed=0";
+                        $stmt = $conn->prepare($giftSql);
+                        $stmt->bind_param("i", $userID);
+                        $stmt->execute();
+                        $gifts = $stmt->get_result();
+                        $stmt->close();
+
+                        while ($gift = $gifts->fetch_assoc()) {
+                        ?>
+                            <div class="gift-row">
+                                <img src='data:image/png;base64,<?php echo $gift['giftMedia'] ?>' title='<?php echo $gift['giftName']; ?>' class='giftPic'>
+                                <button class="button use-gift-btn" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use</button>
+                            </div>
+                        <?php } ?>
+                        <p style="background-color:red; color:white;">The gift applied will give you extra points, <br>but not reflect on the course's leaderboard</p>
+                    </div>
+                <?php } ?>
                 <form method="post">
                     <input type="text" value="<?php echo $courseID; ?>" name="courseID" hidden>
+                    <input type="number" name="useGift" id="useGift" value="null" hidden>
                     <?php $result->data_seek(0);
                     $count = 1;
-                    while ($row = $result->fetch_assoc()) { ?>
-                        <span class="questCount">Q<?php echo $count; ?></span><br><br>
-                        <span class="questContent"><?php echo $row['questText']; ?><span class="point"> [<?php echo $row['awardPt']; ?>m]</span></span><br><br>
+                    while ($row = $result->fetch_assoc()) { 
+                        $questID = $row['questID'];
+                        ?>
+                        <span class="questCount">Q<?php echo $count;?></span><br><br>
+                        <span class="questContent"><?php echo $row['questText']; ?><span class="point"> [<span class="ptVal"><?php echo $row['awardPt']; ?></span>m]</span></span><br><br>
+                        <input type="number" name="ptValue-<?php echo $questID; ?>" id="ptValue-<?php echo $questID; ?>" value="<?php echo $row['awardPt']; ?>" required hidden>
                         <?php if ($row['questImg'] != null) {
                             echo "<img src='data:image/png;base64," . $row['questImg'] . "' class='questImg'><br><br>";
                         } ?>
                         <?php
-                        $questID = $row['questID'];
                         $sql = "SELECT `option`.optID, `option`.optValue, `option`.IsAnswer, `option`.optImg 
                                     FROM `option`
                                     WHERE questID=?";
@@ -214,6 +296,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
+    <script>
+        function useGift(redemptionID, giftID){
+            if (giftID === 1){
+                questPt = document.getElementsByClassName('ptVal');
+                for (let i = 0; i < questPt.length; i++){
+                    var newPt = (parseInt(questPt[i].innerHTML) * 2).toString();
+                    questPt[i].innerHTML = "<b>"+newPt+"</b>"
+                    document.getElementById(`ptValue-${i+1}`).value = newPt;
+                }
+            }
+            
+            var useGiftBtn = document.getElementsByClassName('use-gift-btn');
+            for (let i = 0; i < useGiftBtn.length; i++){
+                useGiftBtn[i].disabled=true;
+            }
+            document.getElementById('useGift').value = redemptionID;
+        }
+    </script>
 </body>
 <?php include '../includes/footer.php'; ?>
 

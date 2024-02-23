@@ -105,7 +105,7 @@ $result = $stmt->get_result();
         }
 
         #point {
-            width: 4vw;
+            width: 7vw;
             max-width: 5vw;
             cursor: default;
             pointer-events: none;
