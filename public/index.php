@@ -32,8 +32,9 @@
             <div class="intro02">
                 <img class="guest02" src="../images/guest_pic/guest02.png" alt="guest02">
                 <div class="intro02_text">
-                    <h1>Student Outcomes on Mathy</h1>
-                    <p><strong>77%</strong> of Mathy learners conquer their fear and gain the confidence to tackle real-world challenges. No more math anxiety!</p>
+                    <h1>Gamified Learning with Mathy</h1>
+                    <p><strong>67%</strong> of students said that a gamified course is more motivating than their traditional coursework. 
+                        <br><small style="margin-left:5vw;">-- Johnny Selawsky (2019)</small></p>
                     <button class="button" href="./register.php">Join For Free</button>
                 </div>
             </div>
