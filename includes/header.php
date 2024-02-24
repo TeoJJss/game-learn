@@ -58,7 +58,7 @@
                 </button>
             <?php }else if ($role == "educator"){ //educator header ?>
                 <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
-                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/dashboard.php'">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/index.php'">
                     <img src="<?php echo $base; ?>images/educator_pic/dashboard.png" alt="Dashboard">
                     <a>Dashboard</a>
                 </button>
