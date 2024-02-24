@@ -1,5 +1,5 @@
 <?php
-    require '../../modules/config.php';
+    require_once '../../modules/config.php';
     $role = check_ticket();
     if ($role != 'student') {
         header("Location: ../../index.php");
@@ -64,7 +64,7 @@
         exit();
     }
 
-    include '../../includes/header.php';
+    include_once '../../includes/header.php';
 
     $sql = "SELECT question.questID, question.questText, question.awardPt, course.courseName
                 FROM question LEFT JOIN course ON course.courseID = question.courseID
@@ -76,7 +76,7 @@
 
     $stmt->close();
     if ($result->num_rows == 0) {
-        echo "<script>alert('Quiz Not Found!'); history.back(); </script>";
+        echo "<script>alert('Quiz Result Not Found!'); history.back(); </script>";
         exit();
     }
     $row = $result->fetch_assoc();
@@ -278,6 +278,7 @@
                     </div><br>
                 <?php } ?>
                 <button class="button" onclick="location.href='../course.php?courseID=<?php echo $courseID; ?>';">Back to course</button>
+                <button class="button" style="margin-left: 5vw;" onclick="location.href='../student/result_report.php?courseID=<?php echo $courseID; ?>';">Generate Result Report</button>
             </div>
         </div>
     </div>
@@ -302,6 +303,6 @@
         }
     </script>
 </body><br><br>
-<?php include '../../includes/footer.php'; ?>
+<?php include_once '../../includes/footer.php'; ?>
 
 </html>

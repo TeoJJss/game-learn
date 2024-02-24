@@ -44,7 +44,7 @@
                 <div class="card">
                     <h2>Gamified Learning</h2>
                     <hr>
-                    <p>Earn points, badges, and level up</p>
+                    <p>Earn points and level up</p>
                 </div>
                 <div id="card02" class="card">
                     <h2>Personalized Learning</h2>
@@ -69,7 +69,7 @@
                 <div id="card06" class="card">
                     <h2>Feedback System</h2>
                     <hr>
-                    <p>Provide input to improve the platform</p>
+                    <p>Provide feedbacks to improve the platform</p>
                 </div>
                 <div id="card07" class="card">
                     <h2>Online Discussions</h2>
