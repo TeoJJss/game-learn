@@ -88,6 +88,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
         $redemption = $_POST['useGift'];
         $redemptionID = $redemption == 'null' ? null : $redemption;
+
+        $minus = 0;
+
+        if ($redemptionID != null){
+            $chkGift = "SELECT giftID FROM user_gift WHERE redemptionID=?";
+            $stmt = $conn->prepare($chkGift);
+            $stmt->bind_param("i", $redemptionID);
+            $stmt->execute();
+            $stmt->bind_result($giftID);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($giftID === 2){ // Minus One Wrong
+                $minus = 1;
+            }else if ($giftID === 3){ // Minus Two Wrong
+                $minus = 2;
+            }
+        }
+        
+        $addTotal = 0;
         while ($row = $result->fetch_assoc()) {
             $questID = $row['questID'];
             $selectedOpt = $_POST["$questID"];
@@ -104,16 +124,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             $stmt->execute();
             $stmt->close();
-
+            $addPt = $_POST["ptValue-$questID"];
             if ($selectedOpt == $row['optID']) {
-                $addPt = $_POST["ptValue-$questID"];
-                $point_sql = "UPDATE `point` SET pointValue=pointValue+$addPt WHERE userID=?";
-                $stmt = $conn->prepare($point_sql);
-                $stmt->bind_param("i", $userID);
-                $stmt->execute();
-                $stmt->close();
+                $addTotal+=$addPt;
+            }else if (($selectedOpt != $row['optID']) && $minus){
+                $addTotal += $addPt/2;
+                $minus--;
+            }else{
+                $addTotal += 0;
             }
         }
+
+        $point_sql = "UPDATE `point` SET pointValue=pointValue+$addTotal WHERE userID=?";
+        $stmt = $conn->prepare($point_sql);
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $stmt->close();
+
         if ($redemptionID != null){
             $usedSQL = "UPDATE user_gift SET isUsed=1 WHERE redemptionID=?";
             $stmt = $conn->prepare($usedSQL);
@@ -239,10 +266,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                             <div class="gift-row">
                                 <img src='data:image/png;base64,<?php echo $gift['giftMedia'] ?>' title='<?php echo $gift['giftName']; ?>' class='giftPic'>
-                                <button class="button use-gift-btn" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use</button>
+                                <button class="button use-gift-btn" id="gift-<?php echo $gift['giftID']; ?>" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use</button>
                             </div>
                         <?php } ?>
-                        <p style="background-color:red; color:white;">The gift applied will give you extra points, <br>but not reflect on the course's leaderboard</p>
                     </div>
                 <?php } ?>
                 <form method="post">
@@ -271,6 +297,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         while ($q_row = $options->fetch_assoc()) {
                             $optID = $q_row['optID'];
                             $checked = '';
+                            if ($q_row['IsAnswer']){
+                                $optAns="opt-ans";
+                            }
                             if ($q_row['IsAnswer'] && $role != 'student') {
                                 $checked = 'checked';
                             }
@@ -278,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             if ($role != 'student') {
                                 $disabled = 'style="pointer-events: none;"';
                             }
-                            echo "<input type='radio' class='opt' id='opt-$optID' name='$questID' value='$optID' required $checked $disabled>
+                            echo "<input type='radio' class='opt $optAns' id='opt-$optID' name='$questID' value='$optID' required $checked $disabled>
                                 <label for='opt-$optID' class='opt-label' $disabled>" . $q_row['optValue'] . "</label><br><br>";
                         }
                         ?>
@@ -297,13 +326,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
     <script>
+        var questions = document.getElementsByClassName('questCount');
+        if (questions.length < 2){
+            document.getElementById('gift-3').disabled = true;
+            document.getElementById('gift-5').disabled = true;
+            document.getElementById('gift-6').disabled = true;
+        }else if (questions.length < 3){
+            document.getElementById('gift-5').disabled = true;
+            document.getElementById('gift-6').disabled = true;
+        }
+
         function useGift(redemptionID, giftID){
-            if (giftID === 1){
-                questPt = document.getElementsByClassName('ptVal');
+            if (giftID === 1){ // Double Points
+                var questPt = document.getElementsByClassName('ptVal');
                 for (let i = 0; i < questPt.length; i++){
                     var newPt = (parseInt(questPt[i].innerHTML) * 2).toString();
-                    questPt[i].innerHTML = "<b>"+newPt+"</b>"
+                    questPt[i].innerHTML = `<s><i>${questPt[i].innerHTML}</i></s> <b>${newPt}</b>`
                     document.getElementById(`ptValue-${i+1}`).value = newPt;
+                }
+            }else if (giftID>=4 && giftID<=6){ // Skip question
+                var correctopt =document.getElementsByClassName('opt-ans');
+                switch(giftID){
+                    case 4: skip=1; break;
+                    case 5: skip=2; break;
+                    case 6: skip=3; break;
+                    default: skip=0;
+                }
+                console.log(skip);
+                for (let i=0; i<skip; i++){
+                    correctopt[i].checked = true;
                 }
             }
             
