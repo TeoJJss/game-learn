@@ -79,11 +79,11 @@
                     <img src="../images/setting.png" alt="nav_button">
                     <a>Settings</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/system_feedback.php'">
                     <img src="../images/sys_feedback.png" alt="nav_button">
                     <a>System Feedback</a>
-                </button onclick="location.href = '<?php echo $base; ?>users/educator/student_feedback.php'">
-                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/system_feedback.php'">
+                </button>
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/student_feedback.php'">
                     <img src="../images/educator_pic/stu_feedback.png" alt="nav_button">
                     <a>Student's Feedback</a>
                 </button>
