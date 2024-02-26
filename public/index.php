@@ -15,6 +15,8 @@
     <title>Guest Homepage</title>
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/guest.css">
+
+ 
 </head>
 <body>
     <div class="pages">
@@ -35,7 +37,7 @@
                     <h1>Gamified Learning with Mathy</h1>
                     <p><strong>67%</strong> of students said that a gamified course is more motivating than their traditional coursework. 
                         <br><small style="margin-left:5vw;">-- Johnny Selawsky (2019)</small></p>
-                    <button class="button" href="./register.php">Join For Free</button>
+                    <button id="button01" class="button" onclick="location.href ='../public/register.php'">Join For Free</button>
                 </div>
             </div>
 
@@ -44,7 +46,7 @@
                 <div class="card">
                     <h2>Gamified Learning</h2>
                     <hr>
-                    <p>Earn points and level up</p>
+                    <p>Earn points, badges, and level up</p>
                 </div>
                 <div id="card02" class="card">
                     <h2>Personalized Learning</h2>
@@ -69,7 +71,7 @@
                 <div id="card06" class="card">
                     <h2>Feedback System</h2>
                     <hr>
-                    <p>Provide feedbacks to improve the platform</p>
+                    <p>Provide input to improve the platform</p>
                 </div>
                 <div id="card07" class="card">
                     <h2>Online Discussions</h2>
@@ -83,14 +85,18 @@
                 <div class="instructor_info">
                     <h1>Become an instructor</h1>
                     <p>Instructors from around the world teach millions of learners on Mathy. We provide the tools and skills to teach what you love.</p>
-                    <button class="button" href="./register.php">Start Teaching Today</button>
+                    <button class="button" onclick="location.href ='../public/login.php'">Start Teaching Today</button>
                 </div>
             </div>
             
 
         </div>
         <div class="intro02_background"></div>  
+        
+
     </div>
+
+
 </body>
 <?php include '../includes/footer.php';?>
 </html>
