@@ -63,7 +63,7 @@
                 </button>
 
             <?php }else if($role == 'educator'){ ?>
-                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/course.php'">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/course_management.php'">
                     <img src="../images/educator_pic/course.png" alt="nav_button">
                     <a>My Courses</a>
                 </button>
