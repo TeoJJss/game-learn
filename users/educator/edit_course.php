@@ -131,11 +131,11 @@
                 </div>
                 <div class="inp-row">
                     <label for="courseIntro">Course Introduction</label><br>
-                    <textarea name="courseIntro" id="courseIntro" minlength="1" maxlength="100" oninput="editable()" required><?php echo $row['intro']; ?></textarea>
+                    <textarea name="courseIntro" id="courseIntro" minlength="1" maxlength="500" oninput="editable()" required><?php echo $row['intro']; ?></textarea>
                 </div>
                 <div class="inp-row">
                     <label for="courseDesc">Course Description</label><br>
-                    <textarea name="courseDesc" id="courseDesc" minlength="1" maxlength="100" oninput="editable()" required><?php echo $row['description']; ?></textarea>
+                    <textarea name="courseDesc" id="courseDesc" minlength="1" maxlength="500" oninput="editable()" required><?php echo $row['description']; ?></textarea>
                 </div>
                 <div class="inp-row">
                     <label for="courseLabel">Course Label</label><br>
