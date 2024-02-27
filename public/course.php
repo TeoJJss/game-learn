@@ -111,6 +111,11 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
             padding-bottom: 2vh;
         }
 
+        .course-thumb {
+            min-height: 25vh;
+            margin-left: 2vw;
+        }
+
         .preview-content {
             margin-left: 4vw;
             margin-top: 12vh;

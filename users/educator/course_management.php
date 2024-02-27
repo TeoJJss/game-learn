@@ -7,10 +7,19 @@ if ($role != 'educator') {
 }
 include '../../includes/header.php';
 
+$ticket = $_SESSION['ticket'];
+$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$response = json_decode(curl_exec($ch), true);
+$eduID = $response['data']['user_id'];
 
-// Query to fetch courses
-$sql = "SELECT * FROM course";
-$result = $conn->query($sql);
+$sql = "SELECT course.courseName, course.status, course.courseID FROM course WHERE course.userID=?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $eduID);
+$stmt->execute();
+$result = $stmt->get_result();
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -144,8 +153,7 @@ $result = $conn->query($sql);
 <body>
     <div class="page">
         <div class="page-title">
-            <img src="<?php echo $base; ?>images/educator_pic/course.png" alt="Course Icon">
-            Course Management
+            <h1><img src="<?php echo $base; ?>images/educator_pic/course.png" alt="Course Icon">Course Management</h1>
         </div>
         <div class="page-content">
             <h1>Course Categories</h1>
