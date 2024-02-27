@@ -54,8 +54,8 @@
                     <a>Report</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/feedback.png" alt="nav_button">
-                    <a>Feedback</a>
+                    <img src="../images/nav_picture/feedback.png" alt="nav_button" onclick="location.href = '<?php echo $base; ?>users/system_feedback.php'">
+                    <a>System Feedback</a>
                 </button>
                 <button class="more_button" onclick="location.href='./index.php';">
                     <img src="../images/setting.png" alt="nav_button">
@@ -67,7 +67,7 @@
                     <img src="../images/educator_pic/course.png" alt="nav_button">
                     <a>My Courses</a>
                 </button>
-                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/forum.php'">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/forum.php'">
                     <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
                 </button>
@@ -79,7 +79,7 @@
                     <img src="../images/setting.png" alt="nav_button">
                     <a>Settings</a>
                 </button>
-                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/system_feedback.php'">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/system_feedback.php'">
                     <img src="../images/sys_feedback.png" alt="nav_button">
                     <a>System Feedback</a>
                 </button>

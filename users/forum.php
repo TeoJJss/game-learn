@@ -1,16 +1,60 @@
 <?php
-require '../../modules/config.php';
+require '../modules/config.php';
 $role = check_ticket();
-if ($role != 'educator') {
-    header("Location: ../../index.php");
+if (!$role) {
+    header("Location: ../index.php");
     exit();
 }
-include '../../includes/header.php';
+include '../includes/header.php';
 
-$sql = "SELECT post.userID, `profile`.`profilePic`, postID, post.content, post.timestamp FROM post ORDER BY timestamp DESC
-        LEFT JOIN `profile` ON post.userID=`profile`.`userID`
-        WHERE post.courseID=?";
-$result = $conn->query($sql);
+if (!isset($_GET['search'])){
+    $sql = "SELECT post.userID, `profile`.`profilePic`, post.postID, post.content, post.timestamp, post.postMedia
+            FROM post 
+            LEFT JOIN `profile` ON post.userID=`profile`.`userID`
+            ORDER BY post.`timestamp` DESC";
+    $stmt = $conn->prepare($sql);
+}else{
+    $key = $_GET['search'];
+    $sql = "SELECT post.userID, `profile`.`profilePic`, post.postID, post.content, post.timestamp, post.postMedia
+            FROM post 
+            LEFT JOIN `profile` ON post.userID=`profile`.`userID`
+            WHERE LOWER(post.content) LIKE LOWER(?)
+            ORDER BY post.`timestamp` DESC";
+    $stmt = $conn->prepare($sql);
+    $keyword = "%$key%";
+    $stmt -> bind_param("s", $keyword);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+$stmt->close();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $ticket = $_SESSION['ticket'];
+    $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $response = json_decode(curl_exec($ch), true);
+    $userID_comment = $response['data']['user_id'];
+
+    $postID = $_POST['postID'];
+    $commentText = $_POST['commentText'];
+    $img = null;
+    $image = $_FILES['commentMedia']['tmp_name'];
+    if (isset($_FILES['commentMedia']) && file_exists($image)) {
+        $img = base64_encode(file_get_contents($image));
+    }
+
+    $commentSql = "INSERT INTO comment (`commentText`, `commentMedia`, `postID`, `userID`) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($commentSql);
+    $stmt->bind_param("ssii", $commentText, $img, $postID, $userID_comment);
+    $stmt->execute();
+    if ($stmt->affected_rows < 1) {
+        trigger_error("Update Failed");
+    } else {
+        echo '<script>alert("Comment posted. "); location.href="./forum.php";</script>';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +64,7 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
-    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         .page {
@@ -49,11 +93,8 @@ $result = $conn->query($sql);
             margin-bottom: 40px;
             position: relative;
             background-color: white;
-            /* Light grey background for contrast */
             border-left: 4px solid #333;
-            /* Adds a solid line to the left for style */
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-            /* Adds a subtle shadow for depth */
         }
 
         .user-info {
@@ -63,18 +104,12 @@ $result = $conn->query($sql);
             font-size: 20px;
         }
 
-        .user-info img {
+        .user-info img,
+        .profilePic {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             margin-right: 10px;
-        }
-
-        .question-image {
-            width: 50%;
-            height: auto;
-            max-height: 230px;
-            /* Adjust this value to change the maximum height of the image */
         }
 
         .post-content {
@@ -85,9 +120,7 @@ $result = $conn->query($sql);
         .actions {
             display: flex;
             justify-content: flex-start;
-            /* Aligns the items to the start of the container */
             gap: 10px;
-            /* Adjust this value to change the space between the items */
         }
 
         .actions a {
@@ -102,76 +135,74 @@ $result = $conn->query($sql);
 
         .view-comment {
             position: absolute;
-            /* Positions the link relative to the .post div */
             right: 10px;
-            /* Aligns the link to the right of the .post div */
             bottom: 20px;
-            /* Aligns the link to the bottom of the .post div */
             text-decoration: none;
         }
 
-        /* The modal (background) */
         .modal {
             display: none;
-            /* Hidden by default */
             position: fixed;
-            /* Stay in place */
             z-index: 1;
-            /* Sit on top */
             left: 0;
             top: 0;
             width: 100%;
-            /* Full width */
             height: 100%;
-            /* Full height */
             overflow: auto;
-            /* Enable scroll if needed */
             background-color: rgb(0, 0, 0);
-            /* Fallback color */
             background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
         }
 
-        /* Modal content */
         .modal-content {
             background-color: #fefefe;
             margin: 18% auto;
-            /* 15% from the top and centered */
             padding: 20px;
             border: 1px solid #888;
             width: 35%;
             height: 20%;
-            /* Adjust this value */
         }
 
-        .share-options {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 50px;
+        .username,
+        .timestamp {
+            font-weight: bold;
         }
 
-        .actions .like-btn.liked {
-            color: blue;
+        .timestamp {
+            color: #A0A0A0;
+            margin-left: 2vw;
         }
 
-        .closeBtn {
-            font-size: 25px;
+        .postMedia {
+            max-width: 10vw;
         }
 
-        .closeBtn:hover {
+        input.comment {
+            width: 25vw;
+            height: 5vh;
+        }
+
+        .comment-btn {
+            margin-left: 3vw;
+        }
+
+        .comment-a, .ban-act {
+            color: darkblue;
             cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .ban-act {
             color: red;
+            margin-left: 5vw;
         }
 
-        .feedback-date {
-            margin-left: 70px;
-            font-size: 12px;
+        #search-forum{
+            margin-left: 5vw;
+            height: 5vh;
         }
 
-        .feedback-time {
-            margin-left: 70px;
-            font-size: 12px;
+        .create-post-btn{
+            margin-top: 5vh;
         }
     </style>
 
@@ -180,125 +211,129 @@ $result = $conn->query($sql);
 <body>
     <div class="page">
         <div class="page-title">
-            <img src="<?php echo $base; ?>images/educator_pic/forum.png" alt="Forum Icon" class="forum-image">
-            Forum
+            <h1><img src="<?php echo $base; ?>images/educator_pic/forum.png" alt="Forum Icon" class="forum-image">Forum</h1>
+            <input type="text" class="nav_search" maxlength="50" id="search-forum" placeholder="Search For Forum Posts" onclick="addParam()" autocomplete="off">
+            <button class="button create-post-btn" onclick="location.href='../users/create_forum.php'">Create Post</button>
         </div>
         <div class="page-content">
-            <!-- Post 1 -->
-            <?php
-            $sql = "SELECT postID, content, timestamp, userID FROM post ORDER BY timestamp DESC";
-            $result = $conn->query($sql);
+            <?php while ($row = $result->fetch_assoc()) { ?>
+                <div class="post">
+                    <div class="user-info">
+                        <img src='data:image/png;base64,<?php echo $row['profilePic'] ?>' class='profilePic'>
+                        <span class="username"><b>
+                                <?php
+                                $userID = $row['userID'];
+                                $ch = curl_init("$base_url/user-detail?user_id=$userID");
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                                $response = json_decode(curl_exec($ch), true);
 
-            // Check if there are posts to display
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $postID = $row['postID'];
-                    $content = $row['content'];
+                                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                                    $userName = $response['msg'];
+                                } else {
+                                    trigger_error("Unknown user!");
+                                    exit();
+                                }
+                                echo $userName;
+                                ?></b>
+                        </span>
+                        <span class="timestamp">
+                            <?php echo $row['timestamp']; ?>
+                        </span>
+                    </div>
+                    <p><?php echo $row['content'] ?></p>
+                    <?php if ($row['postMedia']) { ?>
+                        <img src='data:image/png;base64,<?php echo $row['postMedia']; ?>' class='postMedia'><br>
+                    <?php } ?>
+                    <a class="comment-a" onclick="showCommentInp(<?php echo $row['postID']; ?>)"><i class="fa fa-comment"></i> Comment</a>
+                    <?php if ($role == 'admin'){ ?>
+                        <a class="ban-act" onclick="dltPost(<?php echo $row['postID']; ?>)">Delete Post (admin only)</a>
+                    <?php } ?>
+                    <form method="post" id="comment-form-<?php echo $row['postID']; ?>" enctype="multipart/form-data" hidden>
+                        <input type="number" name="postID" value="<?php echo $row['postID']; ?>" hidden>
+                        <input type="text" name="commentText" placeholder="Enter comment..." maxlength="150" autocomplete="off" class="comment" required>
+                        <input type="file" accept=".jpg, .jpeg, .png" name="commentMedia">
+                        <button type="submit" class="button comment-btn">Post Comment</button>
+                    </form>
+                    <?php
+                    $getCommentSql = "SELECT comment.`commentText`, comment.`commentMedia`, comment.`timestamp`, comment.`userID`, `profile`.profilePic, comment.commentID 
+                                            FROM `comment` JOIN `profile` ON comment.userID = `profile`.userID
+                                            WHERE comment.postID=?";
+                    $stmt = $conn->prepare($getCommentSql);
+                    $stmt->bind_param("i", $row['postID']);
+                    $stmt->execute();
+                    $comments = $stmt->get_result();
+                    $stmt->close();
+                    if ($comments->num_rows > 0) {
+                    ?>
+                        <hr style="width:95%;text-align:left;margin-left:0"><br>
+                        <?php while ($row_comment = $comments->fetch_assoc()) {
+                            $comment_userID = $row_comment['userID'];
+                            $ch = curl_init("$base_url/user-detail?user_id=$comment_userID");
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                            $response = json_decode(curl_exec($ch), true);
 
-                    // Parse timestamp using DateTime
-                    $timestamp = new DateTime($row['timestamp']);
-
-                    // Format the date and time separately
-                    $feedbackDate = $timestamp->format('Y-m-d'); // Format: Year-Month-Day
-                    $feedbackTime = $timestamp->format('H:i:s'); // Format: Hour:Minute:Second
-
-                    $userID = $row['userID'];
-
-                    // Additional code for fetching user information (e.g., name, image) based on $userID
-
-                    // Display the post
-                    echo '<div class="post">';
-                    echo '<div class="user-info">';
-                    // Additional code for displaying user information
-                    echo '</div>';
-                    echo '<div class="feedback-date">' . $feedbackDate . '</div>';
-                    echo '<div class="feedback-time">' . $feedbackTime . '</div>';
-                    echo '<img src="' . $base . 'images/educator_pic/differentiation.jpg" alt="Question Image" class="question-image">';
-                    echo '<div class="post-content">';
-                    echo $content;
-                    echo '</div>';
-                    echo '<div class="actions">';
-                    echo '<a href="add_forum_comment.php"><i class="fas fa-comment"></i> Comment</a>';
-                    echo '<div class="share">';
-                    echo '<a href="#" class="shareBtn" data-modal="shareModal' . $postID . '"><i class="fas fa-share"></i> Share</a>';
-                    echo '</div>';
-                    // The Share modal (hidden by default)
-                    echo '<div id="shareModal' . $postID . '" class="modal">';
-                    echo '<div class="modal-content">';
-                    echo '<span class="closeBtn" data-modal="shareModal' . $postID . '" style="font-weight: bold;">&times;</span>';
-                    echo '<p>Share on:</p>';
-                    echo '<div class="share-options">';
-                    echo '<a href="https://www.whatsapp.com" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>';
-                    echo '<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>';
-                    echo '<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>';
-                    echo '<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>';
-                    echo '</div>';
-                    echo '</div>';
-                    echo '</div>';
-                    echo '</div>';
-                    echo '<a href="view_forum_comment.php" class="view-comment">View Comment</a>';
-                    echo '</div>';
-                }
-            } else {
-                echo '<p>No posts found.</p>';
-            }
-
-            ?>
-            <!-- Add more posts as needed -->
-        </div>
+                            if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                                $comment_userName = $response['msg'];
+                            } else {
+                                trigger_error("Unknown user!");
+                                exit();
+                            }
+                        ?>
+                            <div>
+                                <div class="user-info">
+                                    <img src='data:image/png;base64,<?php echo $row_comment['profilePic'] ?>' class='profilePic'>
+                                    <span class="username"><?php echo $comment_userName; ?></span><span class='timestamp'><?php $row_comment['timestamp']; ?></span>
+                                    <span class="timestamp">
+                                        <?php echo $row_comment['timestamp']; ?>
+                                    </span>
+                                </div>
+                                <span><?php echo $row_comment['commentText'] ?></span>
+                                <?php if ($row_comment['commentMedia'] != null) { ?>
+                                    <br><img src='data:image/png;base64,<?php echo $row_comment['commentMedia']; ?>' class='postMedia'>
+                                <?php } ?>
+                                <?php if ($role == 'admin'){ ?>
+                                    <a class="ban-act" onclick="dltComment(<?php echo $row['postID']; ?>, <?php echo $row_comment['commentID']; ?>)">Delete Comment (admin only)</a>
+                                <?php } ?>
+                            </div><br>
+                        <?php } ?>
+                </div>
+            <?php  } ?>
+        
+        <?php } ?>
+    </div>
+    </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var shareBtns = document.querySelectorAll(".shareBtn");
+        function showCommentInp(postID) {
+            document.getElementById(`comment-form-${postID}`).hidden = false;
+        }
 
-            // Add a click event listener to each share button
-            shareBtns.forEach(function(shareBtn) {
-                shareBtn.addEventListener("click", function(event) {
-                    // Prevent the default behavior of the anchor tag
-                    event.preventDefault();
+        function dltPost(postID){
+            if (window.confirm("Are you sure to delete this post?") == true){
+                location.href = '../modules/dlt_post.php?postID='+postID;
+            }
+        }
 
-                    // Get the corresponding modal for the clicked share button
-                    var modalId = shareBtn.getAttribute("data-modal");
-                    var modal = document.getElementById(modalId);
+        function dltComment(postID, commentID){
+            if (window.confirm("Are you sure to delete this comment?") == true){
+                location.href = `../modules/dlt_comment.php?postID=${postID}&commentID=${commentID}`;
+            }
+        }
 
-                    // Display the modal
-                    modal.style.display = "block";
-                });
-            });
+        var searchInput = document.getElementById("search-forum");
 
-            // Get all close buttons
-            var closeBtns = document.querySelectorAll(".closeBtn");
-
-            // Add a click event listener to each close button
-            closeBtns.forEach(function(closeBtn) {
-                closeBtn.addEventListener("click", function() {
-                    // Get the corresponding modal for the clicked close button
-                    var modalId = closeBtn.getAttribute("data-modal");
-                    var modal = document.getElementById(modalId);
-
-                    // Close the modal
-                    modal.style.display = "none";
-                });
-            });
-
-            // Get all modals
-            var modals = document.querySelectorAll(".modal");
-
-            // Close the modal when the user clicks anywhere outside of it
-            window.onclick = function(event) {
-                modals.forEach(function(modal) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                });
-            };
+        searchInput.addEventListener("keypress", function(event){
+            if (event.key == "Enter"){
+                console.log("entered");
+                searchInputVal =searchInput.value;
+                location.href = './forum.php?search='+searchInputVal;
+                event.preventDefault();
+            }
         });
     </script>
-
-
-
-
 </body>
-<?php include '../../includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
 
 </html>

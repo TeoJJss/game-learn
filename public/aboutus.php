@@ -1,9 +1,5 @@
 <?php 
     require '../modules/config.php';
-    if (check_ticket()){
-        header("Location: ../index.php");
-        exit();
-    }
     include '../includes/header.php';
 ?>
 
