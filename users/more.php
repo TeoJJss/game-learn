@@ -54,8 +54,8 @@
                     <a>Report</a>
                 </button>
                 <button class="more_button">
-                    <img src="../images/nav_picture/feedback.png" alt="nav_button">
-                    <a>Feedback</a>
+                    <img src="../images/nav_picture/feedback.png" alt="nav_button" onclick="location.href = '<?php echo $base; ?>users/system_feedback.php'">
+                    <a>System Feedback</a>
                 </button>
                 <button class="more_button" onclick="location.href='./index.php';">
                     <img src="../images/setting.png" alt="nav_button">
@@ -63,15 +63,15 @@
                 </button>
 
             <?php }else if($role == 'educator'){ ?>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/course_management.php'">
                     <img src="../images/educator_pic/course.png" alt="nav_button">
                     <a>My Courses</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/forum.php'">
                     <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/report.php'">
                     <img src="../images/nav_picture/report.png" alt="nav_button">
                     <a>Report</a>
                 </button>
@@ -79,11 +79,11 @@
                     <img src="../images/setting.png" alt="nav_button">
                     <a>Settings</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/system_feedback.php'">
                     <img src="../images/sys_feedback.png" alt="nav_button">
                     <a>System Feedback</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href = '<?php echo $base; ?>users/educator/student_feedback.php'">
                     <img src="../images/educator_pic/stu_feedback.png" alt="nav_button">
                     <a>Student's Feedback</a>
                 </button>

@@ -13,16 +13,6 @@
     <div class="navbar">
         <?php 
             echo "<img src='$base\images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick='location.href=\"$base\public/index.php\"'>";
-            // if (file_exists("./$role/index.php") && $role){
-            //     echo "<img src='../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick=\"location.href='./$role/index.php'\">";
-            // }else if (file_exists("../$role/index.php") && $role){
-            //     echo "<img src='../../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick='location.href=\"../$role/index.php\"'>";
-            // }else if ($role) {
-            //     echo "<img src='../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick='location.href=\"../../$role/index.php\"'>";
-            // }
-            // if (!$role){
-            //     echo "<img src='../images/nav_picture/logo01.png' alt='Mathy logo' class='logo' onclick='location.href=\"../public/index.php\"'>";
-            // }
         ?>
         <div class="nav">
             <?php if (!$role){ //Guest header ?>
@@ -35,8 +25,8 @@
                     <a>My Learning</a>
                 </button>
                 <input type="search" class="nav_search" id="search-inp" placeholder="Search For Course">
-                <button class="guest-btn" id="login"  onclick="window.location.href='login.php'">Log In</button>
-                <button class="guest-btn" id="signup" onclick="window.location.href='register.php'">Sign Up</button>
+                <button class="guest-btn" id="login"  onclick="window.location.href='<?php echo $base; ?>public/login.php'">Log In</button>
+                <button class="guest-btn" id="signup" onclick="window.location.href='<?php echo $base; ?>public/register.php'">Sign Up</button>
 
             <?php }else if ($role == "student"){ //student header ?>
                 <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
@@ -44,7 +34,7 @@
                     <img src="<?php echo $base; ?>images/nav_picture/course.png" alt="Course">
                     <a>Course</a>
                 </button>
-                <button class="nav_button">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/forum.php'">
                     <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>
@@ -62,11 +52,11 @@
                     <img src="<?php echo $base; ?>images/educator_pic/dashboard.png" alt="Dashboard">
                     <a>Dashboard</a>
                 </button>
-                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/course.php'">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/course_management.php'">
                     <img src="<?php echo $base; ?>images/educator_pic/course.png" alt="Course">
                     <a>Course</a>
                 </button>
-                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/forum.php'">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/forum.php'">
                     <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>
@@ -80,7 +70,7 @@
                     <img src="<?php echo $base; ?>images/admin_pic/manage_user.png" alt="Manage User">
                     <a>Manage User</a>
                 </button>
-                <button class="nav_button">
+                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/forum.php'">
                     <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>

@@ -175,12 +175,23 @@ $row = $result->fetch_assoc();
             .questContent {
                 font-size: 4vw;
             }
+
             .course-content {
                 margin-left: 5vw;
             }
 
-            .opt-label{
+            .opt-label {
                 font-size: 2vw;
+            }
+
+            .correct-ans {
+                color: darkgreen;
+                font-weight: bold;
+            }
+
+            .wrong-ans {
+                color: red;
+                font-weight: bold;
             }
         }
     </style>

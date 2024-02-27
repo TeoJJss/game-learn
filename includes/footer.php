@@ -6,9 +6,9 @@
   <?php } ?>
   <div class="footer">
     <div>
-      <a href="../public/aboutus.php">About Us</a>
-      <a href="../public/contactus.php">Contact Us</a>
-      <a href="#terms">Terms</a>
+      <a href="<?php echo $base; ?>public/aboutus.php">About Us</a>
+      <a href="<?php echo $base; ?>public/contactus.php">Contact Us</a>
+      <a href="<?php echo $base; ?>public/term.php">Terms</a>
     </div>
     <hr>
     <div>
