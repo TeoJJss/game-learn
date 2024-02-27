@@ -3,11 +3,11 @@ from services import *
 
 blueprint = Blueprint('blueprint', __name__)
 
-@blueprint.route("/")
+@blueprint.route("/") #http://127.0.0.1:5000/login-api/
 def index():
     return jsonify({"msg": "nothing here"}), 200
 
-@blueprint.route("/login", methods=["POST"])
+@blueprint.route("/login", methods=["POST"]) #http://127.0.0.1:5000/login-api/login
 def login():
     body = request.json
     email = body.get("email")
@@ -23,7 +23,7 @@ def login():
         return jsonify({"msg": "Unauthenticated"}), 400
     return jsonify({"ticket": ticket}), 201
 
-@blueprint.route("/register", methods=["POST"])
+@blueprint.route("/register", methods=["POST"]) #http://127.0.0.1:5000/login-api/register
 def register():
     body = request.json
     email = body.get("email")
@@ -36,7 +36,7 @@ def register():
         return jsonify({"msg": "User already exists", "user_id": 0}), 403
     return jsonify({"msg": "Registered", "user_id": str(user_id)}), 200
 
-@blueprint.route("/check-ticket", methods=["GET"])
+@blueprint.route("/check-ticket", methods=["GET"]) #http://127.0.0.1:5000/login-api/check-ticket?ticket=your_ticket_value
 def check():
     ticket = request.args.get("ticket")
 
@@ -47,7 +47,7 @@ def check():
     else:
         return jsonify({"msg": "Not Allowed", "data":[]}), 401
 
-@blueprint.route("/logout", methods=["DELETE"])
+@blueprint.route("/logout", methods=["DELETE"]) #http://127.0.0.1:5000/login-api/logout
 def logout():
     body = request.json
     tic = body.get("ticket")
@@ -55,7 +55,7 @@ def logout():
     rm_ticket(tic)
     return jsonify({"msg": "Logout success"}), 200
 
-@blueprint.route("/update-prof", methods=["PATCH"])
+@blueprint.route("/update-prof", methods=["PATCH"]) #http://127.0.0.1:5000/login-api/update-prof
 def update_profile():
     body = request.json
     tic = body.get("ticket")
@@ -65,7 +65,7 @@ def update_profile():
     msg, code = update_usr_prof(tic, email, name)
     return jsonify({"msg": msg}), code
 
-@blueprint.route("/update-pass", methods=["PATCH"])
+@blueprint.route("/update-pass", methods=["PATCH"]) #http://127.0.0.1:5000/login-api/update-pass
 def update_password():
     body = request.json
     email = body.get("email")
@@ -75,7 +75,7 @@ def update_password():
     msg, code = reset_pass(email, name, new_pass)
     return jsonify({"msg": msg}), code
 
-@blueprint.route("/update-status", methods=["PATCH"])
+@blueprint.route("/update-status", methods=["PATCH"]) #http://127.0.0.1:5000/login-api/update-status
 def update_usr_status():
     body = request.json
     tic = body.get("ticket")
@@ -86,21 +86,21 @@ def update_usr_status():
 
     return jsonify({"msg": msg}), code
 
-@blueprint.route("/edu-list", methods=["GET"])
+@blueprint.route("/edu-list", methods=["GET"]) #http://127.0.0.1:5000/login-api/edu-list?ticket=your_ticket_value
 def get_edu_ls():
     tic = request.args.get("ticket")
 
     msg, code = get_edu_list(tic)
     return jsonify({"msg": msg}), code
 
-@blueprint.route('/user-list', methods=['GET'])
+@blueprint.route('/user-list', methods=['GET']) #http://127.0.0.1:5000/login-api/user-list?ticket=your_ticket_value
 def get_user_ls():
     tic = request.args.get("ticket")
 
-    msg, code = get_user_list(tic)
+    msg, code = get_user_list(tic) 
     return jsonify({"msg": msg}), code
 
-@blueprint.route("/user-detail", methods=["GET"])
+@blueprint.route("/user-detail", methods=["GET"]) #http://127.0.0.1:5000/login-api/user-detail?user_id=user_id_value
 def get_usr_details():
     u_id = request.args.get("user_id")
     username, code = get_usr(u_id)

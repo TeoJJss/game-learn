@@ -96,25 +96,21 @@
                     <img src="../images/admin_pic/edu_approval.png" alt="nav_button">
                     <a>Educators Applications</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='./admin/app_console.php';">
                     <img src="../images/admin_pic/course_review.png" alt="nav_button">
-                    <a>Courses Application</a>
+                    <a>Courses Applications</a>
                 </button>
                 <button class="more_button" onclick="location.href='./admin/user_console.php';">
                     <img src="../images/admin_pic/manage_user.png" alt="nav_button">
                     <a>User Management</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='./admin/system_feedback?page=1.php';">
                     <img src="../images/admin_pic/feedback.png" alt="nav_button">
                     <a>System Feedbacks</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='./admin/forum?page=1.php';">
                     <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
-                </button>
-                <button class="more_button">
-                    <img src="../images/report.png" alt="nav_button">
-                    <a>Report</a>
                 </button>
                 <button class="more_button" onclick="location.href='./index.php';">
                     <img src="../images/setting.png" alt="nav_button">
