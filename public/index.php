@@ -85,7 +85,7 @@
                 <div class="instructor_info">
                     <h1>Become an instructor</h1>
                     <p>Instructors from around the world teach millions of learners on Mathy. We provide the tools and skills to teach what you love.</p>
-                    <button class="button" onclick="location.href ='../public/login.php'">Start Teaching Today</button>
+                    <button class="button" onclick="location.href ='../public/register.php'">Start Teaching Today</button>
                 </div>
             </div>
             

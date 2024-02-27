@@ -16,15 +16,11 @@
         ?>
         <div class="nav">
             <?php if (!$role){ //Guest header ?>
-                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>public/register.php'">
+                <input type="search" class="nav_search" id="search-inp" placeholder="Search For Course">
+                <button class="nav_button" id="teach-btn-guest" onclick="location.href = '<?php echo $base; ?>public/register.php'">
                     <img src="<?php echo $base; ?>images/nav_picture/teach_on_mathy.png" alt="Teach On Mathy">
                     <a>Teach On Mathy</a>
                 </button>
-                <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/my_learning.png" alt="My Learning">
-                    <a>My Learning</a>
-                </button>
-                <input type="search" class="nav_search" id="search-inp" placeholder="Search For Course">
                 <button class="guest-btn" id="login"  onclick="window.location.href='<?php echo $base; ?>public/login.php'">Log In</button>
                 <button class="guest-btn" id="signup" onclick="window.location.href='<?php echo $base; ?>public/register.php'">Sign Up</button>
 

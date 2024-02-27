@@ -154,3 +154,7 @@ div.nav {
     text-shadow: 0 0 5px #ffffff;
     box-shadow: 0 0 10px rgba(3, 3, 3, 0.5);
 }
+
+#teach-btn-guest{
+    margin-left: 10vw;
+}
