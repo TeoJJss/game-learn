@@ -70,9 +70,9 @@
                     <img src="<?php echo $base; ?>images/forum.png" alt="Forum">
                     <a>Forum</a>
                 </button>
-                <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/report.png" alt="Report">
-                    <a>Report</a>
+                <button class="nav_button" onclick="location.href='<?php echo $base; ?>users/admin/system_feedback.php'">
+                    <img src="<?php echo $base; ?>images/admin_pic/feedback.png" alt="System feedback">
+                    <a>System Feedback</a>
                 </button>
             <?php } ?>
 

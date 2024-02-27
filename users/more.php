@@ -104,11 +104,11 @@
                     <img src="../images/admin_pic/manage_user.png" alt="nav_button">
                     <a>User Management</a>
                 </button>
-                <button class="more_button" onclick="location.href='./admin/system_feedback?page=1.php';">
+                <button class="more_button" onclick="location.href='./admin/system_feedback.php';">
                     <img src="../images/admin_pic/feedback.png" alt="nav_button">
                     <a>System Feedbacks</a>
                 </button>
-                <button class="more_button" onclick="location.href='./admin/forum?page=1.php';">
+                <button class="more_button" onclick="location.href='./forum?page=1.php';">
                     <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
                 </button>

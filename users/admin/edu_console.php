@@ -38,8 +38,15 @@
             font-size: 2rem; 
             padding-left: 1rem;
             padding-top: 2rem; 
-            padding-bottom: 1rem;
+            padding-bottom: 5rem;
             width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .category img {
+            margin-right: 10px;
+            height: 5rem;
         }
 
         table {
@@ -61,7 +68,11 @@
 <body>
     <div class="box-container">
         <table >
-            <h1 class="category">Educators Applications</h1>
+            <div class="category">
+                <img src="../../images/admin_pic/edu_approval.png" alt="Educators Applications">
+                <h1>Educators Applications</h1> 
+            </div>
+
             <tr>
                 <th>Email</th>
                 <th>Name</th>

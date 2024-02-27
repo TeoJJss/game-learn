@@ -1,29 +1,102 @@
 <?php
-    require '../../modules/config.php';
-    require './controllers/appConsoleController.php';
-    $pendingCourses = fetchPendingCourses();
+require '../../modules/config.php';
 
-    if (check_ticket() != 'admin'){
-        header("Location: ../../index.php");
-        exit();
+// Redirect if user is not an admin
+if (check_ticket() != 'admin'){
+    header("Location: ../../index.php");
+    exit();
+}
+
+$ticket = $_SESSION['ticket'];
+
+function fetchPendingCourses() {
+    global $conn;
+
+    $sql = "SELECT courseID, courseThumb, courseName, intro, description, lastUpdate, status, category, label, userID 
+            FROM course
+            WHERE status = 'pending'";
+    
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $pendingCourses = array();
+
+        while($row = $result->fetch_assoc()) {
+            $course = array(
+                'courseID' => $row['courseID'],
+                'courseThumb' => $row['courseThumb'],
+                'courseName' => $row['courseName'],
+                'intro' => $row['intro'],
+                'description' => $row['description'],
+                'lastUpdate' => $row['lastUpdate'],
+                'status' => $row['status'],
+                'category' => $row['category'],
+                'label' => $row['label'],
+                'userID' => $row['userID']
+            );
+
+            $pendingCourses[] = $course;
+        }
+
+        return $pendingCourses;
+    } else {
+        return array();
     }
+}
 
-    $ticket = $_SESSION['ticket'];
+function updateCourseStatus($courseID, $newStatus) {
+    global $conn;
 
-    $usernames = array(); // Initialize an empty array
+    $stmt = $conn->prepare("UPDATE course SET status = ? WHERE courseID = ?");
 
-    foreach ($pendingCourses as $course) {
-        $userID = $course['userID']; 
-        $ch = curl_init("$base_url/user-detail?user_id=$userID");
+    $stmt->bind_param("si", $newStatus, $courseID);
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $username = json_decode(curl_exec($ch), true)['msg'];
-
-        $usernames[$userID] = $username; 
+    if ($stmt->execute()) {
+        return array('success' => true, 'message' => "Course status updated to '$newStatus'");
+    } else {
+        return array('success' => false, 'message' => "Failed to update course status");
     }
+}
 
-    include '../../includes/header.php';
+// Fetch pending courses
+$pendingCourses = fetchPendingCourses();
+
+$usernames = array(); // Initialize an empty array
+
+// Retrieve usernames for pending courses
+foreach ($pendingCourses as $course) {
+    $userID = $course['userID']; 
+    $ch = curl_init("$base_url/user-detail?user_id=$userID");
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $username = json_decode(curl_exec($ch), true)['msg'];
+
+    $usernames[$userID] = $username; 
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['approveBtn']) || isset($_POST['rejectBtn'])) {
+        // Get the course ID and new status from the form
+        $courseId = $_POST['courseId'];
+        $newStatus = $_POST['newStatus'];
+
+        // Update the course status using the controller function
+        $updateResult = updateCourseStatus($courseId, $newStatus);
+
+        // Check if the update was successful
+        if ($updateResult['success']) {
+            // Redirect to the same page to refresh the data
+            header("Location: {$_SERVER['PHP_SELF']}");
+            exit();
+        } else {
+            // Handle the error if the update failed
+            echo "Failed to update course status: " . $updateResult['message'];
+        }
+    }
+}
+
+include '../../includes/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -62,8 +135,15 @@
             font-size: 2rem; 
             padding-left: 1rem;
             padding-top: 2rem; 
-            padding-bottom: 1rem;
+            padding-bottom: 5rem;
             width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .category img {
+            margin-right: 10px;
+            height: 5rem;
         }
 
         .course-header {
@@ -93,13 +173,14 @@
         .button-row button {
             margin-right: 10px; /* Adjust as needed */
         }
-       
     </style>
 </head>
 <body>
     <div class="box-container">
-
-        <h1 class="category">Courses Applications</h1>
+        <div class="category">
+            <img src="../../images/admin_pic/course_review.png" alt="Educators Applications">
+            <h1>Courses Applications</h1> 
+        </div>
 
         <?php if (empty($pendingCourses)): ?>
             <p>There are no new applications for course.</p>
@@ -113,9 +194,8 @@
 
                     <div class="course-info" style="display: none;">
                         <!-- Thumbnail image -->
-                        <?php 
-                            $imageData = base64_encode($course['courseThumb']);
-                            echo '<img src="data:image/png;image/jpg;base64,' . $imageData . '" alt="Course Thumbnail" class="courseThumb">';                        ?>
+                        <img src='data:image/png;base64,<?php echo $course['courseThumb']; ?>' title='<?php echo $course['courseName']; ?>' class='courseThumb' alt='Course thumbnail'>
+
                         <!-- Description and other information in a column -->
                         <div class="info-column">
                             <p><strong>Description:</strong> <?php echo $course['description']; ?></p>
@@ -126,34 +206,18 @@
                         </div>
                         <!-- Approve and reject buttons in a row -->
                         <div class="button-row">
-                            <button 
-                                id="approveBtn" 
-                                class="button"
-                                onclick="uptFunc('active', '<?php echo $course['courseID']; ?>')" 
-                                <?php 
-                                    if ($course['status'] != 'pending'){ 
-                                        echo 'disabled style="cursor:not-allowed; background-color: grey; padding: 5px; margin-bottom: 4px;"';
-                                    } else {
-                                        echo 'style="background-color: green; padding: 5px; margin-bottom: 4px;"';
-                                    }
-                                ?>
-                            >
-                                Approve
-                            </button>
-                            <button 
-                                id="rejectBtn" 
-                                class="button"
-                                onclick="uptFunc('banned', '<?php echo $course['courseID']; ?>')" 
-                                <?php 
-                                    if ($course['status'] != 'pending'){ 
-                                        echo 'disabled style="cursor:not-allowed; background-color: grey; padding: 5px; margin-bottom: 4px; "';
-                                    } else {
-                                        echo 'style="background-color: red; padding: 5px; margin-bottom: 4px;"';
-                                    }
-                                ?>
-                            >
-                                Reject
-                            </button>
+                            <!-- Approve form -->
+                            <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="return confirmSubmit('approve')">
+                                <input type="hidden" name="courseId" value="<?php echo $course['courseID']; ?>">
+                                <input type="hidden" name="newStatus" value="active"> 
+                                <button type="submit" class="button" name="approveBtn">Approve</button>
+                            </form>
+                            <!-- Reject form -->
+                            <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="return confirmSubmit('reject')">
+                                <input type="hidden" name="courseId" value="<?php echo $course['courseID']; ?>">
+                                <input type="hidden" name="newStatus" value="banned"> 
+                                <button type="submit" class="button" name="rejectBtn">Reject</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -161,36 +225,15 @@
         <?php endif; ?>
     </div>
 
-
-
     <script>
          function toggleDropdown(element) {
             var courseInfo = element.nextElementSibling;
             courseInfo.style.display = (courseInfo.style.display === 'none') ? 'block' : 'none';
         }
 
-        function uptFunc(newStatus, courseId){
-            var confirmed = window.confirm("Are you sure you want to perform this action?");
-
-            if (!confirmed) {
-                return; 
-            }
-
-            fetch('./api/appConsoleApi.php', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    courseId: courseId,
-                    newStatus: newStatus
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                location.reload();
-            });
+        function confirmSubmit(action) {
+            var confirmation = window.confirm("Are you sure you want to " + action + " this?");
+            return confirmation;
         }
 
     </script>

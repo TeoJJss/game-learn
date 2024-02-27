@@ -1,188 +1,238 @@
 <?php
-    require '../../modules/config.php';
-    require './controllers/systemFeedbackController.php';
+require '../../modules/config.php';
+$role = check_ticket();
+if ($role != 'admin') {
+    header("Location: ../ind ex.php");
+    exit();
+}
+include '../../includes/header.php';
 
-    if (check_ticket() != 'admin'){
-        header("Location: ../../index.php");
-        exit();
+if(isset($_GET['sfID'])) {
+    $sfID = $_GET['sfID'];
+} else {
+    echo "No sfID parameter found in the URL.";
+}
+
+function provideFeedbackReply($sfID, $replyContent, $replyMedia) {
+    global $conn;
+
+    // Check if replyContent is empty
+    if (empty($replyContent)) {
+        return array(
+            "message" => "Reply content cannot be empty.",
+            "success" => false
+        );
     }
 
-    $ticket = $_SESSION['ticket'];
+    // Check if a reply already exists for the given sfID
+    $sql_check = "SELECT COUNT(*) AS num_replies FROM reply WHERE sfID = ?";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param("i", $sfID);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+    $row_check = $result_check->fetch_assoc();
+    $num_replies = $row_check['num_replies'];
 
-    if(isset($_GET['sfID'])) { // Retrieve sfID parameter from URL
-        $sfID = $_GET['sfID'];
+    $response = array();
 
-        $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    if ($num_replies > 0) {
+        $sql_update = "UPDATE reply SET replyContent = ?, replyMedia = ? WHERE sfID = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("ssi", $replyContent, $replyMedia, $sfID);
+        $stmt_update->execute();
+
+        $response["message"] = "Reply updated successfully.";
+        $response["success"] = true;
     } else {
-        header("Location: ./system_feedback.php?page=1.php"); 
-        exit();
+        $sql_insert = "INSERT INTO reply (sfID, replyContent, replyMedia) VALUES (?, ?, ?)";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bind_param("iss", $sfID, $replyContent, $replyMedia);
+        $stmt_insert->execute();
+
+        $response["message"] = "New reply inserted successfully.";
+        $response["success"] = true;
     }
 
-    $feedbackWithProfile = fetchFeedbackWithProfile($sfID);
+    // If there was an error with the SQL statement, set success to false
+    if ($conn->error) {
+        $response["message"] = $conn->error;
+        $response["success"] = false;
+    }
 
-    if ($feedbackWithProfile) {
-        $userID = $feedbackWithProfile['userID']; 
-        $ch = curl_init("$base_url/user-detail?user_id=$userID");
+    return $response;
+}
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $response = curl_exec($ch);
-        $userData = json_decode($response, true);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Retrieve input field values
+    $userFB = $_POST['userFB'];
+    $img = null;
+    if (isset($_FILES['userFile']) && $_FILES['userFile']['size'] > 0) {
+        $image = $_FILES['userFile']['tmp_name'];
+        $img = base64_encode(file_get_contents($image));
+    }
 
-        if (isset($userData['msg'])) {
-            $username = $userData['msg'];
+    // Check if sfID is set
+    if (isset($_POST['sfID'])) {
+        $sfID = $_POST['sfID'];
+        
+        // Check if userFB is empty
+        if (empty($userFB)) {
+            echo '<script>alert("Reply content cannot be empty.");</script>';
         } else {
-            echo "Error retrieving username";
+            $replyResult = provideFeedbackReply($sfID, $userFB, $img);
+    
+            // Check the result of provideFeedbackReply
+            if ($replyResult['success']) {
+                echo '<script>alert("System feedback is submitted!");</script>';
+                echo '<meta http-equiv="refresh" content="0;url=provide_feedback.php?sfID='.$sfID.'&status=success">';
+                exit(); 
+            } else {
+                echo '<script>alert("An error occurred while submitting the system feedback: ' . $replyResult['message'] . '");</script>';
+            }
         }
     } else {
-        echo "No data found";
+        echo '<script>alert("No sfID parameter found in the form submission.");</script>';
     }
+}
 
-    include "../../includes/header.php";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add_feedback</title>
     <link rel="stylesheet" href="../../styles/style.css">
-    <title>Feedback to user</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        .box-container {
-            display: flex;
-            padding-left: 3rem;
-            padding-right: 3rem;
-            padding-bottom: 3rem;
-            flex-wrap: wrap; /* Allow flex items to wrap */
-        }
-
         .category {
             font-size: 2rem; 
             padding-left: 1rem;
             padding-top: 2rem; 
-            padding-bottom: 1rem;
             width: 100%;
-        }
-
-        .main {
-            display: flex;
-            flex-direction: column;
-            padding: 20px; /* Adjust as needed */
-            width: 100%;
-        }
-
-        .userProfile {
             display: flex;
             align-items: center;
-            padding-bottom: 20px; /* Adjust as needed */
         }
 
-      
-       
+        .category img {
+            margin-right: 10px;
+            height: 5rem;
+        }
+
+        .page {
+            width: 80%;
+            margin: auto;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .page-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .post {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-top: 60px;
+            margin-bottom: 20px;
+        }
+
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+
+
+        .user-input-style {
+            width: 100%;
+            height: 200px;
+            /* Adjust as needed */
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            margin-bottom: 60px;
+        }
+
+        .file-upload-button {
+            width: 45%;
+            /* Adjust as needed */
+        }
+
+        .submit-button {
+            width: 10%;
+            /* Adjust as needed */
+            background-color: #FFA500;
+            /* Orange background */
+            border: none;
+            /* Remove border */
+            color: white;
+            /* White text */
+            padding: 15px 32px;
+            /* Some padding */
+            text-decoration: none;
+            /* Remove underline */
+            font-size: 16px;
+            cursor: pointer;
+            /* Pointer/hand icon */
+            transition-duration: 0.4s;
+            /* Transition effect */
+            border-radius: 12px;
+            /* Rounded corners */
+        }
+
+        .submit-button:hover {
+            background-color: #FF4500;
+            /* Darker orange */
+        }
     </style>
+
 </head>
+
 <body>
-    <div class="box-container">
-        <h1 class="category">Feedback to User</h1>
-        <div class="main">
-            <div style="display: flex; justify-content: space-between;">
-                <div class="userProfile">
-                        <?php
-                        $feedbackWithProfile = fetchFeedbackWithProfile($sfID);
-                        if ($feedbackWithProfile) {
-                            $userID = $feedbackWithProfile['userID'];
-                            $profilePicBlob = $feedbackWithProfile['profilePic'];
-                            $profilePicBase64 = base64_encode($profilePicBlob);
-                            $profilePicSrc = 'data:image/jpeg;base64,' . $profilePicBase64;
-                        ?>
-                            
-                            <img src="<?php echo $profilePicSrc; ?>" alt="User Profile Picture">
-                            <p style="margin-left: 15px;"><?php echo $username; ?></p>
-
-                        <?php } else { ?>
-                            <p>No user data found</p>
-                        <?php } ?>        
-                </div>
-
-                <a href="system_feedback.php" class="button" style="margin-bottom: 15px; margin-top: 12px; text-decoration: none; padding-top: 1rem;">Back</a>
-            </div>
-
-            <form action="./api/provideFeedbackApi.php" method="POST">
-                <textarea id="feedback" name="feedback" placeholder="Enter your feedback..." style="width: 100%; height: 300px; resize: none;"></textarea>
-                <input type="hidden" name="sfID" value="<?php echo htmlspecialchars($sfID); ?>"> 
-                <input type="hidden" name="page" value="<?php echo $currentPage; ?>">
-                <div style="display: flex; justify-content:space-between ; margin-top: 15px;">
-                    <div>
-                        <label for="image" style="cursor: pointer;"> 
-                            <img id="imagePreview" src="../../images/admin_pic/picture.png" alt="Preview" class="button" style="width: 50px; height: 50px;"> <!-- Initial empty image -->
-                        </label>
-                        <input type="file" id="image" name="image" style="display: none;" onchange="previewImage(event)"> 
-                    </div>
-
-                    <input type="submit" value="Submit" class="button">
-                </div>
-                <div id="uploadedImage" style="margin-top: 10px;"></div> 
-            </form>
-
-            <script>
-                    //Show error or success message from the API
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const status = urlParams.get('status');
-                    const message = urlParams.get('message');
-
-                    // Display message based on status
-                    if (status === 'success') {
-                        alert('Feedback submitted successfully!');
-                    } else if (status === 'error') {
-                        const errorMessage = message ? decodeURIComponent(message) : 'An error occurred. Please try again.';
-                        alert(errorMessage);
-                    }
-
-                function previewImage(event) {
-                    const input = event.target;
-                    const file = input.files[0];
-                    const reader = new FileReader();
-
-                    reader.onload = function () {
-                        const uploadedImage = document.getElementById('uploadedImage');
-
-                        if (file.type.startsWith('image/')) {
-                            uploadedImage.innerHTML = '<h1>You uploaded this image: </h1> </br> <img src="' + reader.result + '" alt="Uploaded Image" style="max-width: 100%; max-height: 200px;">'; // Display the uploaded image
-                        } else {
-                            window.alert('Error: Please upload an image file.'); // Display error message using prompt
-                            input.value = ''; 
-                        }
-                    };
-
-                    reader.readAsDataURL(file); 
-                }
-
-                feedbackForm.addEventListener('submit', async (event) => {
-                    event.preventDefault(); 
-
-                    const currentPage = <?php echo json_encode($currentPage); ?>;
-                    const formData = new FormData(feedbackForm);
-                    formData.append('page', currentPage);
-
-                
-                    const response = await fetch('./api/provideFeedbackApi.php/', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`API call failed with status ${response.status}`);
-                    }
-
-                    feedbackForm.reset(); 
-                });
-
-            </script>
+    <div class="page">
+        <div class="category">
+            <img src="../../images/admin_pic/feedback.png" alt="Educators Applications">
+            <h1>Feedback to User</h1> 
         </div>
+        <br><br><br>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="sfID" value="<?php echo htmlspecialchars($sfID); ?>">
+            <div class="user-input">
+                <textarea id="userQuestion" name="userFB" class="user-input-style" placeholder="Write a feedback"></textarea>
+            </div>
+            <div class="action-buttons">
+                <input type="file" id="userFile" name="userFile" class="file-upload-button">
+                <input type="submit" value="Submit" class="button">
+            </div>
+        </form>
     </div>
+    <?php include '../../includes/footer.php'; ?>
 </body>
 
 </html>
-
-<?php include '../../includes/footer.php'; ?>
