@@ -7,13 +7,13 @@ if (!$role) {
 }
 include '../includes/header.php';
 
-if (!isset($_GET['search'])){
+if (!isset($_GET['search'])) {
     $sql = "SELECT post.userID, `profile`.`profilePic`, post.postID, post.content, post.timestamp, post.postMedia
             FROM post 
             LEFT JOIN `profile` ON post.userID=`profile`.`userID`
             ORDER BY post.`timestamp` DESC";
     $stmt = $conn->prepare($sql);
-}else{
+} else {
     $key = $_GET['search'];
     $sql = "SELECT post.userID, `profile`.`profilePic`, post.postID, post.content, post.timestamp, post.postMedia
             FROM post 
@@ -22,7 +22,7 @@ if (!isset($_GET['search'])){
             ORDER BY post.`timestamp` DESC";
     $stmt = $conn->prepare($sql);
     $keyword = "%$key%";
-    $stmt -> bind_param("s", $keyword);
+    $stmt->bind_param("s", $keyword);
 }
 
 $stmt->execute();
@@ -185,7 +185,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-left: 3vw;
         }
 
-        .comment-a, .ban-act {
+        .comment-a,
+        .ban-act {
             color: darkblue;
             cursor: pointer;
             text-decoration: underline;
@@ -196,12 +197,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-left: 5vw;
         }
 
-        #search-forum{
+        #search-forum {
             margin-left: 5vw;
             height: 5vh;
         }
 
-        .create-post-btn{
+        .create-post-btn {
             margin-top: 5vh;
         }
     </style>
@@ -246,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <img src='data:image/png;base64,<?php echo $row['postMedia']; ?>' class='postMedia'><br>
                     <?php } ?>
                     <a class="comment-a" onclick="showCommentInp(<?php echo $row['postID']; ?>)"><i class="fa fa-comment"></i> Comment</a>
-                    <?php if ($role == 'admin'){ ?>
+                    <?php if ($role == 'admin') { ?>
                         <a class="ban-act" onclick="dltPost(<?php echo $row['postID']; ?>)">Delete Post (admin only)</a>
                     <?php } ?>
                     <form method="post" id="comment-form-<?php echo $row['postID']; ?>" enctype="multipart/form-data" hidden>
@@ -293,42 +294,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <?php if ($row_comment['commentMedia'] != null) { ?>
                                     <br><img src='data:image/png;base64,<?php echo $row_comment['commentMedia']; ?>' class='postMedia'>
                                 <?php } ?>
-                                <?php if ($role == 'admin'){ ?>
+                                <?php if ($role == 'admin') { ?>
                                     <a class="ban-act" onclick="dltComment(<?php echo $row['postID']; ?>, <?php echo $row_comment['commentID']; ?>)">Delete Comment (admin only)</a>
                                 <?php } ?>
                             </div><br>
                         <?php } ?>
+                    <?php  } ?>
                 </div>
-            <?php  } ?>
-        
-        <?php } ?>
+            <?php } ?>
+        </div>
     </div>
-    </div>
-    </div>
+
     <script>
         function showCommentInp(postID) {
             document.getElementById(`comment-form-${postID}`).hidden = false;
         }
 
-        function dltPost(postID){
-            if (window.confirm("Are you sure to delete this post?") == true){
-                location.href = '../modules/dlt_post.php?postID='+postID;
+        function dltPost(postID) {
+            if (window.confirm("Are you sure to delete this post?") == true) {
+                location.href = '../modules/dlt_post.php?postID=' + postID;
             }
         }
 
-        function dltComment(postID, commentID){
-            if (window.confirm("Are you sure to delete this comment?") == true){
+        function dltComment(postID, commentID) {
+            if (window.confirm("Are you sure to delete this comment?") == true) {
                 location.href = `../modules/dlt_comment.php?postID=${postID}&commentID=${commentID}`;
             }
         }
 
         var searchInput = document.getElementById("search-forum");
 
-        searchInput.addEventListener("keypress", function(event){
-            if (event.key == "Enter"){
+        searchInput.addEventListener("keypress", function(event) {
+            if (event.key == "Enter") {
                 console.log("entered");
-                searchInputVal =searchInput.value;
-                location.href = './forum.php?search='+searchInputVal;
+                searchInputVal = searchInput.value;
+                location.href = './forum.php?search=' + searchInputVal;
                 event.preventDefault();
             }
         });
