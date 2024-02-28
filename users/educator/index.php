@@ -85,7 +85,7 @@ $result = mysqli_query($conn, $sql);
         }
 
         .course-card .course-status.pending {
-            color: red;
+            color: orange;
         }
     </style>
 </head>
