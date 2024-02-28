@@ -331,7 +331,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="form-group">
-                    <label for="IsAnswer">Is Correct Answer:</label>
+                    <label for="IsAnswer">Correct Answer:</label>
                     <input type="radio" id="IsAnswer1" name="IsAnswer[]" value="1" required>
                     <label for="IsAnswer1">Yes</label>
 
