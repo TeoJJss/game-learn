@@ -1,4 +1,5 @@
 <?php
+session_start();
 if (file_exists('../modules/error_handler.php')) {
     $base = "../";
     include '../modules/error_handler.php';
