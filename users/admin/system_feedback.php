@@ -1,24 +1,25 @@
 <?php
 require '../../modules/config.php';
 
-if (check_ticket() != 'admin'){
+if (check_ticket() != 'admin') {
     header("Location: ./index.php");
     exit();
 }
 
 $ticket = $_SESSION['ticket'];
 
-function fetchAllFeedbacks() {
-    global $conn; 
+function fetchAllFeedbacks()
+{
+    global $conn;
 
     $sql = "SELECT sfID, sfContent, sfMedia, timestamp, userID FROM system_feedback";
 
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
-        $allFeedbacks = array(); 
+        $allFeedbacks = array();
 
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             $sfID = $row['sfID'];
             $sfContent = $row['sfContent'];
             $sfMedia = $row['sfMedia'];
@@ -36,11 +37,12 @@ function fetchAllFeedbacks() {
 
         return $allFeedbacks;
     } else {
-        return array(); 
+        return array();
     }
 }
 
-function checkReplyStatus($sfID) {
+function checkReplyStatus($sfID)
+{
     global $conn;
 
     // Prepare SQL statement to check if the sfID exists in the reply table
@@ -81,6 +83,7 @@ include '../../includes/header.php';
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -94,9 +97,9 @@ include '../../includes/header.php';
         }
 
         .category {
-            font-size: 2rem; 
+            font-size: 2rem;
             padding-left: 1rem;
-            padding-top: 2rem; 
+            padding-top: 2rem;
             padding-bottom: 5rem;
             width: 100%;
             display: flex;
@@ -114,32 +117,37 @@ include '../../includes/header.php';
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            background-color: #f2f2f2; /* Light grey background color */
-            border: 1px solid #ccc; /* Grey border */
-            padding: 10px; /* Padding for inner content */
-            margin-bottom: 10px; /* Add margin bottom for spacing between containers */
+            background-color: #f2f2f2;
+            /* Light grey background color */
+            border: 1px solid #ccc;
+            /* Grey border */
+            padding: 10px;
+            /* Padding for inner content */
+            margin-bottom: 10px;
+            /* Add margin bottom for spacing between containers */
         }
 
         .feedback-content {
-            flex: 1; 
+            flex: 1;
         }
 
         .date-container {
             display: flex;
-            align-items: center; /* Align items vertically */
+            align-items: center;
+            /* Align items vertically */
         }
 
         .date-container h2,
         .date-container h3 {
-            margin: 0; 
+            margin: 0;
             padding: 0;
         }
 
         .sFContent {
-            max-width: 11rem; 
-            max-height: 5rem; 
-            min-width: 20rem; 
-            overflow: auto; 
+            max-width: 11rem;
+            max-height: 5rem;
+            min-width: 20rem;
+            overflow: auto;
             margin-right: 11rem;
         }
 
@@ -147,7 +155,7 @@ include '../../includes/header.php';
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 20px; 
+            margin-top: 20px;
             padding-bottom: 25px;
         }
 
@@ -164,70 +172,84 @@ include '../../includes/header.php';
             background-color: #f2f2f2;
             color: #666;
         }
+
+        .replied,
+        .not-replied {
+            color: darkgreen;
+            font-weight: bold;
+        }
+
+        .not-replied {
+            color: red;
+        }
     </style>
 </head>
+
 <body>
     <div class="box-container">
         <div class="category">
             <img src="../../images/admin_pic/feedback.png" alt="Educators Applications">
-            <h1>System Feedbacks</h1> 
+            <h1>System Feedbacks</h1>
         </div>
 
-        <?php if (empty($feedbacksOnPage)): ?>
+        <?php if (empty($feedbacksOnPage)) : ?>
             <p>There are no new system feedbacks from the user.</p>
-        <?php else: ?>
-            <?php foreach ($feedbacksOnPage as $feedback): ?>
+        <?php else : ?>
+            <?php foreach ($feedbacksOnPage as $feedback) : ?>
                 <div class="feedback-container">
-                    <?php 
-                        // Convert timestamp to separate day, month (in English), year, and hour
-                        $timestamp = strtotime($feedback['timestamp']);
-                        $day = date('d', $timestamp);
-                        $month = date('F', $timestamp); // Full month name
-                        $year = date('Y', $timestamp);
-                        $hour = date('h:i A', $timestamp); // Hour and minute in 12-hour format with AM/PM
+                    <?php
+                    // Convert timestamp to separate day, month (in English), year, and hour
+                    $timestamp = strtotime($feedback['timestamp']);
+                    $day = date('d', $timestamp);
+                    $month = date('F', $timestamp); // Full month name
+                    $year = date('Y', $timestamp);
+                    $hour = date('h:i A', $timestamp); // Hour and minute in 12-hour format with AM/PM
                     ?>
                     <div class="date-container">
                         <h2><?php echo $day; ?></h2> <!-- Display day -->
-                        <h3 style="padding-left: 0.3rem;"><?php echo $month . ' ' . $year; ?></h3> 
+                        <h3 style="padding-left: 0.3rem;"><?php echo $month . ' ' . $year; ?></h3>
                     </div>
 
-                    <p><?php echo $hour; ?></p> 
+                    <p><?php echo $hour; ?></p>
 
                     <div>
                         <?php if (checkReplyStatus($feedback["sfID"])) : ?>
-                            <p>You replied</p>
-                        <?php else: ?>
-                            <p>Haven't replied</p>
+                            <p class="replied">You replied</p>
+                        <?php else : ?>
+                            <p class="not-replied">Haven't replied</p>
                         <?php endif; ?>
                     </div>
 
                     <div style="display: flex; align-items: center;">
-                       <div class="sFContent">
-                            <p><?php echo $feedback["sfContent"] ?><p>
+                        <div class="sFContent">
+                            <p><strong>Feedback: </strong><?php echo $feedback["sfContent"] ?>
+                            <p>
                         </div>
-
-                        <a href="./provide_feedback.php?sfID=<?php echo $feedback['sfID']; ?>">
-                            <img src="../../images/admin_pic/provide_feedback.png" alt="Provide feedback" style="width: 30px; height: 40px;" class="button">
-                        </a> 
+                        <?php if (!checkReplyStatus($feedback["sfID"])){ ?>
+                            <a href="./provide_feedback.php?sfID=<?php echo $feedback['sfID']; ?>">
+                                <img src="../../images/admin_pic/provide_feedback.png" alt="Provide feedback" style="width: 30px; height: 40px;" class="button">
+                            </a>
+                        <?php }else{ ?>
+                            <a href="../view_system_feedback.php?sfID=<?php echo $feedback['sfID']; ?>">
+                                <img src="../../images/admin_pic/provide_feedback.png" alt="Provide feedback" style="width: 30px; height: 40px;" class="button">
+                            </a>
+                        <?php } ?>
                     </div>
                 </div>
-                
+
             <?php endforeach; ?>
 
-             <!-- Pagination -->
+            <!-- Pagination -->
             <div class="pagination">
-                <?php if ($totalPages > 1): ?>
-                    <?php if ($currentPage > 1): ?>
+                <?php if ($totalPages > 1) : ?>
+                    <?php if ($currentPage > 1) : ?>
                         <button class="button" onclick="window.location.href='?page=<?php echo max($currentPage - 1, 1); ?>'">Previous</button>
                     <?php endif; ?>
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <button 
-                            class="button <?php echo ($i === $currentPage) ? 'active' : 'inactive'; ?>" 
-                            style="background-color: <?php echo ($i !== $currentPage) ? 'gray' : ''; ?>;" 
-                            onclick="window.location.href='?page=<?php echo $i; ?>'"><?php echo $i; ?>
+                    <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                        <button class="button <?php echo ($i === $currentPage) ? 'active' : 'inactive'; ?>" style="background-color: <?php echo ($i !== $currentPage) ? 'gray' : ''; ?>;" onclick="window.location.href='?page=<?php echo $i; ?>'"><?php echo $i; ?>
                         </button>
                     <?php endfor; ?>
-                    <?php if ($currentPage < $totalPages): ?>
+                    <?php if ($currentPage < $totalPages) : ?>
                         <button class="button" onclick="window.location.href='?page=<?php echo min($currentPage + 1, $totalPages); ?>'">Next</button>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -236,6 +258,7 @@ include '../../includes/header.php';
         <?php endif; ?>
     </div>
 </body>
+
 </html>
 
 <?php include '../../includes/footer.php'; ?>

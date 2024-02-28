@@ -194,7 +194,7 @@ include '../../includes/header.php';
 
                     <div class="course-info" style="display: none;">
                         <!-- Thumbnail image -->
-                        <img src='data:image/png;base64,<?php echo $course['courseThumb']; ?>' title='<?php echo $course['courseName']; ?>' class='courseThumb' alt='Course thumbnail'>
+                        <img src='data:image/png;image/jpg;base64,<?php echo $course['courseThumb']; ?>' title='<?php echo $course['courseName']; ?>' class='courseThumb' alt='Course thumbnail'>
 
                         <!-- Description and other information in a column -->
                         <div class="info-column">

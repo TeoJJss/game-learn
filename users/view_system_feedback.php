@@ -1,7 +1,7 @@
 <?php
 require '../modules/config.php';
 $role = check_ticket();
-if ($role == 'admin') {
+if (!$role) {
     header("Location: ../index.php");
     exit();
 }
@@ -141,7 +141,7 @@ if (isset($_GET['sfID'])) {
                         <p><?php echo $sfContent; ?></p>
 
                         <!-- Return button -->
-                        <a href="system_feedback.php" class="return-button"><i class="fa fa-arrow-left"></i> Return</a>
+                        <a href="<?php if ($role=='admin'){ echo './admin/';} ?>system_feedback.php" class="return-button"><i class="fa fa-arrow-left"></i> Return</a>
                     </div>
                     <?php if ($row['replyContent']) { ?>
                         <div class="fbReply">

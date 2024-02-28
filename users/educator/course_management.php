@@ -28,7 +28,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template</title>
+    <title>Educator Course Management</title>
     <link rel="stylesheet" href="../../styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -83,30 +83,27 @@ $stmt->close();
             margin-bottom: 10px;
             position: absolute;
             bottom: 50px;
-            /* Adjusted to "top" */
             left: 920px;
-            /* Adjusted to "left" */
             font-size: 17px;
             font-weight: bold;
         }
 
         .course .course-status.active {
             color: darkgreen;
-            /* Change color for active status */
         }
 
         .course .course-status.pending {
+            color: orange;
+        }
+
+        .course .course-status.banned {
             color: red;
-            /* Change color for pending status */
         }
 
         .course a {
             position: absolute;
-            /* Add this line */
             bottom: 10px;
-            /* Add this line */
-            right: 10px;
-            /* Add this line */
+            right: 2vw;
             text-decoration: none;
         }
 
@@ -115,36 +112,24 @@ $stmt->close();
             display: block;
             margin: auto;
             padding: 15px 30px;
-            /* Increase button size */
             font-size: 20px;
-            /* Increase font size */
             color: #000000;
-            /* Text color */
             background-color: transparent;
-            /* Button color */
             border: 2px solid #000000;
-            /* Border color */
             border-radius: 5px;
-            /* Rounded corners */
             cursor: pointer;
-            /* Hand cursor on hover */
             transition: background-color 0.3s ease;
-            /* Smooth transition */
             margin-bottom: 30px;
         }
 
         .course-categories button:hover {
             background-color: #FFA07A;
-            /* Change color on hover to light orange */
         }
 
         .course a::before {
             content: "\f06e";
-            /* Font Awesome eye icon */
             font-family: "Font Awesome 5 Free";
-            /* Font Awesome font-family */
             padding-right: 10px;
-            /* Space between the icon and the text */
         }
     </style>
 
@@ -160,17 +145,14 @@ $stmt->close();
             <div class="course-categories">
                 <button onclick="window.location.href='create_new_course.php'">Create New Course</button>
                 <?php
-                // Check if there are any courses
                 if ($result->num_rows > 0) {
-                    // Output data of each row
                     while ($row = $result->fetch_assoc()) {
                         echo '<div class="course">';
                         echo '<p>' . $row['courseName'] . '</p>';
 
                         $courseStatus = $row['status'];
-                        echo '<p class="course-status ' . ($courseStatus == 'active' ? 'active' : 'pending') . '">Status: ' . $courseStatus . '</p>';
+                        echo '<p class="course-status ' . $courseStatus . '">Status: ' . $courseStatus . '</p>';
 
-                        // Check the status and generate the link accordingly
                         if ($courseStatus == 'pending') {
                             echo '<a href="pending.php">View course</a>';
                         } else {

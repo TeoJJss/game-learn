@@ -10,18 +10,22 @@ include '../../includes/header.php';
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    $ticket = $_SESSION['ticket'];
+    $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $response = json_decode(curl_exec($ch), true);
+    $userID = $response['data']['user_id'];
     // Code for course insertion
-    $image = $_FILES['courseThumb']['tmp_name'];
-    $img = base64_encode(file_get_contents($image));
+    $course_image = $_FILES['courseThumb']['tmp_name'];
+    $course_img = base64_encode(file_get_contents($course_image));
 
     $stmt = $conn->prepare("INSERT INTO course (courseName, intro, `description`, userID, courseThumb, label, category) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssisss", $courseName, $intro, $description, $userID, $img, $label, $courseCategory);
+    $stmt->bind_param("sssisss", $courseName, $intro, $description, $userID, $course_img, $label, $courseCategory);
 
     $courseName = $_POST["fullName"];
     $intro = $_POST["courseIntroduction"];
-    $description = $_POST["courseSummary"];
-    $userID = 1;
+    $description = $_POST["courseSummary"]; 
     $label = $_POST["label"];
     $courseCategory = $_POST["courseCategory"];
     $stmt->execute();
@@ -45,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>alert('Action failed! Something went wrong.')</script>";
             $stmt->close();
             $conn->close();
-            exit(); // Add exit to prevent further execution
+            exit(); 
         } else {
             $stmt->close();
             $moduleID = $conn->insert_id;
@@ -78,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $awardPt = $_POST['awardPt'];
 
         // Handle file upload
-        $img = 'questImg';
+        $img = null;
         $image = $_FILES['questImg']['tmp_name'];
         if (isset($_FILES['questImg']) && file_exists($image)) {
             $img = "'" . base64_encode(file_get_contents($image)) . "'";
@@ -279,7 +283,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group">
                     <label for="awardPt">Award Points:</label>
-                    <input type="number" id="awardPt" name="awardPt" placeholder="Enter the award points" required>
+                    <input type="number" id="awardPt" name="awardPt" min="1" max="20" placeholder="Enter the award points" required>
                 </div>
 
                 <div class="form-group">
@@ -288,7 +292,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="button-group">
-                    <input type="submit" value="Create Question">
+                    <input type="submit" value="Create Course">
                     <input type="reset" value="Reset">
                 </div>
 
