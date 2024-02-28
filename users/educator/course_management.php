@@ -138,7 +138,7 @@ $stmt->close();
 <body>
     <div class="page">
         <div class="page-title">
-            <h1><img src="<?php echo $base; ?>images/educator_pic/course.png" alt="Course Icon">Course Management</h1>
+            <img src="<?php echo $base; ?>images/educator_pic/course.png" alt="Course Icon">Course Management
         </div>
         <div class="page-content">
             <h1>Course Categories</h1>
