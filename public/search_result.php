@@ -196,7 +196,7 @@ $result = $stmt->get_result();
                 $courseName = $row['courseName'];
                 $courseEdu = $row['eduID'];
                 $courseJob = $row['jobTitle'];
-                $courseRating = $row['rating'] == null ? 0 : $row['rating'];
+                $courseRating = $row['rating'] == null ? '0' : $row['rating'];
                 $courseEnrolled = $row['enrolled'];
 
                 $ch = curl_init("$base_url/user-detail?user_id=$courseEdu");
@@ -248,7 +248,7 @@ $result = $stmt->get_result();
                         </div>
                     </div>
                     <p class="category-val" hidden><?php echo $row['category']; ?></p>
-                    <p class="rating-val" hidden><?php echo $row['rating']; ?></p>
+                    <p class="rating-val" hidden><?php echo $courseRating; ?></p>
                 </div><br>
             <?php } ?>
         </div>
@@ -279,9 +279,9 @@ $result = $stmt->get_result();
 
             for (let i = 0; i < rows.length; i++) {
                 var cat = rows[i].getElementsByClassName('rating-val')[0].innerHTML;
+                console.log(cat + " , " + selected_cat);
                 if (cat == selected_cat) {
                     rows[i].style.display = "";
-                    count += 1;
                 } else {
                     rows[i].style.display = "none";
                 }

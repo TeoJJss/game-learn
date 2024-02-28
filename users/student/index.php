@@ -1,25 +1,13 @@
 <?php 
     require '../../modules/config.php';
 
-    if (check_ticket() != 'student'){
-        header("Location: ../../index.php");
+    $role = check_ticket();
+
+    if ($role != 'student'){
+        echo "<script>location.href='../../index.php'</script>";
         exit();
     }
     include '../../includes/header.php';
-    $host = "localhost";
-    $user = "root";
-    $password = "";
-    $database = "math_gamelearn";
-    
-    // Create a new mysqli connection
-    $conn = new mysqli($host, $user, $password, $database);
-    
-    // Check the connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    $role = check_ticket();
 
     $search = "";
     if (isset($_GET['search'])) {
@@ -175,7 +163,7 @@
                 border-radius: 5px;
             }
 
-            select, {
+            select {
                 padding: 8px;
                 font-size: 16px;
             }
