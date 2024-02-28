@@ -15,14 +15,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image = $_FILES['courseThumb']['tmp_name'];
     $img = base64_encode(file_get_contents($image));
 
-    $stmt = $conn->prepare("INSERT INTO course (courseName, intro, `description`, userID, courseThumb,label) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssiss", $courseName, $intro, $description, $userID, $img, $label);
+    $stmt = $conn->prepare("INSERT INTO course (courseName, intro, `description`, userID, courseThumb, label, category) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssisss", $courseName, $intro, $description, $userID, $img, $label, $courseCategory);
 
     $courseName = $_POST["fullName"];
     $intro = $_POST["courseIntroduction"];
     $description = $_POST["courseSummary"];
     $userID = 1;
     $label = $_POST["label"];
+    $courseCategory = $_POST["courseCategory"];
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
@@ -237,6 +238,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="label">Label:</label>
                     <input type="text" id="label" name="label" placeholder="Math">
                 </div>
+
+                <div class="form-group">
+                    <label for="courseCategory">Course Category:</label>
+                    <input type="text" id="courseCategory" name="courseCategory" placeholder="Enter the course category">
+                </div>
+
 
                 <br><br><br><br>
 
