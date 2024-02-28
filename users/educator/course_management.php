@@ -152,14 +152,7 @@ $stmt->close();
 
                         $courseStatus = $row['status'];
                         echo '<p class="course-status ' . $courseStatus . '">Status: ' . $courseStatus . '</p>';
-
-                        if ($courseStatus == 'pending') {
-                            echo '<a href="pending.php">View course</a>';
-                        } else {
-                            echo '<a href="../../public/course.php?courseID=' . $row['courseID'] . '?">View course</a>';
-                        }
-
-
+                        echo '<a href="../../public/course.php?courseID=' . $row['courseID'] . '?">View course</a>';
                         echo '</div>';
                     }
                 } else {
