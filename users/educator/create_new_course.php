@@ -234,6 +234,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #da190b;
             /* Darker shade of red */
         }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 1px;
+            /* Adjust as needed */
+        }
     </style>
 </head>
 
@@ -332,11 +342,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group">
                     <label for="IsAnswer">Correct Answer:</label>
-                    <input type="radio" id="IsAnswer1" name="IsAnswer[]" value="1" required>
-                    <label for="IsAnswer1">Yes</label>
+                    <div class="radio-group">
+                        <input type="radio" id="IsAnswer1" name="IsAnswer[]" value="1" required>
+                        <label for="IsAnswer1">Yes</label>
 
-                    <input type="radio" id="IsAnswer0" name="IsAnswer[]" value="0" required>
-                    <label for="IsAnswer0">No</label>
+                        <input type="radio" id="IsAnswer0" name="IsAnswer[]" value="0" required>
+                        <label for="IsAnswer0">No</label>
+                    </div>
                 </div>
 
                 <div class="form-group">
