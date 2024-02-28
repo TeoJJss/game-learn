@@ -6,9 +6,7 @@ if ($role != 'educator') {
     exit();
 }
 include '../../includes/header.php';
-?>
 
-<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ticket = $_SESSION['ticket'];
     $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
@@ -16,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $response = json_decode(curl_exec($ch), true);
     $userID = $response['data']['user_id'];
+
     // Code for course insertion
     $course_image = $_FILES['courseThumb']['tmp_name'];
     $course_img = base64_encode(file_get_contents($course_image));
@@ -25,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $courseName = $_POST["fullName"];
     $intro = $_POST["courseIntroduction"];
-    $description = $_POST["courseSummary"]; 
+    $description = $_POST["courseSummary"];
     $label = $_POST["label"];
     $courseCategory = $_POST["courseCategory"];
     $stmt->execute();
@@ -49,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>alert('Action failed! Something went wrong.')</script>";
             $stmt->close();
             $conn->close();
-            exit(); 
+            exit();
         } else {
             $stmt->close();
             $moduleID = $conn->insert_id;
@@ -88,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $img = "'" . base64_encode(file_get_contents($image)) . "'";
         }
 
-        // Insert data into the database
+        // Insert data into the database for the question
         $sql = "INSERT INTO question (courseID, questText, awardPt, questImg) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("isis", $courseID, $questText, $awardPt, $img);
@@ -96,6 +95,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Check if the insertion was successful
         if ($stmt->affected_rows > 0) {
+            $questionID = $conn->insert_id; // Obtain the generated questionID
+
+            // Code for option insertion
+            $options = $_POST['optValue'];
+            $isAnswers = $_POST['IsAnswer'];
+
+            foreach ($options as $key => $optionValue) {
+                $isAnswer = isset($isAnswers[$key]) ? $_POST['IsAnswer'][$key] : 0;
+
+                // Handle file upload for each option
+                $optImg = null;
+                $optionImage = $_FILES['optImg']['tmp_name'][$key];
+                if (isset($_FILES['optImg']) && file_exists($optionImage)) {
+                    $optImg = "'" . base64_encode(file_get_contents($optionImage)) . "'";
+                }
+
+                // Insert data into the database for each option
+                $sql = "INSERT INTO `option` (optValue, IsAnswer, questID, optImg) VALUES (?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("sisi", $optionValue, $isAnswer, $questionID, $optImg);
+                $stmt->execute();
+
+                // Check if the insertion was successful
+                if ($stmt->affected_rows === 0) {
+                    echo "<script>alert('Action failed! Something went wrong.')</script>";
+                    $stmt->close();
+                    $conn->close();
+                    exit();
+                }
+            }
+
             echo '<script>alert("A Course has been created!"); window.location.href = "course_management.php";</script>';
         } else {
             echo "Error: " . $stmt->error;
@@ -107,6 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -289,6 +320,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group">
                     <label for="questImg">Upload Question Image (PNG, JPEG):</label>
                     <input type="file" id="questImg" name="questImg" accept=".png, .jpeg" required>
+                </div>
+
+                <br><br><br><br>
+
+                <!-- Option Details -->
+                <div class="form-group">
+                    <label for="optValue">Option Value:</label>
+                    <textarea id="optValue" name="optValue[]" placeholder="Enter option value" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="IsAnswer">Is Correct Answer:</label>
+                    <input type="radio" id="IsAnswer1" name="IsAnswer[]" value="1" required>
+                    <label for="IsAnswer1">Yes</label>
+
+                    <input type="radio" id="IsAnswer0" name="IsAnswer[]" value="0" required>
+                    <label for="IsAnswer0">No</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="optImg">Upload Option Image (PNG, JPEG):</label>
+                    <input type="file" id="optImg" name="optImg[]" accept=".png, .jpeg">
                 </div>
 
                 <div class="button-group">
