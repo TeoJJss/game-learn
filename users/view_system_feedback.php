@@ -11,7 +11,6 @@ include '../includes/header.php';
 if (isset($_GET['sfID'])) {
     $sfID = $_GET['sfID'];
 
-    // Fetch system feedback for the specific sfID
     $sql = "SELECT system_feedback.sfID, system_feedback.sfContent, system_feedback.sfMedia, system_feedback.`timestamp`, reply.`replyContent`, reply.`replyMedia`
             FROM system_feedback LEFT JOIN reply ON system_feedback.sfID=reply.sfID 
             WHERE system_feedback.sfID = ?";
@@ -20,15 +19,13 @@ if (isset($_GET['sfID'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Check if feedback exists
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $feedbackDate = date('Y-m-d', strtotime($row['timestamp'])); // Format: Year-Month-Day
-        $feedbackTime = date('H:i:s', strtotime($row['timestamp'])); // Format: Hour:Minute:Second
+        $feedbackDate = date('Y-m-d', strtotime($row['timestamp'])); 
+        $feedbackTime = date('H:i:s', strtotime($row['timestamp'])); 
         $sfContent = $row['sfContent'];
-        $sfMedia = $row['sfMedia']; // Assuming sfMedia is a blob
+        $sfMedia = $row['sfMedia']; 
 
-        // Rest of your HTML code
 ?>
         <!DOCTYPE html>
         <html lang="en">
@@ -69,7 +66,6 @@ if (isset($_GET['sfID'])) {
                     margin-top: 50px;
                     margin-bottom: 20px;
                     padding-left: 80px;
-                    /* Added space to the left */
                     font-size: 24px;
                     font-family: 'Poppins', sans-serif;
 
@@ -84,21 +80,13 @@ if (isset($_GET['sfID'])) {
 
                 .return-button {
                     float: right;
-                    /* Position the return button on the right */
                     padding: 10px 20px;
-                    /* Add some padding */
                     color: #fff;
-                    /* White text color */
                     background-color: #007BFF;
-                    /* Blue background */
                     border: none;
-                    /* Remove border */
                     border-radius: 5px;
-                    /* Slightly rounded corners */
                     text-decoration: none;
-                    /* Remove underline */
                     transition: background-color 0.3s ease;
-                    /* Smooth transition */
                 }
 
                 .return-button:hover {

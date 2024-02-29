@@ -6,8 +6,8 @@
     }
 
     $course_id = $_GET['cid'];
-
-    $dlt_sql = "DELETE FROM course WHERE courseID=?";
+    
+    $dlt_sql = "UPDATE course SET course.status='deleted' WHERE courseID=?";
     $stmt = $conn->prepare($dlt_sql);
     $stmt->bind_param("i", $course_id);
     $stmt->execute();
@@ -17,5 +17,6 @@
         echo "<script>alert('Action failed!')</script>";
     }
     echo "<script>location.href='../users/educator/index.php'</script>";
+    $stmt -> close();
     exit();
 ?>

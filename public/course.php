@@ -306,6 +306,8 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                                     echo '<p style="color: red;">Your course is banned!</p>';
                                 } else if ($row['status'] == 'pending') {
                                     echo '<p style="color: red;">Your course is waiting for approval!</p>';
+                                }else if ($row['status']=='deleted'){
+                                    echo '<p style="color: red;">The course is deleted by educator.</p>';
                                 } else {
                                     trigger_error('Course invalid!');
                                     exit();
@@ -320,6 +322,8 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         } else if ($row['status'] == 'pending') {
                             echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';" . '">Approve</button><br>';
                             echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';" . '">Reject</button><br>';
+                        }else if ($row['status']=='deleted'){
+                            echo '<p style="color: red;">The course is deleted by educator.</p>';
                         } else {
                             trigger_error('Course invalid!');
                             exit();
