@@ -93,7 +93,69 @@ function getTop5Modules() {
     return $results;
 }
 
+function getTotalEnrollmentRestModules() {
+    global $conn;
 
+    $sql = "SELECT module.moduleID, COUNT(module_enrolment.moduleID) AS enrolment_count
+            FROM module_enrolment
+            INNER JOIN module ON module_enrolment.moduleID = module.moduleID
+            GROUP BY module.moduleID
+            ORDER BY enrolment_count DESC";
+
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Error in preparing statement: " . $conn->error);
+    }
+    $stmt->execute();
+    $stmt->bind_result($moduleID, $enrolmentCount);
+
+    // Initialize total enrollment count for rest of the modules
+    $totalEnrollmentRestModules = 0;
+    $counter = 0;
+    while ($stmt->fetch()) {
+        // Skip the top 5 modules
+        if ($counter >= 5) {
+            $totalEnrollmentRestModules += $enrolmentCount;
+        }
+        $counter++;
+    }
+
+    $stmt->close();
+
+    return $totalEnrollmentRestModules;
+}
+
+function getTotalEnrollmentRestCourses() {
+    global $conn;
+
+    $sql = "SELECT course.courseID, COUNT(course_enrolment.courseID) AS enrolment_count
+            FROM course_enrolment
+            INNER JOIN course ON course_enrolment.courseID = course.courseID
+            GROUP BY course.courseID
+            ORDER BY enrolment_count DESC";
+
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Error in preparing statement: " . $conn->error);
+    }
+    $stmt->execute();
+    $stmt->bind_result($courseID, $enrolmentCount);
+
+    // Initialize total enrollment count for rest of the courses
+    $totalEnrollmentRestCourses = 0;
+    $counter = 0;
+    while ($stmt->fetch()) {
+        // Skip the top 5 courses
+        if ($counter >= 5) {
+            $totalEnrollmentRestCourses += $enrolmentCount;
+        }
+        $counter++;
+    }
+
+    $stmt->close();
+
+    return $totalEnrollmentRestCourses;
+}
 
 function getTotalPendingCourses() {
     global $conn;
@@ -125,6 +187,8 @@ function getTotalPendingCourses() {
 // Call controller functions
 $topCourses = getTop5Courses();
 $topModules = getTop5Modules();
+$restCoursesEnrollment = getTotalEnrollmentRestCourses();
+$restModulesEnrollment = getTotalEnrollmentRestModules();
 $totalPendingCourses = getTotalPendingCourses();
 
 $totalStudents = 0;
@@ -140,6 +204,28 @@ foreach ($user_ls as $row) {
         $totalEducatorApplications++;
     }
 }
+
+$topCoursesData = array();
+
+foreach ($topCourses as $courseID => $courseData) {
+    $topCoursesData[] = array("label"=> $courseData['courseName'], "y"=> $courseData['enrolmentCount']);
+}
+$topCoursesData[] = array("label"=> "Others", "y"=> $restCoursesEnrollment);
+
+$topModuleData = array();
+
+foreach ($topModules as $moduleID => $moduleData) {
+    $topModuleData[] = array("label"=> $moduleData['moduleName'], "y"=> $moduleData['enrolmentCount']);
+}
+$topModuleData[] = array("label"=> "Others", "y"=> $restModulesEnrollment);
+
+$newEnrollData = array();
+
+$newEnrollData[] = array("label"=> 'Applicaition for Educator', "y"=> $totalEducatorApplications);
+$newEnrollData[] = array("label"=> 'Applicaition for Course', "y"=> count($totalPendingCourses));
+$newEnrollData[] = array("label"=> 'Total Students', "y"=> $totalStudents);
+$newEnrollData[] = array("label"=> 'Total Educators', "y"=> $totalEducators);
+
 ?>
 
 <!DOCTYPE html>
@@ -201,10 +287,69 @@ foreach ($user_ls as $row) {
 </head>
 
 <body>
-    <script> //checking value of ticket
-        var ticket = "<?php echo $ticket; ?>";
-        console.log("Ticket value:", ticket);
-    </script>
+<script>
+    window.onload = function () {
+    
+        var topCourseChart = new CanvasJS.Chart("topCourseChart", {
+            animationEnabled: true,
+            exportEnabled: true,
+            title:{
+                text: ""
+            },
+            subtitles: [{
+                text: ""
+            }],
+            data: [{
+                type: "pie",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - #percent%",
+                yValueFormatString: "฿#,##0",
+                dataPoints: <?php echo json_encode($topCoursesData, JSON_NUMERIC_CHECK); ?>
+            }]
+        });
+        topCourseChart.render();
+
+    var topModuleChart = new CanvasJS.Chart("topModuleChart", {
+            animationEnabled: true,
+            exportEnabled: true,
+            title:{
+                text: ""
+            },
+            subtitles: [{
+                text: ""
+            }],
+            data: [{
+                type: "pie",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - #percent%",
+                yValueFormatString: "฿#,##0",
+                dataPoints: <?php echo json_encode($topModuleData, JSON_NUMERIC_CHECK); ?>
+            }]
+        });
+    topModuleChart.render();
+
+    var totalEnrollmentChart = new CanvasJS.Chart("totalEnrollmentChart", {
+        animationEnabled: true,
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        title: {
+            text: ""
+        },
+        axisY: {
+            title: "Total Amounts"
+        },
+        data: [{
+            type: "bar",
+            dataPoints: <?php echo json_encode($newEnrollData, JSON_NUMERIC_CHECK); ?>
+        }]
+    });
+    totalEnrollmentChart.render();
+    
+    }
+ </script>
 
     <div class="category">
         <img src="../../images/admin_pic/analytics.png" alt="Educators Applications">
@@ -214,30 +359,20 @@ foreach ($user_ls as $row) {
     <div class="box-container">
         <div class="topCourses box">
             <h1>Top 5 courses</h1>
-            <?php foreach ($topCourses as $courseID => $courseData): ?>
-                <div class="info">
-                    <h2><?php echo $courseData['courseName']; ?></h2>
-                    <p>Enrollment Count: <?php echo $courseData['enrolmentCount']; ?></p>
-                </div>
-            <?php endforeach; ?>
+            <div id="topCourseChart" style="height: 370px; width: 100%;"></div>
+            <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
         </div>
 
         <div class="topModules box">
             <h1>Top 5 modules</h1>
-            <?php foreach ($topModules as $moduleID => $moduleData): ?>
-                <div class="info">
-                    <h2><?php echo $moduleData['moduleName']; ?></h2>
-                    <p>Enrollment Count: <?php echo $moduleData['enrolmentCount']; ?></p>
-                </div>
-            <?php endforeach; ?>
+            <div id="topModuleChart" style="height: 370px; width: 100%;"></div>
+            <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>        
         </div>
 
         <div class="newNumApplication box">
-            <h1>New enrollment</h1>
-            <h2>Total applications for educator: <br><?php echo $totalEducatorApplications; ?></h2>
-            <h2>Total applications for course: <br><?php echo count($totalPendingCourses); ?></h2>
-            <h2>Total Students: <br><?php echo $totalStudents; ?></h2>
-            <h2>Total Educators: <br><?php echo $totalEducators; ?></h2>
+            <h1>Total Enrollments and Applications</h1>
+            <div id="totalEnrollmentChart" style="height: 370px; width: 100%;"></div>
+            <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
         </div>
     </div>
 
