@@ -275,7 +275,7 @@ foreach ($user_ls as $row) {
                 <?php endif; ?>
             <?php endforeach; ?>
 
-            <button onclick="window.location.href='user_console.php';" class="button">Check more</button>
+            <button onclick="window.location.href='./app_console.php';" class="button">Check more</button>
             </div>
         </div>
     

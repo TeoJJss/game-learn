@@ -91,6 +91,10 @@ $result = mysqli_query($conn, $sql);
         .course-card .course-status.banned {
             color: red;
         }
+
+        .course-card .course-status.deleted {
+            color: #555;
+        }
     </style>
 </head>
 
@@ -120,7 +124,7 @@ $result = mysqli_query($conn, $sql);
                             // Check if 'status' is set in the database result
                             if (isset($row['status'])) {
                                 $courseStatus = $row['status'];
-                                echo '<p class="course-status ' . ($courseStatus == 'active' ? 'active' : 'pending') . '">Status: ' . $courseStatus . '</p>';
+                                echo '<p class="course-status ' . $courseStatus . '">Status: ' . $courseStatus . '</p>';
                             } else {
                                 // If 'status' is not set, provide a default value or handle accordingly
                                 echo '<p class="course-status default">Status: Not specified</p>';

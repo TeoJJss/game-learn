@@ -84,46 +84,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $img = null;
         $image = $_FILES['questImg']['tmp_name'];
         if (isset($_FILES['questImg']) && file_exists($image)) {
-            $img = "'" . base64_encode(file_get_contents($image)) . "'";
+            $img = base64_encode(file_get_contents($image));
         }
 
-        // Insert data into the database for the question
         $sql = "INSERT INTO question (courseID, questText, awardPt, questImg) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("isis", $courseID, $questText, $awardPt, $img);
         $stmt->execute();
 
-        // Check if the insertion was successful
         if ($stmt->affected_rows > 0) {
-            $questionID = $conn->insert_id; // Obtain the generated questionID
+            $questionID = $conn->insert_id;
 
-            // Code for option insertion
             $options = $_POST['optValue'];
-            $isAnswers = $_POST['IsAnswer'];
+            $correctOpt = $_POST['correctOpt'];
 
-            foreach ($options as $key => $optionValue) {
-                $isAnswer = isset($isAnswers[$key]) ? $_POST['IsAnswer'][$key] : 0;
-
-                // Handle file upload for each option
-                $optImg = null;
-                $optionImage = $_FILES['optImg']['tmp_name'][$key];
-                if (isset($_FILES['optImg']) && file_exists($optionImage)) {
-                    $optImg = "'" . base64_encode(file_get_contents($optionImage)) . "'";
+            for ($c = 1; $c <= 4; $c++) {
+                $optionValue = $options[$c-1];
+                $isAnswer = $c == $correctOpt ? 1 : 0;
+                if (!$optionValue){
+                    continue;
                 }
-
-                // Insert data into the database for each option
-                $sql = "INSERT INTO `option` (optValue, IsAnswer, questID, optImg) VALUES (?, ?, ?, ?)";
+                $sql = "INSERT INTO `option` (optValue, IsAnswer, questID) VALUES (?, ?, ?)";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sisi", $optionValue, $isAnswer, $questionID, $optImg);
+                $stmt->bind_param("sii", $optionValue, $isAnswer, $questionID);
                 $stmt->execute();
-
-                // Check if the insertion was successful
-                if ($stmt->affected_rows === 0) {
-                    echo "<script>alert('Action failed! Something went wrong.')</script>";
-                    $stmt->close();
-                    $conn->close();
-                    exit();
-                }
+                $stmt->close();
             }
 
             echo '<script>alert("A Course has been created!"); window.location.href = "course_management.php";</script>';
@@ -146,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>create_new_course</title>
+    <title>Create Course</title>
     <link rel="stylesheet" href="../../styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
@@ -164,30 +149,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .nav-link {
             text-decoration: none;
-            /* Add more styles for the links here if needed */
         }
 
         .form-group {
             display: flex;
             align-items: flex-start;
             margin-bottom: 20px;
+            max-width: 50vw;
         }
 
         .form-group label {
-            width: 200px;
-            /* Adjust this value as needed */
+            width: 10vw;
             margin-right: 10px;
         }
 
         .form-group input,
         .form-group textarea {
             flex-grow: 1;
-            /* This will make the input fields take up the remaining space */
+            min-height: 3vh;
         }
 
         .form-group textarea {
             height: 100px;
-            /* Adjust this value as needed */
         }
 
 
@@ -244,6 +227,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-right: 1px;
             /* Adjust as needed */
         }
+
+        .required-label {
+            color: red;
+            font-size: 1vw;
+        }
     </style>
 </head>
 
@@ -290,9 +278,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
 
-                <br><br><br><br>
+                <br><br>
 
                 <!-- Module Details -->
+                <h2>Create the first module</h2>
                 <div class="form-group">
                     <label for="moduleTitle">Module Title:</label>
                     <input type="text" id="moduleTitle" name="moduleTitle" placeholder="Topic 1: Base 64" required>
@@ -313,13 +302,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" name="filename" id="moduleFilename" placeholder="Enter the displayed filename" required>
                 </div>
 
-                <br><br><br><br>
-
+                <br><br>
 
                 <!-- Question Details -->
+                <h2>Create the first question</h2>
                 <div class="form-group">
-                    <label for="questText">Question Text:</label>
-                    <textarea id="questText" name="questText" placeholder="Enter your question" required></textarea>
+                    <label for="questText">Question:</label>
+                    <textarea id="questText" name="questText" placeholder="Enter your question" maxlength="150" required></textarea>
                 </div>
 
                 <div class="form-group">
@@ -331,29 +320,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="questImg">Upload Question Image (PNG, JPEG):</label>
                     <input type="file" id="questImg" name="questImg" accept=".png, .jpeg" required>
                 </div>
-
-                <br><br><br><br>
-
                 <!-- Option Details -->
-                <div class="form-group">
-                    <label for="optValue">Option Value:</label>
-                    <textarea id="optValue" name="optValue[]" placeholder="Enter option value" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="IsAnswer">Correct Answer:</label>
-                    <div class="radio-group">
-                        <input type="radio" id="IsAnswer1" name="IsAnswer[]" value="1" required>
-                        <label for="IsAnswer1">Yes</label>
-
-                        <input type="radio" id="IsAnswer0" name="IsAnswer[]" value="0" required>
-                        <label for="IsAnswer0">No</label>
+                <p class="required-label">You must create 2-4 options for a question, leave option 3 and 4 empty if not required</p>
+                <?php for ($i = 1; $i <= 4; $i++) { ?>
+                    <div class="form-group">
+                        <label for="optValue">Option <?php echo $i; ?>:</label>
+                        <input type="text" id="optValue" name="optValue[]" placeholder="Enter option value" maxlength="150" <?php if ($i < 3) {
+                                                                                                                                echo 'required';
+                                                                                                                            } ?>>
                     </div>
-                </div>
+                <?php } ?>
 
                 <div class="form-group">
-                    <label for="optImg">Upload Option Image (PNG, JPEG):</label>
-                    <input type="file" id="optImg" name="optImg[]" accept=".png, .jpeg">
+                    <label for="IsAnswer">Correct Option:</label>
+                    <input type="number" name="correctOpt" id="correctOpt" min="1" max="4" placeholder="Enter Correct Option Number" required>
                 </div>
 
                 <div class="button-group">

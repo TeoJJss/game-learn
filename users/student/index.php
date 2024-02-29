@@ -171,7 +171,6 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
             align-items: center;
             gap: 10px;
             margin-bottom: 13px;
-            padding:
         }
 
         .filter-column {

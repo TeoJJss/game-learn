@@ -2,7 +2,7 @@
 require '../../modules/config.php';
 $role = check_ticket();
 if ($role != 'admin') {
-    header("Location: ../ind ex.php");
+    header("Location: ../index.php");
     exit();
 }
 include '../../includes/header.php';
