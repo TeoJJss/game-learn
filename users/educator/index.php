@@ -85,6 +85,10 @@ $result = mysqli_query($conn, $sql);
         }
 
         .course-card .course-status.pending {
+            color: orange;
+        }
+
+        .course-card .course-status.banned {
             color: red;
         }
     </style>
