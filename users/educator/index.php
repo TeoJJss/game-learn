@@ -7,9 +7,18 @@ if ($role != 'educator') {
 }
 include '../../includes/header.php';
 
+$ticket = $_SESSION['ticket'];
+$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$response = json_decode(curl_exec($ch), true);
 
-$sql = "SELECT courseID, courseName, courseThumb, status FROM course";
-$result = mysqli_query($conn, $sql);
+$sql = "SELECT courseID, courseName, courseThumb, `status` FROM course WHERE userID=?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $response['data']['user_id']);
+$stmt->execute();
+$result = $stmt->get_result();
+$stmt -> close();
 ?>
 
 <html lang="en">
@@ -136,7 +145,7 @@ $result = mysqli_query($conn, $sql);
             <?php
                 }
             } else {
-                echo "No courses found in the database.";
+                echo "No created course";
             }
             ?>
         </div>

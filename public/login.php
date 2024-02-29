@@ -90,7 +90,7 @@
         }
 
 
-        #email{
+        #email, #password{
             width: 23em;
             height: 3em;
         }
@@ -111,9 +111,10 @@
             padding-bottom: 0%;
         }
 
-
-
-
+        .show-pass-btn{
+            cursor: pointer;
+            max-width: 1.5vw;
+        }
     </style>
 </head>
 <body>
@@ -123,7 +124,8 @@
         <label for="email">Email:</label> 
             <input type="email" id="email" class="searchbar" name="email" autocomplete="off" required autofocus placeholder="name@email.com"><br><br>
         <label for="password">Password:</label> 
-            <input type="password" id="email" class="searchbar" name="password" required placeholder="********"><br><br>
+            <input type="password" id="password" class="searchbar" name="password" required placeholder="********">
+            <img src="../images/showPassword.png" title="Show/Hide Password" class="show-pass-btn" id="show-pass-btn" onclick="showPass()">
         <input class="login_signup_button" type="submit" value="Login Now!">
         <div class="login-link">
             Or <a href="./reset_pass.php" class="link">Forgot Password</a>
@@ -134,6 +136,7 @@
         </div>
         
     </form>
+    <script src="../src/showPass.js"></script>
 </body>
 <?php include '../includes/footer.php'; ?>
 </html>

@@ -87,7 +87,7 @@
             font-weight: 600; 
         }
 
-        #email{
+        #email,#password{
             width: 23em;
             height: 3em;
         }
@@ -108,6 +108,10 @@
             padding-bottom: 0%;
         }
 
+        .show-pass-btn{
+            cursor: pointer;
+            max-width: 1.5vw;
+        }
     </style>
 </head>
 <body>  
@@ -121,7 +125,8 @@
         <input id="email" class="searchbar" type="text" name="name" id="name" placeholder="Enter your username">
         <br><br>
         <label for="password">New Password: </label>
-        <input id="email" class="searchbar" type="password" name="password" id="password" placeholder="New Password">
+        <input id="password" class="searchbar" type="password" name="password" id="password" placeholder="New Password">
+        <img src="../images/showPassword.png" title="Show/Hide Password" class="show-pass-btn" id="show-pass-btn" onclick="showPass()">
         <br><br>
 
         <input class="login_signup_button" type="submit" value="Reset Password">
@@ -134,5 +139,6 @@
         </div>
     </form>
 </body>
+<script src="../src/showPass.js"></script>
 <?php include '../includes/footer.php'; ?>
 </html>

@@ -175,6 +175,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-weight: 700;
         }
 
+        .show-pass-btn{
+            cursor: pointer;
+            max-width: 1.5vw;
+        }
 
         .login-link{
             padding-top: 8px;
@@ -203,6 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="inp-row">
                     <label for="password">Password:</label> 
                         <input type="password" id="password" name="password" minlength="8" autocomplete="off" required class="searchbar" placeholder="Create Password">
+                        <img src="../images/showPassword.png" title="Show/Hide Password" class="show-pass-btn" id="show-pass-btn" onclick="showPass()">
                 </div><br>
                 <div class="inp-row">
                     <select id="user_type" class="dropbutton" name="user_type" onchange="educator_selected()" required>
@@ -250,6 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     </script>
+    <script src="../src/showPass.js"></script>
 </body>
 <?php include '../includes/footer.php'; ?>
 </html>
