@@ -279,8 +279,10 @@
                 document.getElementById('chg-img').click();
             }
         }
+
+        
     </script>
 </body><br>
 <?php include '../includes/footer.php'; ?>
 
-</html>
+</html> 
