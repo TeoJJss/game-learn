@@ -253,9 +253,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <span class="gift-bag-title"><img src="../images/nav_picture/giftbag.png" class="gift-bag-icon">Gift Bag</span><br>
                         </div>
                         <?php
-                        $giftSql = "SELECT gift.giftID, gift.giftName, gift.giftMedia, user_gift.redemptionID
+                        $giftSql = "SELECT gift.giftID, gift.giftName, gift.giftMedia, user_gift.redemptionID, COUNT(user_gift.redemptionID) AS gift_count
                                         FROM user_gift JOIN gift ON user_gift.giftID=gift.giftID 
-                                        WHERE user_gift.userID=? AND user_gift.isUsed=0";
+                                        WHERE user_gift.userID=? AND user_gift.isUsed=0
+                                        GROUP BY gift.giftID";
                         $stmt = $conn->prepare($giftSql);
                         $stmt->bind_param("i", $userID);
                         $stmt->execute();
@@ -266,7 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                             <div class="gift-row">
                                 <img src='data:image/png;base64,<?php echo $gift['giftMedia'] ?>' title='<?php echo $gift['giftName']; ?>' class='giftPic'>
-                                <button class="button use-gift-btn" id="gift-<?php echo $gift['giftID']; ?>" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use</button>
+                                <button class="button use-gift-btn" id="gift-<?php echo $gift['giftID']; ?>" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use: <?php echo $gift['gift_count']; ?></button>
                             </div>
                         <?php } ?>
                     </div>
