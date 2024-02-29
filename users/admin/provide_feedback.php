@@ -62,6 +62,53 @@ function provideFeedbackReply($sfID, $replyContent, $replyMedia) {
     return $response;
 }
 
+function getFeedbackData($sfID) {
+    global $conn;
+
+    // Prepare and execute a SQL statement to fetch data from the database
+    $sql = "SELECT sfContent, sfMedia, userID FROM system_feedback WHERE sfID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $sfID); // Assuming sfID is an integer, change "i" if it's a different data type
+    $stmt->execute();
+    
+    // Bind result variables
+    $stmt->bind_result($sfContent, $sfMedia, $userID);
+    
+    // Fetch the data
+    $stmt->fetch();
+    
+    // Close statement
+    $stmt->close();
+    
+    // Return the fetched data as an associative array
+    return array(
+        'sfContent' => $sfContent,
+        'sfMedia' => $sfMedia,
+        'userID' => $userID
+    );
+}
+
+function getProfilePicture($userID) {
+    global $conn;
+    // Prepare and execute a SQL statement to fetch data from the database
+    $sql = "SELECT profilePic FROM profile WHERE userID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userID); // Assuming userID is an integer, change "i" if it's a different data type
+    $stmt->execute();
+    
+    // Bind result variables
+    $stmt->bind_result($profilePic);
+    
+    // Fetch the data
+    $stmt->fetch();
+    
+    // Close statement
+    $stmt->close();
+    
+    // Return the profile picture URL
+    return $profilePic;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Retrieve input field values
     $userFB = $_POST['userFB'];
@@ -94,6 +141,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo '<script>alert("No sfID parameter found in the form submission.");</script>';
     }
 }
+
+$feedbackDetails = getFeedbackData($sfID);
+$userID = $feedbackDetails['userID'];
+$userPic = getProfilePicture($userID);
+
+$defaultProfilePic = '../../images/admin_pic/user.png';
+
+if (!empty($userPic)) {
+    $profilePicSrc = 'data:image/png;image/jpg;base64' . $userPic;
+} else {
+    $profilePicSrc = $defaultProfilePic;
+}
+
+
+$ch = curl_init("$base_url/user-detail?user_id=$userID");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$username = json_decode(curl_exec($ch), true)['msg'];
 
 ?>
 
@@ -220,7 +285,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <img src="../../images/admin_pic/feedback.png" alt="Educators Applications">
             <h1>Feedback to User</h1> 
         </div>
-        <br><br><br>
+        <br><br>
+
+        <div class="custoomerDetails" style="display: flex; flex-direction: row;  gap: 1rem;">
+            <img src="<?php echo $profilePicSrc; ?>" alt="User Profile Picture" style="width: 3rem; height: 3rem;">
+
+            <div style="margin-bottom: 0; margin-right: 0.5rem;"> 
+                <div style="margin-bottom: 0;"><?php echo $username ?></div>
+                <h2 style="margin-top: 0;">Replied: 
+                    <span style="overflow: auto; max-height: 3rem;"> 
+                        <?php echo $feedbackDetails['sfContent']; ?>
+                    </span>
+                </h2>            
+            </div>
+        </div>
+
+
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="sfID" value="<?php echo htmlspecialchars($sfID); ?>">
             <div class="user-input">

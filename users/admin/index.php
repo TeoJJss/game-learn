@@ -234,6 +234,7 @@ $newEnrollData[] = array("label"=> 'Total Educators', "y"=> $totalEducators);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../styles/style.css">
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
     <title>Admin</title>
     <style>
         .box-container {
@@ -360,19 +361,16 @@ $newEnrollData[] = array("label"=> 'Total Educators', "y"=> $totalEducators);
         <div class="topCourses box">
             <h1>Top 5 courses</h1>
             <div id="topCourseChart" style="height: 370px; width: 100%;"></div>
-            <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
         </div>
 
         <div class="topModules box">
             <h1>Top 5 modules</h1>
-            <div id="topModuleChart" style="height: 370px; width: 100%;"></div>
-            <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>        
+            <div id="topModuleChart" style="height: 370px; width: 100%;"></div>        
         </div>
 
         <div class="newNumApplication box">
             <h1>Total Enrollments and Applications</h1>
             <div id="totalEnrollmentChart" style="height: 370px; width: 100%;"></div>
-            <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
         </div>
     </div>
 
