@@ -7,13 +7,14 @@ if ($role != 'admin') {
 }
 include '../../includes/header.php';
 
-if(isset($_GET['sfID'])) {
+if (isset($_GET['sfID'])) {
     $sfID = $_GET['sfID'];
 } else {
     echo "No sfID parameter found in the URL.";
 }
 
-function provideFeedbackReply($sfID, $replyContent, $replyMedia) {
+function provideFeedbackReply($sfID, $replyContent, $replyMedia)
+{
     global $conn;
 
     // Check if replyContent is empty
@@ -62,7 +63,8 @@ function provideFeedbackReply($sfID, $replyContent, $replyMedia) {
     return $response;
 }
 
-function getFeedbackData($sfID) {
+function getFeedbackData($sfID)
+{
     global $conn;
 
     // Prepare and execute a SQL statement to fetch data from the database
@@ -70,16 +72,16 @@ function getFeedbackData($sfID) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $sfID); // Assuming sfID is an integer, change "i" if it's a different data type
     $stmt->execute();
-    
+
     // Bind result variables
     $stmt->bind_result($sfContent, $sfMedia, $userID);
-    
+
     // Fetch the data
     $stmt->fetch();
-    
+
     // Close statement
     $stmt->close();
-    
+
     // Return the fetched data as an associative array
     return array(
         'sfContent' => $sfContent,
@@ -88,23 +90,24 @@ function getFeedbackData($sfID) {
     );
 }
 
-function getProfilePicture($userID) {
+function getProfilePicture($userID)
+{
     global $conn;
     // Prepare and execute a SQL statement to fetch data from the database
     $sql = "SELECT profilePic FROM profile WHERE userID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userID); // Assuming userID is an integer, change "i" if it's a different data type
     $stmt->execute();
-    
+
     // Bind result variables
     $stmt->bind_result($profilePic);
-    
+
     // Fetch the data
     $stmt->fetch();
-    
+
     // Close statement
     $stmt->close();
-    
+
     // Return the profile picture URL
     return $profilePic;
 }
@@ -121,18 +124,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Check if sfID is set
     if (isset($_POST['sfID'])) {
         $sfID = $_POST['sfID'];
-        
+
         // Check if userFB is empty
         if (empty($userFB)) {
             echo '<script>alert("Reply content cannot be empty.");</script>';
         } else {
             $replyResult = provideFeedbackReply($sfID, $userFB, $img);
-    
+
             // Check the result of provideFeedbackReply
             if ($replyResult['success']) {
                 echo '<script>alert("System feedback is submitted!");</script>';
-                echo '<meta http-equiv="refresh" content="0;url=provide_feedback.php?sfID='.$sfID.'&status=success">';
-                exit(); 
+                echo '<meta http-equiv="refresh" content="0;url=provide_feedback.php?sfID=' . $sfID . '&status=success">';
+                exit();
             } else {
                 echo '<script>alert("An error occurred while submitting the system feedback: ' . $replyResult['message'] . '");</script>';
             }
@@ -149,7 +152,7 @@ $userPic = getProfilePicture($userID);
 $defaultProfilePic = '../../images/admin_pic/user.png';
 
 if (!empty($userPic)) {
-    $profilePicSrc = 'data:image/png;image/jpg;base64' . $userPic;
+    $profilePicSrc = 'data:image/png;image/jpg;base64,' . $userPic;
 } else {
     $profilePicSrc = $defaultProfilePic;
 }
@@ -173,9 +176,9 @@ $username = json_decode(curl_exec($ch), true)['msg'];
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         .category {
-            font-size: 2rem; 
+            font-size: 2rem;
             padding-left: 1rem;
-            padding-top: 2rem; 
+            padding-top: 2rem;
             width: 100%;
             display: flex;
             align-items: center;
@@ -283,20 +286,20 @@ $username = json_decode(curl_exec($ch), true)['msg'];
     <div class="page">
         <div class="category">
             <img src="../../images/admin_pic/feedback.png" alt="Educators Applications">
-            <h1>Feedback to User</h1> 
+            <h1>Feedback to User</h1>
         </div>
         <br><br>
 
         <div class="custoomerDetails" style="display: flex; flex-direction: row;  gap: 1rem;">
             <img src="<?php echo $profilePicSrc; ?>" alt="User Profile Picture" style="width: 3rem; height: 3rem;">
 
-            <div style="margin-bottom: 0; margin-right: 0.5rem;"> 
-                <div style="margin-bottom: 0;"><?php echo $username ?></div>
-                <h2 style="margin-top: 0;">Replied: 
-                    <span style="overflow: auto; max-height: 3rem;"> 
+            <div style="margin-bottom: 0; margin-right: 0.5rem;">
+                <div style="margin-bottom: 0; font-weight:bold;"><?php echo $username ?></div>
+                <h2 style="margin-top: 0;"><strong>Says:</strong>
+                    <span style="overflow: auto; max-height: 3rem;">
                         <?php echo $feedbackDetails['sfContent']; ?>
                     </span>
-                </h2>            
+                </h2>
             </div>
         </div>
 
