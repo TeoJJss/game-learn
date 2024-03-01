@@ -228,7 +228,6 @@ CREATE TABLE IF NOT EXISTS `option` (
   `optValue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `IsAnswer` tinyint(1) NOT NULL,
   `questID` int NOT NULL,
-  `optImg` blob,
   PRIMARY KEY (`optID`),
   KEY `questID` (`questID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -237,11 +236,11 @@ CREATE TABLE IF NOT EXISTS `option` (
 -- Dumping data for table `option`
 --
 
-INSERT INTO `option` (`optID`, `optValue`, `IsAnswer`, `questID`, `optImg`) VALUES
-(1, '10', 1, 1, NULL),
-(2, '20', 0, 1, NULL),
-(3, '30', 0, 2, NULL),
-(4, '50', 1, 2, NULL);
+INSERT INTO `option` (`optID`, `optValue`, `IsAnswer`, `questID`) VALUES
+(1, '10', 1, 1),
+(2, '20', 0, 1),
+(3, '30', 0, 2),
+(4, '50', 1, 2);
 
 -- --------------------------------------------------------
 
