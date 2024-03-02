@@ -6,17 +6,23 @@ if (check_ticket() != 'student') {
     exit();
 }
 include '../../includes/header.php';
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "math_gamelearn";
 
-// Create a new mysqli connection
-$conn = new mysqli($host, $user, $password, $database);
 
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!isset($_SESSION['ticket'])) {
+    header("Location: ../index.php");
+    exit();
+}
+$ticket = $_SESSION['ticket'];
+$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$response = json_decode(curl_exec($ch), true);
+
+if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
+    $userID = $response["data"]["user_id"];
+} else {
+    header("Location: ../index.php");
+    exit();
 }
 
 $role = check_ticket();
@@ -49,19 +55,6 @@ if (isset($_GET['search'])) {
 
 $stmt->execute();
 $result = $stmt->get_result();
-function truncateDescription($description, $wordLimit = 20)
-{
-    // Explode the description into an array of words
-    $words = explode(' ', $description);
-
-    // Limit the array to the specified number of words
-    $limitedWords = array_slice($words, 0, $wordLimit);
-
-    // Implode the limited words back into a string
-    $limitedDescription = implode(' ', $limitedWords);
-
-    return $limitedDescription;
-}
 
 $queryAllCourses = "SELECT courseID, courseThumb, courseName, intro, description, label, category FROM course";
 
@@ -80,6 +73,7 @@ $progressFilter = isset($_GET['progress']) ? $_GET['progress'] : '';
 
 $queryFilteredCourses = "SELECT courseID, courseThumb, courseName, intro, description, label, category FROM course WHERE 1";
 
+
 if (!empty($categoryFilter)) {
     $queryFilteredCourses .= " AND category = '$categoryFilter'";
 }
@@ -93,22 +87,6 @@ if (!empty($progressFilter)) {
 }
 
 $resultFilteredCourses = $conn->query($queryFilteredCourses);
-
-$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
-
-if (!empty($searchTerm)) {
-    $querySearch = "SELECT courseID, courseThumb, courseName, intro, description, label, category, instructor FROM course WHERE 
-            courseName LIKE '%$searchTerm%' OR 
-            intro LIKE '%$searchTerm%' OR 
-            description LIKE '%$searchTerm%' OR 
-            label LIKE '%$searchTerm%' OR 
-            category LIKE '%$searchTerm%' OR 
-            instructor LIKE '%$searchTerm%'";
-} else {
-    $querySearch = "SELECT courseID, courseThumb, courseName, intro, description, label, category, instructor FROM course";
-}
-
-$resultSearch = $conn->query($querySearch);
 
 $perPage = 5; // Number of courses per page
 $totalCourses = $result->num_rows; // Total number of courses
@@ -133,6 +111,95 @@ $queryParams = $_SERVER['QUERY_STRING'];
 
 // If there are existing query parameters, append an ampersand to separate them
 $queryString = empty($queryParams) ? '' : '&' . $queryParams;
+
+
+function getCourseIDByUserID($userID) {
+    global $conn;
+
+    // SQL query to get courseID based on userID
+    $sql = "SELECT courseID FROM course_enrolment WHERE userID = ?";
+
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $stmt->bind_result($courseID);
+
+        if ($stmt->fetch()) {
+            // Return the courseID if a match is found
+            return $courseID;
+        } else {
+            // Return null or any default value if no match is found
+            return null;
+        }
+
+        $stmt->close();  // Close the prepared statement
+    } catch (Exception $e) {
+        // Handle exceptions (e.g., database error)
+        echo "Error: " . $e->getMessage();
+        return null;
+    }
+}
+
+$courseID = getCourseIDByUserID($userID);
+
+function countTotalModules($courseID) {
+    global $conn;
+
+    // SQL query to count total modules for a specific course
+    $sql = "SELECT COUNT(DISTINCT moduleID) AS totalCurrent FROM module WHERE courseID = ?";
+
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $courseID);
+        $stmt->execute();
+        $stmt->bind_result($totalCurrent);
+        $stmt->fetch();
+
+        // Close the prepared statement
+        $stmt->close();
+
+        // Return the total current modules
+        return $totalCurrent;
+    } catch (Exception $e) {
+        // Handle exceptions (e.g., database error)
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+function countUserModules($userID) {
+    global $conn;
+
+    // SQL query to count modules for a specific user
+    $sql = "SELECT COUNT(DISTINCT moduleID) AS current FROM module_enrolment WHERE userID = ?";
+
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $stmt->bind_result($current);
+        $stmt->fetch();
+
+        // Close the prepared statement
+        $stmt->close();
+
+        // Return the current modules for the user
+        return $current;
+    } catch (Exception $e) {
+        // Handle exceptions (e.g., database error)
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+$courseID = getCourseIDByUserID($userID);
+$totalCurrent = countTotalModules($courseID);
+$current = countUserModules($userID);
+
+if ($totalCurrent>=0 ) {
+    $progress = ($totalCurrent > 0) ? ($current / $totalCurrent * 100) : 0;  
+} else {
+    echo "Error preparing statement.";
+}
 
 ?>
 
@@ -171,6 +238,7 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
             align-items: center;
             gap: 10px;
             margin-bottom: 13px;
+            padding:
         }
 
         .filter-column {
@@ -184,7 +252,7 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
         }
 
         section {
-            padding: 10px;
+            padding-left: 3rem;
         }
 
         #game-field {
@@ -201,7 +269,8 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
             font-weight: bold;
             border-radius: 5px;
             width: 350px;
-            vertical-align: middle
+            vertical-align: middle;
+            padding-right: 3rem;
         }
 
         .progress-bar-container {
@@ -330,33 +399,22 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
         .pagination .active a {
             background-color: #ddd;
         }
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
     <link rel="stylesheet" href="../../styles/style.css">
 </head>
 
 <body>
     <header>
-        <span class="count-results">
-            <?php if ($role == 'student') {
-                $ticket = $_SESSION['ticket'];
-                $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                $response = json_decode(curl_exec($ch), true);
-                $user_id = $response['data']['user_id'];
-                $sql = "SELECT pointValue FROM point WHERE userID=?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $user_id);
-                $stmt->execute();
-                $stmt->bind_result($pointVal);
-                $stmt->fetch();
-                echo "<p class='button' id='point'><img src='../../images/nav_picture/point.png' class='ptImg'><span>$pointVal<span></p>";
-            } ?>
-        </span>
         <div class="header-content">
             <img src="../../images/nav_picture/my_learning.png" alt="Header Image" class="header-image">
             <h1>My Learning</h1>
         </div>
+        <div class = "top">
         <form method="get" action="">
             <div class="filter-container">
                 <div class="filter-column" style="padding-top: 10px;">
@@ -376,10 +434,27 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
                     </select>
                 </div>
                 <input type="text" class="nav_search" id="search-inp" placeholder="Search My Course">
-                <button class="nav_button" onclick="location.href = '<?php echo $base; ?>public/search_result.php'">
+            <button class="nav_button" onclick="searchCourses()">
             </div>
         </form>
-        </div>
+            <span class="count-results">
+            <?php if ($role == 'student') {
+                $ticket = $_SESSION['ticket'];
+                $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                $response = json_decode(curl_exec($ch), true);
+                $user_id = $response['data']['user_id'];
+                $sql = "SELECT pointValue FROM point WHERE userID=?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $stmt->bind_result($pointVal);
+                $stmt->fetch();
+                echo "<p class='button' id='point'><img src='../../images/nav_picture/point.png' class='ptImg'><span>$pointVal<span></p>";
+            } ?>
+            </span>
+            </div>
         </div>
     </header>
 
@@ -419,45 +494,9 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
                     <a class="course-title" onclick="location.href='../../public/course.php?courseID=<?php echo $row['courseID']; ?>'"><?php echo $courseName; ?></a>
                     <p class="detail">
                         <?php echo $eduName; ?>/<?php echo $courseJob; ?>
-                        <?php if ($role == 'educator') : ?>
-                            <?php $ticket = $_SESSION['ticket'];
-                            $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                            $response = json_decode(curl_exec($ch), true);
-                            $user_id = $response['data']['user_id'];
-                            if ($user_id == $courseEdu) :
-                                echo "<span class='button' id='your-course'>Your course</span>";
-                            endif;
-                            ?>
-                        <?php endif; ?>
-
-                        <?php
-                        $progress_sql = "SELECT 
-                                (SELECT COUNT(moduleID) FROM module WHERE courseID = ?) as module_total,
-                                (SELECT COUNT(module_enrolment.moduleID) FROM module_enrolment 
-                                LEFT JOIN module ON module.moduleID = module_enrolment.moduleID 
-                                WHERE module_enrolment.userID = ? AND module.courseID = ?) as enrolled_count";
-
-                        $stmt = $conn->prepare($progress_sql);
-
-                        if ($stmt) {
-                            $stmt->bind_param("iii", $row['courseID'], $userID, $row['courseID']);
-                            $stmt->execute();
-
-                            $stmt->bind_result($total, $current);
-                            $stmt->fetch();
-                            $stmt->close();
-
-                            $progress = ($total > 0) ? ($current / $total * 100) : 0;
-                            
-                        } else {
-                            echo "Error preparing statement.";
-                        }
-                        ?>
 
                     <div class="progress-bar-container">
-                        <div class="progress-bar" style="<?php echo $progress; ?>%;"></div>
+                        <div class="progress-bar" style="width:<?php echo $progress; ?>%;"></div>
                     </div>
 
                     <div class="rating">
@@ -497,6 +536,7 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
             }
             ?>
         </div>
+        
     </div>
     <script>
         function cat_selected() {
@@ -534,8 +574,7 @@ $queryString = empty($queryParams) ? '' : '&' . $queryParams;
 
             document.getElementById('count-num').innerHTML = count;
         }
-    </script>
-    <script>
+
         var searchInput = document.getElementById("search-inp");
 
         searchInput.addEventListener("keypress", function(event){
