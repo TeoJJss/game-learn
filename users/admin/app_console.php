@@ -183,7 +183,7 @@ include '../../includes/header.php';
         </div>
 
         <?php if (empty($pendingCourses)): ?>
-            <p>There are no new applications for course.</p>
+            <p>There are no new course applications.</p>
         <?php else: ?>
             <?php foreach ($pendingCourses as $course): ?>
                 <div class="course-dropdown">

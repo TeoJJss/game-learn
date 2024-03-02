@@ -71,6 +71,7 @@
             <div class="category">
                 <img src="../../images/admin_pic/manage_user.png" alt="Educators Applications">
                 <h1>User Management</h1> 
+                <input type="search" class="nav_search" id="user-search-inp" placeholder="Filter user by username" oninput="filterUser()">
             </div>
             <tr>
                 <th>Email</th>
@@ -81,9 +82,9 @@
                 <th>Action</th>
             </tr>
             <?php foreach ($edu_ls as $row){ ?>
-                <tr>
+                <tr class="user-row">
                     <td><?php echo $row['email']; ?></td>
-                    <td><?php echo $row['name']; ?></td>
+                    <td class="user-name"><?php echo $row['name']; ?></td>
                     <td><?php echo $row['role']; ?></td>
                     <td id="status"><?php echo $row['status']; ?></td>
                     <td><?php echo $row['remark']; ?></td>
@@ -136,6 +137,20 @@
             }
 
             location.href = `../../modules/update_usr_status.php?new_status=${newStatus}&uid=${userId}&remark=${re}`;
+        }
+
+        function filterUser(){
+            var inpVal = document.getElementById('user-search-inp').value.toUpperCase();
+            var userRows = document.getElementsByClassName('user-row');
+
+            for (let i=0; i<userRows.length; i++){
+                userName = userRows[i].getElementsByClassName('user-name')[0].innerHTML;
+                if (userName.toUpperCase().indexOf(inpVal) > -1){
+                    userRows[i].hidden = false;
+                }else{
+                    userRows[i].hidden = true;
+                }
+            }
         }
     </script>
 </body>
