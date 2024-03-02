@@ -11,6 +11,7 @@ if (!isset($_GET['courseID'])) {
 }
 $courseID = $_GET['courseID'];
 
+// Get the user ID of the user
 $ticket = $_SESSION['ticket'];
 $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -21,6 +22,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 202) {
     $userID = $response['data']['user_id'];
 }
 
+// If the user is student and has enrolled in the quiz before, show results directly
 if ($role == 'student') {
     $sql = "SELECT quiz_enrolment.userID FROM quiz_enrolment 
                 JOIN question ON question.questID = quiz_enrolment.questID
@@ -42,6 +44,7 @@ if ($role == 'student') {
 
 include '../includes/header.php';
 
+// Query the quiz content
 $sql = "SELECT question.questID, question.questText, question.awardPt, course.courseName, question.questImg
             FROM question LEFT JOIN course ON course.courseID = question.courseID
             WHERE question.courseID=?";
@@ -49,7 +52,7 @@ if ($role != 'educator') {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $courseID);
 } else {
-    $sql .= " AND course.userID=?";
+    $sql .= " AND course.userID=?"; // Educator can only view his/her own quiz
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $courseID, $userID);
 }
@@ -306,7 +309,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                             <div class="gift-row">
                                 <img src='data:image/png;base64,<?php echo $gift['giftMedia'] ?>' title='<?php echo $gift['giftName']; ?>' class='giftPic'>
-                                <button class="button use-gift-btn" id="gift-<?php echo $gift['giftID']; ?>" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use <span class="gift-count" id="gift-count-<?php echo $gift['giftID']; ?>"><?php echo $gift['gift_count']; ?></span></button>
+                                <button class="button use-gift-btn" id="gift-<?php echo $gift['giftID']; ?>" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use 
+                                <span class="gift-count" id="gift-count-<?php echo $gift['giftID']; ?>"><?php echo $gift['gift_count']; ?></span></button>
                             </div>
                         <?php } ?>
                     </div>
@@ -395,9 +399,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script>
         var questions = document.getElementsByClassName('questCount');
         if (questions.length < 2) {
-            document.getElementById('gift-3').disabled = true;
-            document.getElementById('gift-5').disabled = true;
-            document.getElementById('gift-6').disabled = true;
+            document.getElementById('gift-3').disabled = true; // Minus Two Wrong
+            document.getElementById('gift-5').disabled = true; // Skip Two Questions
+            document.getElementById('gift-6').disabled = true; // Skip Three Questions
         } else if (questions.length < 3) {
             document.getElementById('gift-5').disabled = true;
             document.getElementById('gift-6').disabled = true;
@@ -411,16 +415,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     questPt[i].innerHTML = `<s><i>${questPt[i].innerHTML}</i></s> <b>${newPt}</b>`
                     document.getElementById(`ptValue-${i+1}`).value = newPt;
                 }
-            } else if (giftID >= 4 && giftID <= 6) { // Skip question
+            } else if (giftID >= 4 && giftID <= 6) { // Skip question gift
                 var correctopt = document.getElementsByClassName('opt-ans');
                 switch (giftID) {
-                    case 4:
-                        skip = 1;
+                    case 4: // Skip One Questions
+                        skip = 1; 
                         break;
-                    case 5:
+                    case 5: // Skip Two Questions
                         skip = 2;
                         break;
-                    case 6:
+                    case 6: // Skip Three Questions
                         skip = 3;
                         break;
                     default:
