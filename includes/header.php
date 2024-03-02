@@ -35,11 +35,11 @@
                     <a>Forum</a>
                 </button>
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/gift_shop.png" alt="Gift Shop">
+                    <img src="<?php echo $base; ?>images/nav_picture/gift_shop.png" alt="Gift Shop" onclick="location.href = '<?php echo $base; ?>users/student/GiftShop.php'">
                     <a>Gift Shop</a>
                 </button>
                 <button class="nav_button">
-                    <img src="<?php echo $base; ?>images/nav_picture/my_learning.png" alt="My Learning">
+                    <img src="<?php echo $base; ?>images/nav_picture/my_learning.png" alt="My Learning" onclick="location.href = '<?php echo $base; ?>users/student/index.php'">
                     <a>My Learning</a>
                 </button>
             <?php }else if ($role == "educator"){ //educator header ?>
