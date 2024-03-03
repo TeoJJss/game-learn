@@ -43,8 +43,9 @@
         $sql = "SELECT user_gift.giftID, gift.giftMedia, COUNT(user_gift.giftID) AS totalQuantity
                 FROM user_gift
                 INNER JOIN gift ON user_gift.giftID = gift.giftID
-                WHERE user_gift.userID = ? 
+                WHERE user_gift.userID = ? AND user_gift.isUsed = 0
                 GROUP BY user_gift.giftID";
+
     
         try {
             $stmt = $conn->prepare($sql);
