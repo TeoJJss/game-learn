@@ -104,7 +104,11 @@ curl_close($ch);
     
         } catch (Exception $e) {
             // Handle exceptions (e.g., user not found, database error)
-            echo "Error: " . $e->getMessage();
+            $errorMessage = "Error: " . $e->getMessage();
+    
+            // Display the error message using JavaScript alert
+            echo "<script>alert('" . addslashes($errorMessage) . "');</script>";
+    
             return false;
         }
     }
@@ -125,7 +129,7 @@ curl_close($ch);
                 header("Location: GiftShop.php?user_id=$userID");
             } else {
                 // Deduction failed, display an appropriate message
-                echo "Points are not enough to redeem the gift.";
+                echo "";
             }
         } else {
             // Handle invalid input
@@ -343,6 +347,11 @@ curl_close($ch);
 
     // Submit the form
     buyForm.submit();
+    }
+
+    function showError(errorMessage) {
+        // Display a prompt with the error message
+        window.prompt("Error", errorMessage);
     }
 </script>  
 </html>
