@@ -7,12 +7,18 @@ if ($role != 'educator') {
 }
 
 // Fetch course information based on the selected course name
-$selectedCourse = $_GET['course'] ?? '';
+$selectedCourse = $_GET['courseID'] ?? '';
+$ticket = $_SESSION['ticket'];
+$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$response = json_decode(curl_exec($ch), true);
+$userID = $response['data']['user_id'];
 
 // Modify the SQL query to include a WHERE clause to filter by the selected course name
-$sql = "SELECT * FROM `course` WHERE `courseName` = ?";
+$sql = "SELECT * FROM `course` WHERE `courseID` = ? AND userID = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $selectedCourse);
+$stmt->bind_param("ii", $selectedCourse, $userID);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -53,7 +59,9 @@ if ($result && $result->num_rows > 0) {
     $inactiveParticipants = 0;
 
     // Modify the SQL query to count the number of active participants based on quiz enrolment
-    $activeParticipantsSql = "SELECT COUNT(DISTINCT `userID`) as activeCount FROM `quiz_enrolment` WHERE `questID` = ? AND `optID` IS NOT NULL";
+    $activeParticipantsSql = "SELECT COUNT(DISTINCT `quiz_enrolment`.`userID`) as activeCount 
+                                FROM `quiz_enrolment` JOIN question ON question.questID=quiz_enrolment.questID JOIN course ON course.courseID=question.courseID 
+                                WHERE question.courseID = ? AND `optID` IS NOT NULL";
     $activeParticipantsStmt = $conn->prepare($activeParticipantsSql);
     $activeParticipantsStmt->bind_param("i", $courseID);
     $activeParticipantsStmt->execute();
@@ -72,9 +80,19 @@ if ($result && $result->num_rows > 0) {
     $studentsFail = 0;
 
     // Modify the SQL query to count the number of students who pass or fail
-    $pointSql = "SELECT COUNT(*) as pointCount FROM `point` WHERE `userID` = ? AND `pointValue` >= 40";
+    $pointSql = "SELECT result.userID, SUM(IF(result.IsAnswer = 1, result.awardPt, 0)) AS score, COUNT(*) as pointCount
+                FROM (
+                    SELECT quiz_enrolment.userID, quiz_enrolment.questID, quiz_enrolment.optID, `option`.`IsAnswer`, question.awardPt
+                    FROM quiz_enrolment
+                    LEFT JOIN question ON question.questID=quiz_enrolment.questID
+                    LEFT JOIN `option` ON `option`.`optID` = quiz_enrolment.optID
+                    LEFT JOIN course  ON course.courseID=question.courseID
+                    WHERE course.courseID=?
+                ) result
+                GROUP BY result.userID
+                HAVING score > (SELECT SUM(question.awardPt) FROM question WHERE question.courseID=?) * 0.4";
     $pointStmt = $conn->prepare($pointSql);
-    $pointStmt->bind_param("i", $courseID);
+    $pointStmt->bind_param("ii", $courseID, $courseID);
     $pointStmt->execute();
     $pointResult = $pointStmt->get_result();
 

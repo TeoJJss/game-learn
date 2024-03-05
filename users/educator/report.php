@@ -8,9 +8,16 @@ if ($role != 'educator') {
 include '../../includes/header.php';
 
 // Fetch course names from the database
+$ticket = $_SESSION['ticket'];
+$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$response = json_decode(curl_exec($ch), true);
+$userID = $response['data']['user_id'];
 $courses = [];
-$sql = "SELECT `courseName` FROM `course`";
+$sql = "SELECT `courseName`, `courseID` FROM `course` WHERE course.userID=?";
 $stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $userID);
 
 if ($stmt) {
     $stmt->execute();
@@ -18,6 +25,7 @@ if ($stmt) {
 
     while ($row = $result->fetch_assoc()) {
         $courses[] = $row['courseName'];
+        $courseIDs[] = $row['courseID'];
     }
 
     $stmt->close();
@@ -71,7 +79,7 @@ if ($stmt) {
         }
 
         .btn {
-            background-color: lightblue;
+            background-color: blue;
             /* Green */
             border: none;
             color: white;
@@ -104,8 +112,8 @@ if ($stmt) {
                 <h2 style="margin: 0;">Select Course Name:</h2>
                 <select name="course_name">
                     <!-- Loop through courses to generate options -->
-                    <?php foreach ($courses as $course) : ?>
-                        <option value="<?php echo $course; ?>"><?php echo $course; ?></option>
+                    <?php foreach ($courses as $key => $course) : ?>
+                        <option value="<?php echo $courseIDs[$key]; ?>"><?php echo $course; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -127,7 +135,7 @@ if ($stmt) {
 
             // Create a new iframe and set its source to 'generated_report.php' with the selected course name
             var iframe = $("<iframe />");
-            iframe.attr("src", "generated_report.php?course=" + encodeURIComponent(selectedCourse));
+            iframe.attr("src", "generated_report.php?courseID=" + encodeURIComponent(selectedCourse));
 
             // Set the width and height of the iframe
             iframe.css({
