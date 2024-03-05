@@ -64,29 +64,15 @@
 
     $gifts = fetchGifts();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST["action"])) {
-            switch ($_POST["action"]) {
-                // ... (Your existing cases)
-                case 'showGiftBag':
-                    if (isset($_POST['userID'])) {
-                        $userID = $_POST['userID'];
-                        showGiftBag($userID);
-                    }
-                    break;
-                // ... (Your existing cases)
-            }
-        }
-    }
-
     function deductPoints($userID, $point) {
         global $conn;
+    
         // SQL query to retrieve the current point value for the given user ID
         $selectSql = "SELECT pointValue FROM point WHERE userID = ?";
-        
+    
         // SQL query to update the point value after deduction
         $updateSql = "UPDATE point SET pointValue = ? WHERE userID = ?";
-        
+    
         try {
             // Retrieve the current point value
             $stmtSelect = $conn->prepare($selectSql);
@@ -95,25 +81,35 @@
             $stmtSelect->bind_result($currentPoints);
             $stmtSelect->fetch();
             $stmtSelect->close();  // Close the prepared statement
-        
+    
             if ($currentPoints === false) {
                 throw new Exception("User not found or has no points.");
             }
-        
+    
+            // Check if points are enough for deduction
+            if ($currentPoints < $point) {
+                throw new Exception("Not enough points to redeem the gift.");
+            }
+    
             // Deduct points
             $newPoints = max(0, $currentPoints - $point);
-        
+    
             // Update the point value
             $stmtUpdate = $conn->prepare($updateSql);
             $stmtUpdate->bind_param("ii", $newPoints, $userID);  // Bind the parameters
             $stmtUpdate->execute();
-        
+    
             // Success message or further processing
-            echo "Deducted $point points. New points: $newPoints";
-        
+            return true;
+    
         } catch (Exception $e) {
             // Handle exceptions (e.g., user not found, database error)
-            echo "Error: " . $e->getMessage();
+            $errorMessage = "Error: " . $e->getMessage();
+    
+            // Display the error message using JavaScript alert
+            echo "<script>alert('" . addslashes($errorMessage) . "');</script>";
+    
+            return false;
         }
     }
     
@@ -121,24 +117,25 @@
         // Retrieve user input
         $userID = isset($_POST["user_id"]) ? $_POST["user_id"] : null;
         $point = isset($_POST["gift_points"]) ? $_POST["gift_points"] : null;
-        $giftID = isseT($_POST["gift_id"]) ? $_POST["gift_id"] : null;
-        $quantity = isseT($_POST["quantity"]) ? $_POST["quantity"] : null;
-
-        
+        $giftID = isset($_POST["gift_id"]) ? $_POST["gift_id"] : null;
+        $quantity = isset($_POST["quantity"]) ? $_POST["quantity"] : null;
     
         // Validate user input
         if ($userID !== null && $point !== null) {
             // Your deduction logic
-            deductPoints($userID, $point);
-            insertUserGift($userID,$giftID, $quantity);
-            header("Location: GiftShop.php?user_id=$user_id");
-        }
-    else {
+            if (deductPoints($userID, $point)) {
+                // Deduction successful, proceed with other operations
+                insertUserGift($userID, $giftID, $quantity);
+                header("Location: GiftShop.php?user_id=$userID");
+            } else {
+                // Deduction failed, display an appropriate message
+                echo "";
+            }
+        } else {
             // Handle invalid input
             echo "Invalid input. Please provide both user ID and points.";
         }
     }
-    
     function insertUserGift($userID, $giftID, $quantity = 1 ) {
         global $conn;
     
@@ -287,7 +284,7 @@
                     <h2 style="background-color:pink;"><?php echo $gift['giftName']; ?></h2>
 
                     <h3 class="display: flex; align-items: center;">
-                        <img style=" background-color:pink; height: 2rem; width: 2rem; padding-top:0; padding-left: 0;" src='../../images/nav_picture/point.png'>
+                        <img style=" height: 2rem; width: 2rem; padding-top:0; padding-left: 0;" src='../../images/nav_picture/point.png'>
                         <?php echo $gift['giftPoints']; ?>
                     </h3>
 
@@ -352,17 +349,9 @@
     buyForm.submit();
     }
 
-    function showGiftBag(userID) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                displayGiftBag(JSON.parse(xhr.responseText));
-            }
-        };
-        xhr.send('action=showGiftBag&userID=' + userID);
+    function showError(errorMessage) {
+        // Display a prompt with the error message
+        window.prompt("Error", errorMessage);
     }
-
 </script>  
 </html>
