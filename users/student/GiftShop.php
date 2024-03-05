@@ -32,8 +32,8 @@
         echo " ";
     }
 
-// Close cURL resource
-curl_close($ch);
+    // Close cURL resource
+    curl_close($ch);
 
     function fetchGifts() {
         global $conn;
