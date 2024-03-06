@@ -50,7 +50,6 @@ $stmt->close();
             margin-top: 20px;
             margin-bottom: 20px;
             background-color: black;
-            /* Green */
             border: none;
             color: white;
             padding: 15px 32px;
@@ -59,41 +58,31 @@ $stmt->close();
             transition-duration: 0.4s;
             cursor: pointer;
             float: right;
-            /* Align to the right */
             border-radius: 20px;
         }
 
 
         .compose-button:hover {
             background-color: #606060;
-            /* Darker grey on hover */
         }
 
         .feedback-container {
             border: 1px solid #ccc;
-            /* Add a border */
             border-radius: 5px;
-            /* Optional: Add rounded corners */
             padding: 10px;
-            /* Optional: Add a background color */
             clear: both;
             background-color: white;
-            /* Light grey background for contrast */
             border-left: 4px solid #333;
-            /* Adds a solid line to the left for style */
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-            /* Adds a subtle shadow for depth */
         }
 
         .feedback-item {
             border-top: 1px solid #ccc;
-            /* Add a border at the top of each item */
             padding: 30px;
         }
 
         .feedback-item:first-child {
             border-top: none;
-            /* Remove the border for the first item */
         }
 
         .feedback-date,
@@ -125,12 +114,10 @@ $stmt->close();
 
         .next-page-button i {
             font-size: 24px;
-            /* Adjust this value to make the icon larger or smaller */
         }
 
         .next-page-button:hover {
             color: #4CAF50;
-            /* Change color on hover */
         }
 
         .fbStatus {
