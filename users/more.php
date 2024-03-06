@@ -87,10 +87,6 @@
                     <img src="../images/educator_pic/stu_feedback.png" alt="nav_button">
                     <a>Student's Feedback</a>
                 </button>
-                <button class="more_button">
-                    <img src="../images/leaderboard.png" alt="nav_button">
-                    <a>Leaderboard</a>
-                </button>
             <?php }else if ($role=='admin'){ ?>
                 <button class="more_button" onclick="location.href='./admin/edu_console.php';">
                     <img src="../images/admin_pic/edu_approval.png" alt="nav_button">
