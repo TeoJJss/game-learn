@@ -7,32 +7,27 @@ if ($role != 'educator') {
 }
 include '../../includes/header.php';
 
-if (!isset($_GET['search'])) {
-    $sql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings, course_feedback.fbImg, course_feedback.eduReply, course_feedback.fbID, course_feedback.courseID
-            FROM course_feedback
-            LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
-            ORDER BY course_feedback.`timestamp` DESC";
-    $stmt = $conn->prepare($sql);
-} else {
-    $key = $_GET['search'];
-    $sql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings, course_feedback.fbImg, course_feedback.eduReply, course_feedback.fbID, course_feedback.courseID
-             FROM course_feedback
-            LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
-            WHERE LOWER(course_feedback.fbText) LIKE LOWER(?)
-            ORDER BY course_feedback.`timestamp` DESC";
-    $stmt = $conn->prepare($sql);
-    $keyword = "%$key%";
-    $stmt->bind_param("s", $keyword);
-}
-
-$stmt->execute();
-$result = $stmt->get_result();
-
+$ticket = $_SESSION['ticket'];
+$ch = curl_init("$base_url/check-ticket?ticket=$ticket");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+$response = json_decode(curl_exec($ch), true);
+$eduID = $response['data']['user_id'];
 
 $fbSql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback.timestamp, course_feedback.fbText, course_feedback.ratings, course_feedback.fbImg, course_feedback.eduReply, course_feedback.fbID, course_feedback.courseID
-                                        FROM course_feedback
-                                        LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
-                                        WHERE course_feedback.courseID=?";
+            FROM course_feedback
+            LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
+            LEFT JOIN course ON course.courseID = course_feedback.courseID 
+            WHERE course.userID=?";
+if (isset($_GET['search'])){
+    $fbSql .= " AND LOWER(course_feedback.fbText) LIKE LOWER(?)";
+    $stmt = $conn->prepare($fbSql);
+    $keyword = "%$_GET[search]%";
+    $stmt->bind_param('is', $eduID, $keyword);
+}else{
+    $stmt = $conn->prepare($fbSql);
+    $stmt->bind_param('i', $eduID);
+}
 
 $stmt->execute();
 $result = $stmt->get_result();
