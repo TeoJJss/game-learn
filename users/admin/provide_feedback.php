@@ -307,10 +307,10 @@ $username = json_decode(curl_exec($ch), true)['msg'];
         <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="sfID" value="<?php echo htmlspecialchars($sfID); ?>">
             <div class="user-input">
-                <textarea id="userQuestion" name="userFB" class="user-input-style" placeholder="Write a feedback"></textarea>
+                <textarea id="userQuestion" name="userFB" class="user-input-style" placeholder="Write a feedback" required></textarea>
             </div>
             <div class="action-buttons">
-                <input type="file" id="userFile" name="userFile" class="file-upload-button">
+                <input type="file" id="userFile" name="userFile" class="file-upload-button" required>
                 <input type="submit" value="Submit" class="button">
             </div>
         </form>
