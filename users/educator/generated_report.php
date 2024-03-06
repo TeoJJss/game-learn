@@ -183,7 +183,7 @@ if ($result && $result->num_rows > 0) {
                 <!-- Course Overview -->
                 <h2>Course Overview</h2>
                 <p>
-                    Course Name: <?php echo $selectedCourse; ?><br />
+                    Course Name: <?php echo $row['courseName']; ?><br />
                     Instructor: <?php echo $userName; ?>
                 </p>
 
