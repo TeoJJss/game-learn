@@ -67,7 +67,7 @@
     <h2>Enter new details for this module</h2>
     <div class="inp-row">
         <label for="moduleTitle">Module Title</label>
-        <input type="text" name="moduleTitle" id="moduleTitle" value="<?php echo $moduleTitle; ?>" minlength="1" maxlength="20">
+        <input type="text" name="moduleTitle" id="moduleTitle" value="<?php echo $moduleTitle; ?>" minlength="1" maxlength="250">
     </div>
     <div class="inp-row">
         <label for="moduleDesc">Module Description</label>

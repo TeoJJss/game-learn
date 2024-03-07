@@ -149,7 +149,7 @@
                         <span>(Select the correct option)</span><br>
                         <?php
                         $questID = $row['questID'];
-                        $sql = "SELECT `option`.optID, `option`.optValue, `option`.IsAnswer, `option`.optImg 
+                        $sql = "SELECT `option`.optID, `option`.optValue, `option`.IsAnswer
                                     FROM `option`
                                     WHERE questID=?";
                         $stmt = $conn->prepare($sql);

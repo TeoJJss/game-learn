@@ -330,7 +330,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             echo "<img src='data:image/png;base64," . $row['questImg'] . "' class='questImg'><br><br>";
                         } ?>
                         <?php
-                        $sql = "SELECT `option`.optID, `option`.optValue, `option`.IsAnswer, `option`.optImg 
+                        $sql = "SELECT `option`.optID, `option`.optValue, `option`.IsAnswer
                                     FROM `option`
                                     WHERE questID=?";
                         $stmt = $conn->prepare($sql);

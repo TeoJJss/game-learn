@@ -126,7 +126,7 @@
                 <input type="text" name="courseID" value="<?php echo $courseID; ?>" hidden>
                 <div class="inp-row">
                     <label for="moduleTitle">Module Title</label><br>
-                    <input type="text" name="title" id="moduleTitle" placeholder="Enter the module title" minlength="1" maxlength="20" required autofocus autocomplete="off">
+                    <input type="text" name="title" id="moduleTitle" placeholder="Enter the module title" minlength="1" maxlength="250" required autofocus autocomplete="off">
                 </div>
                 <div class="inp-row">
                     <label for="moduleDesc">Module Description</label><br>

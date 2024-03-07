@@ -37,27 +37,27 @@
                     <img src="../images/nav_picture/course.png" alt="nav_button">
                     <a>Course</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='../users/student/GiftShop.php'">
                     <img src="../images/nav_picture/gift_shop.png" alt="nav_button">
                     <a>Gift Shop</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='../users/forum.php'">
                     <img src="../images/forum.png" alt="nav_button">
                     <a>Forum</a>
                 </button>
-                <button class="more_button">
-                    <img src="../images/nav_picture/my_learning.png" alt="nav_button">
+                <button class="more_button" onclick="location.href='../users/student/index.php'">
+                    <img src="../images/nav_picture/my_learning.png" alt="nav_button" >
                     <a>My Learning</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='../users/student/Report.php'">
                     <img src="../images/nav_picture/report.png" alt="nav_button">
                     <a>Report</a>
                 </button>
-                <button class="more_button">
+                <button class="more_button" onclick="location.href='../users/system_feedback.php'">
                     <img src="../images/nav_picture/feedback.png" alt="nav_button" onclick="location.href = '<?php echo $base; ?>users/system_feedback.php'">
                     <a>System Feedback</a>
                 </button>
-                <button class="more_button" onclick="location.href='./index.php';">
+                <button class="more_button" onclick="location.href='./index.php';" onclick="location.href='../users/index.php'">
                     <img src="../images/setting.png" alt="nav_button">
                     <a>Settings</a>
                 </button>

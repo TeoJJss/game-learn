@@ -211,7 +211,7 @@
                     $stmt->fetch();
                     $stmt->close();
 
-                    $sql = "SELECT `option`.optID, `option`.optValue, `option`.optImg 
+                    $sql = "SELECT `option`.optID, `option`.optValue
                                 FROM `option`
                                 WHERE questID=?";
                     $stmt = $conn->prepare($sql);

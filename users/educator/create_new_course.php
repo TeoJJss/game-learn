@@ -264,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group">
                     <label for="courseThumb">Upload Course Image (PNG, JPEG):</label>
-                    <input type="file" id="courseThumb" name="courseThumb" accept=".png, .jpeg" required>
+                    <input type="file" id="courseThumb" name="courseThumb" accept=".png, .jpg, .jpeg" required>
                 </div>
 
                 <div class="form-group">
@@ -317,8 +317,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="form-group">
-                    <label for="questImg">Upload Question Image (PNG, JPEG):</label>
-                    <input type="file" id="questImg" name="questImg" accept=".png, .jpeg" required>
+                    <label for="questImg">Upload Question Image (PNG, JPG, JPEG):</label>
+                    <input type="file" id="questImg" name="questImg" accept=".png, .jpg, .jpeg" required>
                 </div>
                 <!-- Option Details -->
                 <p class="required-label">You must create 2-4 options for a question, leave option 3 and 4 empty if not required</p>

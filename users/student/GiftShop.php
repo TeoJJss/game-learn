@@ -126,7 +126,7 @@
             if (deductPoints($userID, $point)) {
                 // Deduction successful, proceed with other operations
                 insertUserGift($userID, $giftID, $quantity);
-                header("Location: GiftShop.php?user_id=$userID");
+                echo "<script>location.href='./GiftShop.php'</script>";
             } else {
                 // Deduction failed, display an appropriate message
                 echo "";
@@ -165,7 +165,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template</title>
+    <title>Gift Shop</title>
     <link rel="stylesheet" href="../../styles/style.css">
 
     <style>
