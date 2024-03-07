@@ -21,10 +21,10 @@ if (isset($_GET['sfID'])) {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $feedbackDate = date('Y-m-d', strtotime($row['timestamp'])); 
-        $feedbackTime = date('H:i:s', strtotime($row['timestamp'])); 
+        $feedbackDate = date('Y-m-d', strtotime($row['timestamp']));
+        $feedbackTime = date('H:i:s', strtotime($row['timestamp']));
         $sfContent = $row['sfContent'];
-        $sfMedia = $row['sfMedia']; 
+        $sfMedia = $row['sfMedia'];
 
 ?>
         <!DOCTYPE html>
@@ -57,6 +57,8 @@ if (isset($_GET['sfID'])) {
                     padding: 20px;
                     border-radius: 20px;
                     text-align: center;
+                    border-left: 4px solid #333;
+                    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
                 }
 
 
@@ -91,7 +93,6 @@ if (isset($_GET['sfID'])) {
 
                 .return-button:hover {
                     background-color: #0056b3;
-                    /* Darken the background on hover */
                 }
 
                 .question.image {
@@ -103,10 +104,34 @@ if (isset($_GET['sfID'])) {
                 .fbReply {
                     background-color: rgba(128, 128, 128, 0.5);
                     color: darkblue;
-                    max-width: 60%;
-                    margin-left: 20%;
+                    width: 100%;
                     font-size: 1.4vw;
-                    padding: 1vw;
+                    border-radius: 10px;
+                    margin-top: 20px;
+                    margin-bottom: 50px;
+                    border-left: 4px solid #333;
+                    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+                }
+
+                .fbReply b {
+                    color: #fff;
+                    font-size: 1.2em;
+                    margin-left: 40px;
+                }
+
+                .fbReply .replyContent {
+                    display: block;
+                    margin-top: 10px;
+                    margin-left: 40px;
+                    font-weight: bold;
+                }
+
+                .fbReply img.replyMedia {
+                    max-width: 30%;
+                    margin-top: 10px;
+                    border-radius: 5px;
+                    margin-bottom: 20px;
+                    margin-left: 20px;
                 }
             </style>
 
@@ -129,7 +154,9 @@ if (isset($_GET['sfID'])) {
                         <p><?php echo $sfContent; ?></p>
 
                         <!-- Return button -->
-                        <a href="<?php if ($role=='admin'){ echo './admin/';} ?>system_feedback.php" class="return-button"><i class="fa fa-arrow-left"></i> Return</a>
+                        <a href="<?php if ($role == 'admin') {
+                                        echo './admin/';
+                                    } ?>system_feedback.php" class="return-button"><i class="fa fa-arrow-left"></i> Return</a>
                     </div>
                     <?php if ($row['replyContent']) { ?>
                         <div class="fbReply">

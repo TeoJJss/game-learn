@@ -205,6 +205,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .create-post-btn {
             margin-top: 5vh;
         }
+
+        .comment-wrapper {
+            margin-left: 50px;
+        }
     </style>
 
 </head>
@@ -282,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 exit();
                             }
                         ?>
-                            <div>
+                            <div class="comment-wrapper">
                                 <div class="user-info">
                                     <img src='data:image/png;base64,<?php echo $row_comment['profilePic'] ?>' class='profilePic'>
                                     <span class="username"><?php echo $comment_userName; ?></span><span class='timestamp'><?php $row_comment['timestamp']; ?></span>
