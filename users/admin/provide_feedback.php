@@ -134,8 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Check the result of provideFeedbackReply
             if ($replyResult['success']) {
                 echo '<script>alert("System feedback is submitted!");</script>';
-                echo '<meta http-equiv="refresh" content="0;url=provide_feedback.php?sfID=' . $sfID . '&status=success">';
-                exit();
             } else {
                 echo '<script>alert("An error occurred while submitting the system feedback: ' . $replyResult['message'] . '");</script>';
             }
@@ -143,6 +141,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         echo '<script>alert("No sfID parameter found in the form submission.");</script>';
     }
+    echo '<script>location.href="../admin/system_feedback.php"</script>';
+    exit();
 }
 
 $feedbackDetails = getFeedbackData($sfID);
@@ -310,7 +310,7 @@ $username = json_decode(curl_exec($ch), true)['msg'];
                 <textarea id="userQuestion" name="userFB" class="user-input-style" placeholder="Write a feedback" required></textarea>
             </div>
             <div class="action-buttons">
-                <input type="file" id="userFile" name="userFile" class="file-upload-button" required>
+                <input type="file" id="userFile" name="userFile" class="file-upload-button">
                 <input type="submit" value="Submit" class="button">
             </div>
         </form>

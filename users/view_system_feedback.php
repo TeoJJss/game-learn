@@ -179,9 +179,13 @@ if (isset($_GET['sfID'])) {
         </html>
 <?php
     } else {
-        echo "Feedback not found.";
+        echo '<script>alert("Feedback not found.");</script>';
+        echo '<script>location.href="./admin/system_feedback.php"</script>';
+        exit();
     }
 } else {
-    echo "Invalid request. Missing sfID.";
+    echo '<script>alert("Invalid request. Missing sfID.");</script>';
+    echo '<script>location.href="./admin/system_feedback.php"</script>';
+    exit();
 }
 ?>
