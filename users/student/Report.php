@@ -160,10 +160,10 @@
         $enrolledCourses = array();
     
         // Prepare and execute the SQL query to get distinct courseIDs for the specified user
-        $query = "SELECT DISTINCT module.courseID 
-                  FROM module_enrolment
-                  INNER JOIN module ON module_enrolment.moduleID = module.moduleID
-                  WHERE module_enrolment.userID = ?";
+        $query = "SELECT DISTINCT course.courseID 
+                  FROM course_enrolment
+                  INNER JOIN course ON course_enrolment.courseID = course.courseID
+                  WHERE course_enrolment.userID = ?";
     
         $stmt = $conn->prepare($query);
     
@@ -193,6 +193,7 @@
     
     $enrolledCourseID = getUserEnrolledCourses($userID);
     $allCourseDetails = getAllCourseDetails($enrolledCourseID);
+    
 
 //----------------------- Progress ----------------------------------------------------------------------------------------------------------
 
@@ -449,62 +450,69 @@
         <th>Educator</th>
         <th>Progress</th>
         <th>Quiz</th>   
-        <!-- Add more table headers as needed -->
     </tr>
     <?php foreach ($allCourseDetails as $courseDetails): ?>
-        <tr>
-            <td><?php echo $courseDetails["courseName"]; ?></td>
-            <td><?php echo $courseDetails["educatorName"]; ?></td>
-            <td>
-                <?php
-                foreach ($total as $courseID => $progressCount) {
+    <tr>
+        <td><?php echo $courseDetails["courseName"]; ?></td>
+        <td><?php echo $courseDetails["educatorName"]; ?></td>
+        <td>
+             <?php
+                    $courseID = $courseDetails["courseID"];
+
                     // Check if the corresponding current count exists for the current course ID
                     if (isset($current[$courseID])) {
                         $enrolledModuleCount = $current[$courseID];
 
-                        if ($progressCount > 0) {
-                            $progress = $enrolledModuleCount / $progressCount * 100;
-                        } else {
-                            $progress = 0;
-                        }
+                        // Check if the corresponding total count exists for the current course ID
+                        if (isset($total[$courseID])) {
+                            $progressCount = $total[$courseID];
 
-                        // Output or use the calculated progress for the current course
-                        if ($courseDetails['courseID'] == $courseID) {
-                            echo number_format($progress, 2) . "%<br>";
-                        }
-                    }
-                }
-                ?>
-            </td>
-            <td>
-            <?php
-                foreach ($quizTotal as $courseID => $quizCount) {
-                    // Check if the corresponding current count exists for the current course ID
-                    if (isset($quizCurrent[$courseID])) {
-                        $enrolledQuizCount = $quizCurrent[$courseID];
-
-                        if ($quizCount > 0) {
-                            $quizProgress = $enrolledQuizCount / $quizCount * 100;
-                        } else {
-                            $quizProgress = 0;
-                        }
-
-                        // Output or use the calculated progress for the current course
-                        if ($courseDetails['courseID'] == $courseID) {
-                            if ($quizProgress == 100) {
-                                echo "Done";
-                            } 
-                            if ($quizProgress == 0){
-                                echo "Undone";
+                            // Calculate progress
+                            if ($progressCount > 0) {
+                                $progress = ($enrolledModuleCount / $progressCount) * 100;
+                                $progress = min(100, max(0, $progress)); // Ensure progress is in the range [0, 100]
+                            } else {
+                                $progress = 0;
                             }
+
+                            echo number_format($progress, 2) . "%<br>";
+                        } else {
+                            // Handle the case when total progress count is not available
+                            echo "Total progress count not available";
                         }
+                    } else {
+                        // Handle the case when current count is not available (e.g., course with 0% progress)
+                        echo "0%";
                     }
+            ?>
+        </td>
+        <td>
+            <?php
+                // Check if the corresponding quiz count exists for the current course ID
+                if (isset($quizTotal[$courseID]) && isset($quizCurrent[$courseID])) {
+                    $quizCount = $quizTotal[$courseID];
+                    $enrolledQuizCount = $quizCurrent[$courseID];
+
+                    if ($quizCount > 0) {
+                        $quizProgress = $enrolledQuizCount / $quizCount * 100;
+                    } else {
+                        $quizProgress = 0;
+                    }
+
+                    // Output or use the calculated progress for the current course
+                    if ($quizProgress == 100) {
+                        echo "Done";
+                    } elseif ($quizProgress == 0) {
+                        echo "Undone";
+                    }
+                } else {
+                    // Handle cases where quiz data is not available
+                    echo "No quiz data available";
                 }
-                ?>
-            </td>
-            <!-- Add more cells for additional details -->
-        </tr>
-    <?php endforeach; ?>
+            ?>
+        </td>
+    </tr>
+<?php endforeach; ?>
 </table>
 
     <?php include '../../includes/footer.php'; ?>
