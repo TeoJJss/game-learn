@@ -148,8 +148,6 @@
             }
         }
     
-        // Close the statement
-        $stmt->close();
     
         // Return the array of all course details
         return $allCourseDetails;
