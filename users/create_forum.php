@@ -60,7 +60,7 @@
             <form method="post" enctype="multipart/form-data">
                 <div class="inp-row">
                     <label for="content">Post Content</label><br>
-                    <textarea name="content" id="content" placeholder="Enter the content of new post" cols="30" rows="3" maxlength="200" required autocomplete="off" autofocus></textarea>
+                    <textarea name="content" id="content" placeholder="Enter the content of new post" cols="30" rows="3" maxlength="1500" required autocomplete="off" autofocus></textarea>
                 </div>
                 <div class="inp-row">
                     <label for="postMedia">Image of Forum Post</label><br>

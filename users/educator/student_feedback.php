@@ -19,12 +19,12 @@ $fbSql = "SELECT course_feedback.userID, `profile`.`profilePic`, course_feedback
             LEFT JOIN `profile` ON course_feedback.userID=`profile`.`userID`
             LEFT JOIN course ON course.courseID = course_feedback.courseID 
             WHERE course.userID=?";
-if (isset($_GET['search'])){
+if (isset($_GET['search'])) {
     $fbSql .= " AND LOWER(course_feedback.fbText) LIKE LOWER(?)";
     $stmt = $conn->prepare($fbSql);
     $keyword = "%$_GET[search]%";
     $stmt->bind_param('is', $eduID, $keyword);
-}else{
+} else {
     $stmt = $conn->prepare($fbSql);
     $stmt->bind_param('i', $eduID);
 }
@@ -160,6 +160,11 @@ $result = $stmt->get_result();
             margin-left: 30px;
             font-size: 12px;
             /* Adjust this value to add space between $fbName and timestamp */
+        }
+
+        .fbImg {
+            max-width: 10vw;
+            margin-bottom: 3vh;
         }
     </style>
 
