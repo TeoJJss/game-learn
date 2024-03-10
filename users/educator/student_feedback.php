@@ -152,6 +152,15 @@ $result = $stmt->get_result();
             max-width: 10vw;
             margin-bottom: 3vh;
         }
+
+        .timestamp {
+            font-size: 14px;
+        }
+
+        .time {
+            margin-left: 13px;
+            /* Adjust the margin as needed */
+        }
     </style>
 
 </head>
@@ -185,7 +194,11 @@ $result = $stmt->get_result();
                 echo "<span class='username'>$fbName</span>";
                 echo "<div class='user-details'>";
                 $timestamp = strtotime($row['timestamp']);
-                echo "<span class='timestamp'>" . date('d - m - Y H:i:s', $timestamp) . "</span>";
+                echo "<span class='timestamp'>";
+                echo "<span class='date'>" . date('d - m - Y', $timestamp) . "</span>";
+                echo "<span class='time'>" . date('H:i:s', $timestamp) . "</span>";
+                echo "</span>";
+
                 echo "</div>";
                 echo "</div>";
 
