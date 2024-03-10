@@ -28,6 +28,7 @@ $stmt->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cinzel+Decorative&display=swap">
     <style>
         .page {
             width: 85%;
@@ -70,8 +71,8 @@ $stmt->close();
             text-decoration: none;
         }
 
-
         .course-title {
+            font-family: 'Cinzel Decorative', cursive;
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 10px;
