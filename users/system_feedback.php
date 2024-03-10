@@ -46,6 +46,23 @@ $stmt->close();
             margin-bottom: 20px;
         }
 
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25%,
+            75% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+        }
+
         .compose-button {
             margin-top: 20px;
             margin-bottom: 20px;
@@ -63,8 +80,8 @@ $stmt->close();
         }
 
         .compose-button:hover {
-            background-color: #606060;
-            transform: scale(1.1);
+            background-color: #ff6600;
+            transform: scale(1.1) rotate(0.1deg);
         }
 
         .compose-button i {
@@ -73,6 +90,7 @@ $stmt->close();
 
         .compose-button:hover i {
             transform: scale(1.2);
+            animation: shake 0.5s infinite;
         }
 
         .feedback-container {
