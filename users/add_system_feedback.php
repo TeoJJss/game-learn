@@ -87,12 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-right: 10px;
         }
 
-
-
         .user-input-style {
             width: 100%;
             height: 200px;
-            /* Adjust as needed */
             padding: 10px;
             margin-top: 10px;
         }
@@ -106,34 +103,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .file-upload-button {
             width: 45%;
-            /* Adjust as needed */
         }
 
         .submit-button {
             width: 10%;
-            /* Adjust as needed */
             background-color: #FFA500;
-            /* Orange background */
             border: none;
-            /* Remove border */
             color: white;
-            /* White text */
             padding: 15px 32px;
-            /* Some padding */
             text-decoration: none;
-            /* Remove underline */
             font-size: 16px;
             cursor: pointer;
-            /* Pointer/hand icon */
             transition-duration: 0.4s;
-            /* Transition effect */
             border-radius: 12px;
-            /* Rounded corners */
         }
 
         .submit-button:hover {
             background-color: #FF4500;
-            /* Darker orange */
+            transform: scale(1.1);
         }
     </style>
 
