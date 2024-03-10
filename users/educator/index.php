@@ -18,7 +18,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $response['data']['user_id']);
 $stmt->execute();
 $result = $stmt->get_result();
-$stmt -> close();
+$stmt->close();
 ?>
 
 <html lang="en">
@@ -58,6 +58,12 @@ $stmt -> close();
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
             margin-right: 25px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.3);
         }
 
         .course-card a {
@@ -75,12 +81,14 @@ $stmt -> close();
 
         .course-thumb {
             width: 100%;
-            /* Adjust this value */
             height: auto;
             border-radius: 10px;
-            /* Optional, for rounded corners */
             max-height: 230px;
-            /* Add this line */
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .course-card:hover .course-thumb {
+            transform: translateY(-10px);
         }
 
         .course-card .course-status {
