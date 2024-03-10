@@ -59,11 +59,20 @@ $stmt->close();
             cursor: pointer;
             float: right;
             border-radius: 20px;
+            transition-duration: 0.3s;
         }
-
 
         .compose-button:hover {
             background-color: #606060;
+            transform: scale(1.1);
+        }
+
+        .compose-button i {
+            transition: transform 0.3s ease;
+        }
+
+        .compose-button:hover i {
+            transform: scale(1.2);
         }
 
         .feedback-container {
@@ -114,10 +123,11 @@ $stmt->close();
 
         .next-page-button i {
             font-size: 24px;
+            transition: transform 0.3s ease;
         }
 
-        .next-page-button:hover {
-            color: #4CAF50;
+        .next-page-button:hover i {
+            transform: scale(1.2);
         }
 
         .fbStatus {
