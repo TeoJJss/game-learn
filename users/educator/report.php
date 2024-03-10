@@ -63,11 +63,8 @@ if ($stmt) {
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: white;
-            /* Light grey background for contrast */
             border-left: 4px solid #333;
-            /* Adds a solid line to the left for style */
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-            /* Adds a subtle shadow for depth */
         }
 
         select {
@@ -75,12 +72,10 @@ if ($stmt) {
             border-radius: 5px;
             border: 1px solid #ccc;
             font-size: 18px;
-            /* Adjust this value to your preference */
         }
 
         .btn {
             background-color: blue;
-            /* Green */
             border: none;
             color: white;
             padding: 15px 32px;
@@ -90,13 +85,15 @@ if ($stmt) {
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
             border-radius: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .btn:hover {
             background-color: darkblue;
+            transform: scale(1.1);
         }
+        
     </style>
 </head>
 
