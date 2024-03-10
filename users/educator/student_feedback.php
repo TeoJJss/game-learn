@@ -70,16 +70,12 @@ $result = $stmt->get_result();
             margin-bottom: 40px;
             position: relative;
             background-color: white;
-            /* Light grey background for contrast */
             border-left: 4px solid #333;
-            /* Adds a solid line to the left for style */
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-            /* Adds a subtle shadow for depth */
         }
 
         .post-content {
             margin-top: -20px;
-            /* Adjust this value to bring fbText closer to fbImg */
         }
 
         .user-info {
@@ -100,7 +96,6 @@ $result = $stmt->get_result();
             width: 50%;
             height: auto;
             max-height: 230px;
-            /* Adjust this value to change the maximum height of the image */
         }
 
         .post-content {
@@ -110,9 +105,7 @@ $result = $stmt->get_result();
         .actions {
             display: flex;
             justify-content: flex-start;
-            /* Aligns the items to the start of the container */
             gap: 10px;
-            /* Adjust this value to change the space between the items */
         }
 
         .actions a {
@@ -121,45 +114,38 @@ $result = $stmt->get_result();
             margin-right: 30px;
         }
 
+        .actions a:hover {
+            color: #00BFFF;
+            transform: scale(1.2);
+            transition: color 0.3s, transform 0.3s;
+        }
+
         .actions i {
             margin-right: 5px;
         }
 
         .view-comment {
             position: absolute;
-            /* Positions the link relative to the .post div */
             right: 10px;
-            /* Aligns the link to the right of the .post div */
             bottom: 20px;
-            /* Aligns the link to the bottom of the .post div */
         }
 
-        /* The modal (background) */
         .modal {
             display: none;
-            /* Hidden by default */
             position: fixed;
-            /* Stay in place */
             z-index: 1;
-            /* Sit on top */
             left: 0;
             top: 0;
             width: 100%;
-            /* Full width */
             height: 100%;
-            /* Full height */
             overflow: auto;
-            /* Enable scroll if needed */
             background-color: rgb(0, 0, 0);
-            /* Fallback color */
             background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
         }
 
         .user-details {
             margin-left: 30px;
             font-size: 12px;
-            /* Adjust this value to add space between $fbName and timestamp */
         }
 
         .fbImg {
@@ -189,7 +175,6 @@ $result = $stmt->get_result();
                     $fbName = $response['msg'];
                 }
 
-                // Output the post content using $row and $fbName
                 echo "<div class='post'>";
                 echo "<div class='user-info'>";
                 if ($row['profilePic'] != null) {
@@ -214,9 +199,7 @@ $result = $stmt->get_result();
                 echo "<div class='actions'>";
                 echo '<a href="../../public/course.php?courseID=' . $row['courseID'] . '"><i class="fas fa-comment"></i> View course</a>';
                 echo "</div>";
-                echo "</div>"; // Closing div for the post
-
-
+                echo "</div>";
             }
             ?>
 
