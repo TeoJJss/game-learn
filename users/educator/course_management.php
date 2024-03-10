@@ -31,7 +31,7 @@ $stmt->close();
     <title>Educator Course Management</title>
     <link rel="stylesheet" href="../../styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cinzel+Decorative&display=swap">
 
 
     <style>
@@ -63,9 +63,7 @@ $stmt->close();
             border: 2px solid black;
             padding: 20px;
             width: 80%;
-            /* Add this line */
             margin: auto;
-            /* Add this line to center the h1 element */
         }
 
         .course {
@@ -73,7 +71,6 @@ $stmt->close();
             padding: 10px;
             margin-bottom: 1px;
             position: relative;
-            /* Add this line */
         }
 
         .course p {
@@ -109,7 +106,6 @@ $stmt->close();
             text-decoration: none;
         }
 
-
         .course-categories button {
             display: block;
             margin: auto;
@@ -144,8 +140,8 @@ $stmt->close();
         }
 
         .special-font {
-            font-family: 'Pacifico', cursive;
-            font-size: 25px;
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 22px;
         }
     </style>
 
