@@ -123,11 +123,12 @@ $stmt->close();
 
         .next-page-button i {
             font-size: 24px;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
 
         .next-page-button:hover i {
             transform: scale(1.2);
+            color: red;
         }
 
         .fbStatus {
