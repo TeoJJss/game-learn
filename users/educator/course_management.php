@@ -142,6 +142,8 @@ $stmt->close();
         .special-font {
             font-family: 'Cinzel Decorative', cursive;
             font-size: 22px;
+            color: #00008B;
+            font-weight: bold;
         }
     </style>
 
