@@ -290,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="user-info">
                                     <img src='data:image/png;base64,<?php echo $row_comment['profilePic'] ?>' class='profilePic'>
                                     <span class="username"><?php echo $comment_userName; ?></span><span class='timestamp'><?php $row_comment['timestamp']; ?></span>
-                                    <span class="timestamp">
+                                    <span class="timestamp" style="margin-left: 1px;">
                                         <?php echo $row_comment['timestamp']; ?>
                                     </span>
                                 </div>
