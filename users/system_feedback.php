@@ -145,7 +145,7 @@ $stmt->close();
         }
 
         .next-page-button:hover i {
-            transform: scale(1.2);
+            transform: translateX(20px) scale(1.5);
             color: red;
         }
 
