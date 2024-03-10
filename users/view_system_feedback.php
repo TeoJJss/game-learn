@@ -79,7 +79,6 @@ if (isset($_GET['sfID'])) {
                     clear: both;
                 }
 
-
                 .return-button {
                     float: right;
                     padding: 10px 20px;
@@ -88,11 +87,12 @@ if (isset($_GET['sfID'])) {
                     border: none;
                     border-radius: 5px;
                     text-decoration: none;
-                    transition: background-color 0.3s ease;
+                    transition: background-color 0.3s ease, transform 0.3s ease;
                 }
 
                 .return-button:hover {
                     background-color: #0056b3;
+                    transform: scale(1.1);
                 }
 
                 .question.image {
