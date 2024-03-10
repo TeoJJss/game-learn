@@ -31,6 +31,8 @@ $stmt->close();
     <title>Educator Course Management</title>
     <link rel="stylesheet" href="../../styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico&display=swap">
+
 
     <style>
         .page {
@@ -124,12 +126,26 @@ $stmt->close();
 
         .course-categories button:hover {
             background-color: #FFA07A;
+            transform: scale(1.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: shake 0.3s ease;
         }
 
         .course a::before {
             content: "\f06e";
             font-family: "Font Awesome 5 Free";
             padding-right: 10px;
+        }
+
+        .course a:hover {
+            color: #1E90FF;
+            font-size: 22px;
+            transition: color 0.3s, font-size 0.3s;
+        }
+
+        .special-font {
+            font-family: 'Pacifico', cursive;
+            font-size: 25px;
         }
     </style>
 
@@ -148,7 +164,7 @@ $stmt->close();
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo '<div class="course">';
-                        echo '<p>' . $row['courseName'] . '</p>';
+                        echo '<p class="special-font">' . $row['courseName'] . '</p>';
 
                         $courseStatus = $row['status'];
                         echo '<p class="course-status ' . $courseStatus . '">Status: ' . $courseStatus . '</p>';
