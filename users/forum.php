@@ -222,6 +222,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             color: #1E90FF;
             transform: scale(1.2);
         }
+
+        .time {
+            margin-left: 13px;
+        }
     </style>
 
 </head>
@@ -256,7 +260,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 ?></b>
                         </span>
                         <span class="timestamp">
-                            <?php echo $row['timestamp']; ?>
+                            <span class="date">
+                                <?php
+                                $timestamp = new DateTime($row['timestamp']);
+                                echo $timestamp->format('d-m-Y');
+                                ?>
+                            </span>
+                            <span class="time">
+                                <?php
+                                echo $timestamp->format('H:i:s');
+                                ?>
+                            </span>
                         </span>
                     </div>
                     <p><?php echo $row['content'] ?></p>
@@ -303,8 +317,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="user-info">
                                     <img src='data:image/png;base64,<?php echo $row_comment['profilePic'] ?>' class='profilePic'>
                                     <span class="username"><?php echo $comment_userName; ?></span><span class='timestamp'><?php $row_comment['timestamp']; ?></span>
-                                    <span class="timestamp" style="margin-left: 1px;">
-                                        <?php echo $row_comment['timestamp']; ?>
+                                    <span class="timestamp">
+                                        <?php
+                                        $commentTimestamp = new DateTime($row_comment['timestamp']);
+                                        ?>
+                                        <span class="date">
+                                            <?php echo $commentTimestamp->format('d-m-Y'); ?>
+                                        </span>
+                                        <span class="time">
+                                            <?php echo $commentTimestamp->format('H:i:s'); ?>
+                                        </span>
                                     </span>
                                 </div>
                                 <span><?php echo $row_comment['commentText'] ?></span>
