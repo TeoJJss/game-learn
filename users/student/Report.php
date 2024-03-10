@@ -50,14 +50,16 @@
             $stmt->bind_result($courseID);
     
             if ($stmt->fetch()) {
+                $stmt->close();  // Close the prepared statement
                 // Return the courseID if a match is found
                 return $courseID;
             } else {
+                $stmt->close();  // Close the prepared statement
                 // Return null or any default value if no match is found
                 return null;
             }
     
-            $stmt->close();  // Close the prepared statement
+            
         } catch (Exception $e) {
             // Handle exceptions (e.g., database error)
             echo "Error: " . $e->getMessage();
@@ -391,7 +393,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student report</title>
+    <title>Student Report</title>
     <link rel="stylesheet" href="../../styles/style.css">
     <style>
         .category {

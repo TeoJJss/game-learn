@@ -65,9 +65,8 @@
             }
     
             // Return the associative array
-            return $giftBagDetails;
-    
             $stmt->close();  // Close the prepared statement
+            return $giftBagDetails;
         } catch (Exception $e) {
             // Handle exceptions (e.g., database error)
             echo "Error: " . $e->getMessage();
