@@ -209,6 +209,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .comment-wrapper {
             margin-left: 50px;
         }
+
+        .comment-a {
+            color: black;
+            text-decoration: none;
+            margin-right: 30px;
+            display: inline-block;
+            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .comment-a:hover {
+            color: #1E90FF;
+            transform: scale(1.2);
+        }
     </style>
 
 </head>
