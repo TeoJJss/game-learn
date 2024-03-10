@@ -87,14 +87,28 @@
     }
     
     $courseID = getCourseIDByUserID($userID);
-    $educatorID = getUserIDByCourseID($courseID);
 
-    $ch = curl_init("$base_url/user-detail?user_id=$educatorID");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $response = curl_exec($ch);
-    $responseData = json_decode($response, true);
-    $educatorName = $responseData['msg'];
+    if ($courseID !== null) {
+        $educatorID = getUserIDByCourseID($courseID);
+    
+        $ch = curl_init("$base_url/user-detail?user_id=$educatorID");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        $response = curl_exec($ch);
+        $responseData = json_decode($response, true);
+    
+        if (isset($responseData['msg'])) {
+            $educatorName = $responseData['msg'];
+        } else {
+            // Handle the case when 'msg' is not present in the response
+            echo "Educator name not found in the response.";
+        }
+    
+        // Continue with the rest of your code...
+    } else {
+        // Handle the case when 'courseID' is null
+        echo "";
+    }
 
     function getAllCourseDetails($courseIDs) {
         global $conn; // Assuming $conn is a valid database connection
