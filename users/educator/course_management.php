@@ -79,12 +79,18 @@ $stmt->close();
 
         .course .course-status {
             color: #555;
-            margin-bottom: 10px;
-            position: absolute;
-            bottom: 50px;
-            left: 920px;
+            margin-bottom: 50px;
+            position: relative;
             font-size: 17px;
             font-weight: bold;
+        }
+
+        .course .course-status.active,
+        .course .course-status.pending,
+        .course .course-status.banned {
+            position: absolute;
+            bottom: 10px;
+            right: 2vw;
         }
 
         .course .course-status.active {
