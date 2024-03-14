@@ -174,6 +174,9 @@ $result = $stmt->get_result();
         <div class="page-content">
 
             <?php
+            if ($result->num_rows == 0){ // if no search result
+                echo "<p>There are no matched course feedback from students.</p>";
+            }
             while ($row = $result->fetch_assoc()) {
                 $ch = curl_init("$base_url/user-detail?user_id=$row[userID]");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -189,7 +192,7 @@ $result = $stmt->get_result();
                 if ($row['profilePic'] != null) {
                     echo "<img src='data:image/png;base64," . $row['profilePic'] . "' alt='profilePic' class='profilePic'>";
                 } else {
-                    echo "<img src='../images/user.png' alt='profilePic' class='profilePic'>";
+                    echo "<img src='../../images/user.png' alt='profilePic' class='profilePic'>";
                 }
                 echo "<span class='username'>$fbName</span>";
                 echo "<div class='user-details'>";

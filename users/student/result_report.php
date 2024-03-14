@@ -89,7 +89,7 @@ $row = $result->fetch_assoc();
 
         .questImg {
             margin-bottom: 2vh;
-            width: 25vw;
+            max-width: 12vw;
         }
 
         .opt {

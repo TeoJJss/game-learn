@@ -122,7 +122,6 @@ $role = check_ticket();
 
         searchInput.addEventListener("keypress", function(event) {
             if (event.key == "Enter") {
-                console.log("entered");
                 searchInputVal = searchInput.value;
                 location.href = '<?php echo $base; ?>public/search_result.php?search=' + searchInputVal;
                 event.preventDefault();

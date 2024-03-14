@@ -123,19 +123,27 @@
                     <span class="eduName"><?php echo $eduName; ?></span>
                 </div>
             <?php } ?>
+            <p id="no-course" hidden>No course is found</p>
         </div>
     </div>
     <script>
         function filterCourse(){
+            var count = 0;
             var inpVal = document.getElementById('course-search-inp').value.toUpperCase();
             var containers = document.getElementsByClassName('course-container');
             for (let i = 0; i< containers.length; i++){
                 var courseName = containers[i].getElementsByClassName('courseName')[0].innerHTML;
                 if (courseName.toUpperCase().indexOf(inpVal) > -1){
                     containers[i].hidden = false;
+                    count+=1;
                 }else{
                     containers[i].hidden = true;
                 }
+            }
+            if (count){
+                document.getElementById('no-course').hidden = true;
+            }else{
+                document.getElementById('no-course').hidden = false;
             }
         }
     </script>

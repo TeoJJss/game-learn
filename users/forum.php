@@ -238,7 +238,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button class="button create-post-btn" onclick="location.href='../users/create_forum.php'">Create Post</button>
         </div>
         <div class="page-content">
-            <?php while ($row = $result->fetch_assoc()) { ?>
+            <?php 
+            if ($result->num_rows == 0){ // if no search result
+                echo "<p>No matched forum post.</p>";
+            }
+            while ($row = $result->fetch_assoc()) { ?>
                 <div class="post">
                     <div class="user-info">
                         <img src='data:image/png;base64,<?php echo $row['profilePic'] ?>' class='profilePic'>
@@ -365,7 +369,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         searchInput.addEventListener("keypress", function(event) {
             if (event.key == "Enter") {
-                console.log("entered");
                 searchInputVal = searchInput.value;
                 location.href = './forum.php?search=' + searchInputVal;
                 event.preventDefault();

@@ -66,7 +66,7 @@
 
     include_once '../../includes/header.php';
 
-    $sql = "SELECT question.questID, question.questText, question.awardPt, course.courseName
+    $sql = "SELECT question.questID, question.questText, question.awardPt, course.courseName, question.questImg
                 FROM question LEFT JOIN course ON course.courseID = question.courseID
                 WHERE question.courseID=?";
     $stmt = $conn->prepare($sql);
@@ -92,6 +92,10 @@
     <link rel="stylesheet" href="../../styles/style.css">
     <link rel="stylesheet" href="../../styles/course_style.css">
     <style>
+        .questImg{
+            max-width: 10vw;
+        }
+
         .opt, .opt-label {
             pointer-events: none;
         }
@@ -200,6 +204,9 @@
                     <span class="questCount">Q<?php echo $count; ?></span><br><br>
                     <span class="questContent"><?php echo $row['questText']; ?><span class="point"> [<?php echo $row['awardPt']; ?>m]</span></span><br><br>
                     <?php
+                    if ($row['questImg'] != null) {
+                        echo "<img src='data:image/png;base64," . $row['questImg'] . "' class='questImg'><br><br>";
+                    } 
                     $questID = $row['questID'];
                     $check_sql = "SELECT `option`.optID, `option`.IsAnswer
                                         FROM quiz_enrolment JOIN `option` ON `option`.`optID`=quiz_enrolment.optID 

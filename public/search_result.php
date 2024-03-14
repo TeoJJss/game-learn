@@ -190,6 +190,9 @@ $result = $stmt->get_result();
             <br><br>
             <?php
             $result->data_seek(0);
+            if ($result->num_rows == 0){ // if no search result
+                echo "<p>There are no matched courses.</p>";
+            }
             while ($row = $result->fetch_assoc()) {
                 $edu_name = "";
                 $courseThumb = $row['courseThumb'] == null ? "<img src='../images/nav_picture/course.png' alt='Course Thumbnail' class='course-thumb'>" : "<img src='data:image/png;base64," . $row['courseThumb'] . "' alt='Course Thumbnail' class='course-thumb'>";

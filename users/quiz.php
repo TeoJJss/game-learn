@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $addTotal = 0;
         while ($row = $result->fetch_assoc()) {
             $questID = $row['questID'];
-            $selectedOpt = $_POST["$questID"];
+            $selectedOpt = isset($_POST["$questID"]) ? $_POST["$questID"] : null;
             if ($redemptionID != null) {
                 $post_sql = "INSERT INTO quiz_enrolment(userID, questID, optID, redemptionID)
                                 VALUES(?, ?, ?, ?)";
@@ -290,6 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div><br>
             <div class="course-content">
                 <?php if ($role == 'student') { ?>
+                    <p style="color: red;">Please do not refresh or the quiz will be terminated immediately. </p>
                     <div class="gift-bag">
                         <div class="giftBagTitle">
                             <span class="gift-bag-title"><img src="../images/nav_picture/giftbag.png" class="gift-bag-icon">Gift Bag</span><br>
@@ -315,7 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php } ?>
                     </div>
                 <?php } ?>
-                <form method="post">
+                <form method="post" id="quiz-form">
                     <input type="text" value="<?php echo $courseID; ?>" name="courseID" hidden>
                     <input type="number" name="useGift" id="useGift" value="null" hidden>
                     <?php $result->data_seek(0);
@@ -406,6 +407,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('gift-5').disabled = true;
             document.getElementById('gift-6').disabled = true;
         }
+
+        <?php if ($role == 'student'){ ?>
+            if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+                document.getElementById("quiz-form").submit();
+            }
+        <?php } ?>
 
         function useGift(redemptionID, giftID) {
             if (giftID === 1) { // Double Points
