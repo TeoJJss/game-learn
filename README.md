@@ -46,5 +46,4 @@ Below is the table of email and password of existing users (admin & educator). Y
 - <a href="https://github.com/Lonelywolf88">Sin Boon Leon</a><br>
 - <a href="https://github.com/DamienCKj2812">Chong Kah Jun</a><br>
 - <a href="https://github.com/ysolo01">Yong Lee Wai</a><br>
-- <a href="https://github.com/omeowrice">Ting Zi Qing</a>
 </h2>
