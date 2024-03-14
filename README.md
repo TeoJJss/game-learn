@@ -39,3 +39,12 @@ Below is the table of email and password of existing users (admin & educator). Y
         <td>educator123</td>
     </tr>
 </table>
+
+<h2>Credits</h2>
+- <a href="https://github.com/TeoJJss">Teo Jun Jia</a><br>
+- <a href="https://github.com/shengyaosiew">Siew Sheng Yao</a><br>
+- <a href="https://github.com/Lonelywolf88">Sin Boon Leon</a><br>
+- <a href="https://github.com/DamienCKj2812">Chong Kah Jun</a><br>
+- <a href="https://github.com/ysolo01">Yong Lee Wai</a><br>
+- <a href="https://github.com/omeowrice">Ting Zi Qing</a>
+</h2>
