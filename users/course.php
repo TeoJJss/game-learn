@@ -234,7 +234,7 @@
                     <?php } ?>
                     <hr style="width:95%;text-align:left;margin-left:0">
                 <?php } ?>
-                <a href="../users/quiz.php?courseID=<?php echo $courseID; ?>" class="quiz">Take the quiz now!</a>
+                <a href="../users/quiz.php?courseID=<?php echo $courseID; ?>" class="quiz"><?php if ($role == 'student') { ?>Take the quiz now! <?php }else{ ?>Enter Quiz<?php } ?></a>
                 <br><br>
             </div>
         </div>
