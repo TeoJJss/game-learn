@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="page">
         <div class="page-title">
             <h1><img src="<?php echo $base; ?>images/educator_pic/forum.png" alt="Forum Icon" class="forum-image">Forum</h1>
-            <input type="text" class="nav_search" maxlength="50" id="search-forum" placeholder="Search For Forum Posts" onclick="addParam()" autocomplete="off">
+            <input type="text" class="nav_search" maxlength="50" id="search-forum" placeholder="Search For Forum Posts (Enter key to search)" onclick="addParam()" autocomplete="off">
             <button class="button create-post-btn" onclick="location.href='../users/create_forum.php'">Create Post</button>
         </div>
         <div class="page-content">

@@ -17,7 +17,7 @@ $role = check_ticket();
         <div class="nav">
             <?php if (!$role) { //Guest header 
             ?>
-                <input type="search" class="nav_search" id="search-inp" placeholder="Search For Course">
+                <input type="search" class="nav_search" id="search-inp" placeholder="Search For Course (Enter key to search)">
                 <button class="nav_button" id="teach-btn-guest" onclick="location.href = '<?php echo $base; ?>public/register.php'">
                     <img src="<?php echo $base; ?>images/nav_picture/teach_on_mathy.png" alt="Teach On Mathy">
                     <a>Teach On Mathy</a>
@@ -27,7 +27,7 @@ $role = check_ticket();
 
             <?php } else if ($role == "student") { //student header 
             ?>
-                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
+                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course (Enter key to search)">
                 <button class="nav_button" onclick="location.href = '<?php echo $base; ?>public/search_result.php'">
                     <img src="<?php echo $base; ?>images/nav_picture/course.png" alt="Course">
                     <a>Course</a>
@@ -46,7 +46,7 @@ $role = check_ticket();
                 </button>
             <?php } else if ($role == "educator") { //educator header 
             ?>
-                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
+                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course (Enter key to search)">
                 <button class="nav_button" onclick="location.href = '<?php echo $base; ?>users/educator/index.php'">
                     <img src="<?php echo $base; ?>images/educator_pic/dashboard.png" alt="Dashboard">
                     <a>Dashboard</a>
@@ -65,7 +65,7 @@ $role = check_ticket();
                 </button>
             <?php } else if ($role == "admin") { // admin header 
             ?>
-                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course">
+                <input type="text" class="nav_search" id="search-inp" placeholder="Search For Course (Enter key to search)">
                 <button class="nav_button" onclick="location.href='<?php echo $base; ?>users/admin/user_console.php'">
                     <img src="<?php echo $base; ?>images/admin_pic/manage_user.png" alt="Manage User">
                     <a>Manage User</a>

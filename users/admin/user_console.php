@@ -122,6 +122,7 @@
                     </td>
                 </tr>
             <?php } ?>
+            <tr id="no-matched" hidden><td colspan="6" style="text-align: center;">No matched user</td></tr>
         </table>
     </div>
 
@@ -142,14 +143,22 @@
         function filterUser(){
             var inpVal = document.getElementById('user-search-inp').value.toUpperCase();
             var userRows = document.getElementsByClassName('user-row');
+            var count = 0; 
 
             for (let i=0; i<userRows.length; i++){
                 userName = userRows[i].getElementsByClassName('user-name')[0].innerHTML;
                 if (userName.toUpperCase().indexOf(inpVal) > -1){
                     userRows[i].hidden = false;
+                    count+=1;
                 }else{
                     userRows[i].hidden = true;
                 }
+            }
+
+            if (!count){ // if no result
+                document.getElementById('no-matched').hidden = false;
+            }else{
+                document.getElementById('no-matched').hidden = true;
             }
         }
     </script>
