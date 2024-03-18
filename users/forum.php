@@ -245,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             while ($row = $result->fetch_assoc()) { ?>
                 <div class="post">
                     <div class="user-info">
-                        <img src='data:image/png;base64,<?php echo $row['profilePic'] ?>' class='profilePic'>
+                        <img src='<?php if ($row['profilePic'] != null){ echo "data:image/png;base64,".$row['profilePic']; }else{ echo "../images/user.png"; } ?>' class='profilePic'>
                         <span class="username"><b>
                                 <?php
                                 $userID = $row['userID'];
@@ -319,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                             <div class="comment-wrapper">
                                 <div class="user-info">
-                                    <img src='data:image/png;base64,<?php echo $row_comment['profilePic'] ?>' class='profilePic'>
+                                    <img src='<?php if ($row_comment['profilePic'] != null){ echo "data:image/png;base64,".$row_comment['profilePic']; }else{ echo "../images/user.png"; } ?>' class='profilePic'>
                                     <span class="username"><?php echo $comment_userName; ?></span><span class='timestamp'><?php $row_comment['timestamp']; ?></span>
                                     <span class="timestamp">
                                         <?php
