@@ -397,6 +397,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
+    <?php if ($role == 'student'){ ?>
+        <script>
+            if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+                document.getElementById("quiz-form").submit();
+            }
+        </script>
+    <?php } ?>
     <script>
         var questions = document.getElementsByClassName('questCount');
         if (questions.length < 2) {
@@ -407,12 +414,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('gift-5').disabled = true;
             document.getElementById('gift-6').disabled = true;
         }
-
-        <?php if ($role == 'student'){ ?>
-            if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
-                document.getElementById("quiz-form").submit();
-            }
-        <?php } ?>
 
         function useGift(redemptionID, giftID) {
             if (giftID === 1) { // Double Points
