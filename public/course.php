@@ -182,13 +182,12 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
             margin-right: 5vw;
         }
 
-        .dot {
-            height: 4vh;
-            width: 1.7vw;
-            background-color: #bbb;
-            border-radius: 50%;
+        .rated {
+            height: 6vh;
+            width: 2.5vw;
             display: inline-block;
             margin-right: 0.5vw;
+            margin-bottom: -15px;
         }
 
         .ratings {
@@ -306,7 +305,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                                     echo '<p style="color: red;">Your course is banned!</p>';
                                 } else if ($row['status'] == 'pending') {
                                     echo '<p style="color: red;">Your course is waiting for approval!</p>';
-                                }else if ($row['status']=='deleted'){
+                                } else if ($row['status'] == 'deleted') {
                                     echo '<p style="color: red;">The course is deleted by educator.</p>';
                                 } else {
                                     trigger_error('Course invalid!');
@@ -322,7 +321,7 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         } else if ($row['status'] == 'pending') {
                             echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=active';" . '">Approve</button><br>';
                             echo '<br><button class="button" onclick="location.href=' . "'../modules/update_course_status.php?cid=$row[courseID]&new_status=banned';" . '">Reject</button><br>';
-                        }else if ($row['status']=='deleted'){
+                        } else if ($row['status'] == 'deleted') {
                             echo '<p style="color: red;">The course is deleted by educator.</p>';
                         } else {
                             trigger_error('Course invalid!');
@@ -362,7 +361,8 @@ if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                 <div class="ratings"><br>
                     <h2 class="ratings-h2">
                         <span class="fa fa-star checked" style="font-size: 2vw; margin-left:0.1vw; "></span><span class="rating-text"><?php echo $courseRating; ?> course rating</span>
-                        <span class="dot"></span><span class="num-ratings"><?php echo $num_fb; ?> ratings</span>
+                        <img src="<?php echo $base; ?>images/educator_pic/rating.png" alt="rating Icon" class="rated">
+                        <span class="num-ratings"><?php echo $num_fb; ?> ratings</span>
                     </h2>
                     <table>
                         <?php
