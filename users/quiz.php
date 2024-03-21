@@ -204,6 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .gift-bag {
+            top: 23vh;
             position: fixed;
             background-color: #0557B8;
             right: 10vw;
@@ -211,7 +212,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             min-width: 15vw;
             min-height: 10vh;
             text-align: center;
-            padding: 1vw;
         }
 
         .gift-bag-title {
@@ -310,8 +310,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                             <div class="gift-row">
                                 <img src='data:image/png;base64,<?php echo $gift['giftMedia'] ?>' title='<?php echo $gift['giftName']; ?>' class='giftPic'>
-                                <button class="button use-gift-btn" id="gift-<?php echo $gift['giftID']; ?>" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use 
-                                <span class="gift-count" id="gift-count-<?php echo $gift['giftID']; ?>"><?php echo $gift['gift_count']; ?></span></button>
+                                <button class="button use-gift-btn" id="gift-<?php echo $gift['giftID']; ?>" onclick="useGift(<?php echo $gift['redemptionID']; ?>, <?php echo $gift['giftID']; ?>)">Use
+                                    <span class="gift-count" id="gift-count-<?php echo $gift['giftID']; ?>"><?php echo $gift['gift_count']; ?></span></button>
                             </div>
                         <?php } ?>
                     </div>
@@ -341,7 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $stmt->close();
                         while ($q_row = $options->fetch_assoc()) {
                             $optID = $q_row['optID'];
-                            $optAns= '';
+                            $optAns = '';
                             $checked = '';
                             if ($q_row['IsAnswer']) {
                                 $optAns = "opt-ans";
@@ -397,7 +397,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
-    <?php if ($role == 'student'){ ?>
+    <?php if ($role == 'student') { ?>
         <script>
             if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
                 document.getElementById("quiz-form").submit();
@@ -427,7 +427,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 var correctopt = document.getElementsByClassName('opt-ans');
                 switch (giftID) {
                     case 4: // Skip One Questions
-                        skip = 1; 
+                        skip = 1;
                         break;
                     case 5: // Skip Two Questions
                         skip = 2;
@@ -451,13 +451,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('useGift').value = redemptionID;
 
             var currentCount = document.getElementById(`gift-count-${giftID}`).innerHTML;
-            document.getElementById(`gift-count-${giftID}`).innerHTML = currentCount-1;
+            document.getElementById(`gift-count-${giftID}`).innerHTML = currentCount - 1;
         }
 
-        function showAddQuestForm(){
+        function showAddQuestForm() {
             document.getElementById('add-question-form').hidden = false;
             document.getElementById('add-question-btn').hidden = true;
-        }   
+        }
     </script>
 </body>
 <?php include '../includes/footer.php'; ?>

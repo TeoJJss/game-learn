@@ -170,7 +170,8 @@ $result = $stmt->get_result();
                 <button class="button" onclick="location.reload()">Clear Filter</button>
             </div>
             <span class="count-results">
-                <?php if ($role == 'student') {
+                <?php $pointVal = 0;
+                if ($role == 'student') {
                     $ticket = $_SESSION['ticket'];
                     $ch = curl_init("$base_url/check-ticket?ticket=$ticket");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -285,6 +286,7 @@ $result = $stmt->get_result();
                 console.log(cat + " , " + selected_cat);
                 if (cat == selected_cat) {
                     rows[i].style.display = "";
+                    count+=1;
                 } else {
                     rows[i].style.display = "none";
                 }

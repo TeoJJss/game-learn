@@ -294,7 +294,7 @@
                         <button class="button" onclick="incrementQuantity(<?php echo $gift['giftID']; ?>)">+</button>
                     </div>
 
-                    <button class="button" onclick="buyNow(<?php echo $gift['giftID']; ?>, <?php echo $gift['giftPoints']; ?>)">Buy now</button>
+                    <button class="button" onclick="buyNow(<?php echo $gift['giftID']; ?>, <?php echo $gift['giftPoints']; ?>)">Redeem now</button>
                 </div>
             </div>
         <?php endforeach; ?>

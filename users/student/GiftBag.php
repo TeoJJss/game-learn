@@ -40,7 +40,7 @@
         global $conn;
     
         // SQL query to join user_gift and gift tables, count total quantity, and select giftMedia
-        $sql = "SELECT user_gift.giftID, gift.giftMedia, COUNT(user_gift.giftID) AS totalQuantity
+        $sql = "SELECT user_gift.giftID, gift.giftMedia, gift.giftName, COUNT(user_gift.giftID) AS totalQuantity
                 FROM user_gift
                 INNER JOIN gift ON user_gift.giftID = gift.giftID
                 WHERE user_gift.userID = ? AND user_gift.isUsed = 0
@@ -59,7 +59,8 @@
                 $giftDetails = array(
                     'giftID' => $row['giftID'],
                     'giftMedia' => $row['giftMedia'],
-                    'totalQuantity' => $row['totalQuantity']
+                    'totalQuantity' => $row['totalQuantity'],
+                    "giftName" => $row['giftName']
                 );
                 $giftBagDetails[] = $giftDetails;
             }
@@ -89,7 +90,7 @@ $giftBagDetails = fetchGiftBagDetails($user_id);
             font-size: 2rem; 
             padding-left: 5rem;
             padding-top: 2rem; 
-            padding-bottom: 5rem;
+            padding-bottom: 2rem;
             width: 100%;
             display: flex;
             align-items: center;
@@ -141,6 +142,10 @@ $giftBagDetails = fetchGiftBagDetails($user_id);
             justify-content: space-around; /* Adjust as needed */
             padding-bottom: 5rem;
         }
+
+        .instruction{
+            margin-left: 3vw;
+        }
     </style>
 </head>
 <body>
@@ -150,9 +155,10 @@ $giftBagDetails = fetchGiftBagDetails($user_id);
             <h1>Gift Bag</h1> 
         </div>
     </header>
-    <section >
+    <p class="instruction">Hover the image to view gift name</p><br>
+    <section>
         <?php foreach ($giftBagDetails as $giftDetails) : ?>
-            <div class="game-cell">
+            <div class="game-cell" title="<?php echo$giftDetails['giftName']; ?>">
                 <img src='data:image/png;image/jpg;base64,<?php echo$giftDetails['giftMedia']; ?>' alt='giftMedia'>
                 <p class="right-content">X<?php echo$giftDetails['totalQuantity']; ?></p>
             </div>
