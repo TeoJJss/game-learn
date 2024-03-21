@@ -102,7 +102,7 @@ if ($result && $result->num_rows > 0) {
     }
 
     // Calculate the number of students who fail
-    $studentsFail = $enrolledStudents - $studentsPass;
+    $studentsFail = $enrolledStudents - $studentsPass - $inactiveParticipants;
 } else {
     $userName = "N/A";
     $enrolledStudents = 0;
@@ -191,14 +191,14 @@ if ($result && $result->num_rows > 0) {
                 <h2>Enrolled Students</h2>
                 <p>
                     Total Number of Enrolled Students: <?php echo $enrolledStudents; ?><br />
-                    Active Participants: <?php echo $activeParticipants; ?><br />
-                    Inactive Participants: <?php echo $inactiveParticipants; ?>
+                    Completed quiz: <?php echo $activeParticipants; ?><br />
+                    Not completed quiz: <?php echo $inactiveParticipants; ?>
                 </p>
 
                 <!-- Student Performance -->
                 <h2>Student Performance</h2>
                 <p>
-                    Grade Distribution: A: >80% B: >60% C: >40% D: Fail <br />
+                    <i>[<b>Grade Distribution:</b> A: >80% B: >60% C: >40% D: Fail]</i> <br />
                     Number of students pass: <?php echo $studentsPass; ?><br />
                     Number of students failed: <?php echo $studentsFail; ?>
                 </p>
