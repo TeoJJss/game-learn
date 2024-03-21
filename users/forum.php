@@ -320,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="comment-wrapper">
                                 <div class="user-info">
                                     <img src='<?php if ($row_comment['profilePic'] != null){ echo "data:image/png;base64,".$row_comment['profilePic']; }else{ echo "../images/user.png"; } ?>' class='profilePic'>
-                                    <span class="username"><?php echo $comment_userName; ?></span><span class='timestamp'><?php $row_comment['timestamp']; ?></span>
+                                    <span class="username"><?php echo $comment_userName; ?></span><span class='timestamp' style='margin-left: 10px;'><?php $row_comment['timestamp']; ?></span>
                                     <span class="timestamp">
                                         <?php
                                         $commentTimestamp = new DateTime($row_comment['timestamp']);
