@@ -80,17 +80,17 @@ if ($result && $result->num_rows > 0) {
     $studentsFail = 0;
 
     // Modify the SQL query to count the number of students who pass or fail
-    $pointSql = "SELECT result.userID, SUM(IF(result.IsAnswer = 1, result.awardPt, 0)) AS score, COUNT(*) as pointCount
-                FROM (
-                    SELECT quiz_enrolment.userID, quiz_enrolment.questID, quiz_enrolment.optID, `option`.`IsAnswer`, question.awardPt
-                    FROM quiz_enrolment
-                    LEFT JOIN question ON question.questID=quiz_enrolment.questID
-                    LEFT JOIN `option` ON `option`.`optID` = quiz_enrolment.optID
-                    LEFT JOIN course  ON course.courseID=question.courseID
-                    WHERE course.courseID=?
-                ) result
-                GROUP BY result.userID
-                HAVING score > (SELECT SUM(question.awardPt) FROM question WHERE question.courseID=?) * 0.4";
+    $pointSql = "SELECT COUNT(*) as pointCount
+            FROM (
+                SELECT quiz_enrolment.userID, SUM(IF(quiz_enrolment.optID IS NOT NULL AND `option`.`IsAnswer` = 1, question.awardPt, 0)) AS score
+                FROM quiz_enrolment
+                LEFT JOIN question ON question.questID = quiz_enrolment.questID
+                LEFT JOIN `option` ON `option`.`optID` = quiz_enrolment.optID
+                LEFT JOIN course ON course.courseID = question.courseID
+                WHERE course.courseID = ?
+                GROUP BY quiz_enrolment.userID
+            ) result
+            WHERE score > (SELECT SUM(question.awardPt) FROM question WHERE question.courseID = ?) * 0.4";
     $pointStmt = $conn->prepare($pointSql);
     $pointStmt->bind_param("ii", $courseID, $courseID);
     $pointStmt->execute();
