@@ -5,6 +5,7 @@
 
 1. Clone this repository to your `wamp64/www/` folder. <br>
 2. Launch WampServer.    <br>
+3. Import SQL file into PHPMyAdmin. The SQL file is stored in `sql/` folder.  
 
 <h3>Step 2: Launch Python Server</h3>  
 
