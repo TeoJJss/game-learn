@@ -1,11 +1,12 @@
 <?php
 require '../modules/config.php';
-include '../includes/header.php';
 
 if (check_ticket()) {
     header("Location: ../index.php");
     exit();
 }
+
+include '../includes/header.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
