@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br>
                 <div class="inp-row">
                     <label for="email">Email:</label> 
-                        <input type="text" id="email" name="email" autocomplete="off" required autofocus class="searchbar" placeholder="name@email.com">
+                        <input type="email" id="email" name="email" autocomplete="off" required autofocus class="searchbar" placeholder="name@email.com">
                 </div>
                 <div class="inp-row">
                     <label for="name">Name:</label> 
